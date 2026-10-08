@@ -46,6 +46,90 @@ export function resolveAnchors(from: Rect, to: Rect, fromAnchor: Anchor = 'auto'
   return [fromAnchor === 'auto' ? autoFrom : fromAnchor, toAnchor === 'auto' ? autoTo : toAnchor];
 }
 
+type Side = Exclude<Anchor, 'auto'>;
+const SIDES: Side[] = ['left', 'right', 'top', 'bottom'];
+
+function distPointRect(px: number, py: number, r: Rect): number {
+  const dx = Math.max(r.x - px, 0, px - (r.x + r.w));
+  const dy = Math.max(r.y - py, 0, py - (r.y + r.h));
+  return Math.hypot(dx, dy);
+}
+
+/** Where an element leaves its screen through the given side (point on the screen edge) and how far it travels inside. */
+function exitThrough(el: Rect, frame: Rect, side: Side): { x: number; y: number; inside: number } {
+  const cx = el.x + el.w / 2;
+  const cy = el.y + el.h / 2;
+  if (side === 'left') return { x: frame.x, y: cy, inside: el.x - frame.x };
+  if (side === 'right') return { x: frame.x + frame.w, y: cy, inside: frame.x + frame.w - (el.x + el.w) };
+  if (side === 'top') return { x: cx, y: frame.y, inside: el.y - frame.y };
+  return { x: cx, y: frame.y + frame.h, inside: frame.y + frame.h - (el.y + el.h) };
+}
+
+/** The side of `other` that faces a line leaving through `side` at point p, when `other` lies beyond p in that direction. */
+function facingSide(side: Side, p: { x: number; y: number }, other: Rect): Side | undefined {
+  if (side === 'left' && other.x + other.w <= p.x) return 'right';
+  if (side === 'right' && other.x >= p.x) return 'left';
+  if (side === 'top' && other.y + other.h <= p.y) return 'bottom';
+  if (side === 'bottom' && other.y >= p.y) return 'top';
+  return undefined;
+}
+
+/** Extra travel when `other` lies past the opposite edge of the screen: the arrow has to go around it. */
+function detourAround(side: Side, p: { x: number; y: number }, frame: Rect, other: Rect): number {
+  const aroundV = Math.min(p.y - frame.y, frame.y + frame.h - p.y);
+  const aroundH = Math.min(p.x - frame.x, frame.x + frame.w - p.x);
+  if (side === 'left' && other.x >= frame.x + frame.w) return frame.w + aroundV;
+  if (side === 'right' && other.x + other.w <= frame.x) return frame.w + aroundV;
+  if (side === 'top' && other.y >= frame.y + frame.h) return frame.h + aroundH;
+  if (side === 'bottom' && other.y + other.h <= frame.y) return frame.h + aroundH;
+  return 0;
+}
+
+/**
+ * Picks the side an element inside a screen should leave from so the arrow doesn't run across
+ * its own screen: short escape to the screen edge (weighted ×1.5) + distance from there to the other end,
+ * plus a detour when the other end lies behind the screen.
+ * Returns that side and the best matching side on the other end.
+ */
+export function escapeAnchors(el: Rect, frame: Rect, other: Rect): [Side, Side] {
+  let best: { side: Side; cost: number; x: number; y: number } | undefined;
+  for (const side of SIDES) {
+    const e = exitThrough(el, frame, side);
+    const cost = 1.5 * Math.max(0, e.inside) + distPointRect(e.x, e.y, other) + detourAround(side, e, frame, other) + (facingSide(side, e, other) ? 0 : 1);
+    if (!best || cost < best.cost) best = { side, cost, x: e.x, y: e.y };
+  }
+  const b = best!;
+  const otherSide = facingSide(b.side, b, other) ?? resolveAnchors({ x: b.x, y: b.y, w: 0, h: 0 }, other)[1];
+  return [b.side, otherSide];
+}
+
+/**
+ * Anchors for a connector, aware of screens: explicit anchors win; an element inside a screen that
+ * connects to something outside that screen leaves through the nearest screen edge (see escapeAnchors).
+ */
+export function resolveConnectorAnchors(doc: BoardDoc, c: Connector): [Side, Side] | undefined {
+  const from = absoluteRect(doc, c.from.nodeId);
+  const to = absoluteRect(doc, c.to.nodeId);
+  if (!from || !to) return undefined;
+  let [s, t] = resolveAnchors(from, to, c.from.anchor, c.to.anchor);
+  const frameIdOf = (id: ID) => (doc.frames[id] ? id : doc.elements[id]?.parentId);
+  const fromFrame = frameIdOf(c.from.nodeId);
+  const toFrame = frameIdOf(c.to.nodeId);
+  const fromInside = !doc.frames[c.from.nodeId] && fromFrame && doc.frames[fromFrame] && fromFrame !== toFrame;
+  const toInside = !doc.frames[c.to.nodeId] && toFrame && doc.frames[toFrame] && fromFrame !== toFrame;
+  if (fromInside && c.from.anchor === 'auto') {
+    const [a, b] = escapeAnchors(from, absoluteRect(doc, fromFrame!)!, to);
+    s = a;
+    if (c.to.anchor === 'auto' && !toInside) t = b;
+  }
+  if (toInside && c.to.anchor === 'auto') {
+    const [a, b] = escapeAnchors(to, absoluteRect(doc, toFrame!)!, from);
+    t = a;
+    if (c.from.anchor === 'auto' && !fromInside) s = b;
+  }
+  return [s, t];
+}
+
 /** React Flow zIndex layout: frames get even ranks (children render at rank+1), then edges, then canvas shapes. */
 export const FRAME_Z_STEP = 2;
 export const EDGE_Z = 100_000;
@@ -108,7 +192,8 @@ export function reconcileNodes(doc: BoardDoc, prev: readonly FlowNode[] = []): F
       width: element.w, height: element.h,
       ariaLabel: elementAriaLabel(element, isLinkSource),
       ...(zIndex !== undefined ? { zIndex } : {}),
-      ...(inFrame ? { parentId: element.parentId, extent: 'parent' as const } : {}),
+      // No `extent: 'parent'`: elements can be dragged out of / between screens (re-parented on drop).
+      ...(inFrame ? { parentId: element.parentId } : {}),
       ...ui(p),
     };
   };
@@ -134,10 +219,9 @@ export function reconcileEdges(doc: BoardDoc, prev: readonly SketchFlowEdge[] = 
   for (const e of prev) prevById.set(e.id, e);
   const linkConnectors = new Set(Object.values(doc.links).map((l) => l.connectorId).filter(Boolean));
   return Object.values(doc.connectors).flatMap((c) => {
-    const from = absoluteRect(doc, c.from.nodeId);
-    const to = absoluteRect(doc, c.to.nodeId);
-    if (!from || !to) return [];
-    const [sourceHandle, targetHandle] = resolveAnchors(from, to, c.from.anchor, c.to.anchor);
+    const anchors = resolveConnectorAnchors(doc, c);
+    if (!anchors) return [];
+    const [sourceHandle, targetHandle] = anchors;
     const isLink = linkConnectors.has(c.id);
     const isSelected = selected?.has(c.id) ?? false;
     const p = prevById.get(c.id);

@@ -17,6 +17,7 @@ import { KitNode } from './KitNode';
 import { LaneNode } from './LaneNode';
 import { SketchEdge } from './SketchEdge';
 import { snapBox, unionBox, type Box, type Guide } from '../editor/snap';
+import { reparentAfterMove } from '../editor/features/components/ops';
 import './flow.css';
 
 const nodeTypes = { screen: ScreenNode, kit: KitNode, lane: LaneNode };
@@ -211,7 +212,9 @@ function CanvasInner(props: FlowCanvasProps) {
     }
     if (rest.length) setNodes((nds) => applyNodeChanges(rest, nds));
     if (commitMoves.length) {
-      commit((d) => commitMoves.reduce((acc, c) => moveNode(acc, c.id, Math.round(c.position!.x), Math.round(c.position!.y)), d),
+      commit((d) => reparentAfterMove(
+        commitMoves.reduce((acc, c) => moveNode(acc, c.id, Math.round(c.position!.x), Math.round(c.position!.y)), d),
+        commitMoves.map((c) => c.id)),
         { label: commitMoves.length > 1 ? `Move ${commitMoves.length} items` : 'Move' });
     }
   }, [commit, readOnly, snapChanges]);

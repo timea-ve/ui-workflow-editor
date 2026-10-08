@@ -12,17 +12,31 @@ export interface InsertPaletteProps {
   /** Optional icon/thumbnail per item. */
   renderIcon?: (item: InsertItem) => ReactNode;
   placeholder?: string;
+  /**
+   * Non-modal keeps the canvas interactive (needed for drag-and-drop onto it). Default true.
+   */
+  modal?: boolean;
+  /** When set, items can be dragged out of the palette; returns the drag payload (MIME → data). */
+  dragData?: (item: InsertItem) => Record<string, string> | undefined;
+  /** Where focus goes after closing (preventDefault to manage it yourself). */
+  onCloseAutoFocus?: (e: Event) => void;
+  /** Extra class on the list items' icon slot (e.g. larger previews). */
+  iconClassName?: string;
 }
 
 /** "/" Insert palette: type to filter, ↑↓ to move, Enter to insert (WAI-ARIA combobox + listbox). */
-export function InsertPalette({ open, onOpenChange, items, onSelect, renderIcon, placeholder = 'Search components and shapes…' }: InsertPaletteProps) {
+export function InsertPalette({
+  open, onOpenChange, items, onSelect, renderIcon, placeholder = 'Search components and shapes…',
+  modal = true, dragData, onCloseAutoFocus, iconClassName,
+}: InsertPaletteProps) {
   const [query, setQuery] = useState('');
   const [active, setActive] = useState(0);
+  const [dragging, setDragging] = useState(false);
   const listId = useId();
   const listRef = useRef<HTMLUListElement>(null);
   const results = useMemo(() => filterInsertItems(items, query), [items, query]);
 
-  useEffect(() => { if (open) { setQuery(''); setActive(0); } }, [open]);
+  useEffect(() => { if (open) { setQuery(''); setActive(0); setDragging(false); } }, [open]);
   useEffect(() => { setActive(0); }, [query]);
   useEffect(() => {
     listRef.current?.querySelector(`[data-index="${active}"]`)?.scrollIntoView({ block: 'nearest' });
@@ -51,10 +65,11 @@ export function InsertPalette({ open, onOpenChange, items, onSelect, renderIcon,
   const optionId = (i: number) => `${listId}-opt-${i}`;
 
   return (
-    <Dialog.Root open={open} onOpenChange={onOpenChange}>
+    <Dialog.Root open={open} onOpenChange={onOpenChange} modal={modal}>
       <Dialog.Portal>
         <Dialog.Overlay className="fsc-overlay" />
-        <Dialog.Content className="fsc-float fsc-palette fsc-root" aria-describedby={undefined}
+        <Dialog.Content className={`fsc-float fsc-palette fsc-root${dragging ? ' is-dragging' : ''}`} aria-describedby={undefined}
+          onCloseAutoFocus={onCloseAutoFocus}
           onOpenAutoFocus={(e) => { e.preventDefault(); (e.currentTarget as HTMLElement).querySelector('input')?.focus(); }}>
           <Dialog.Title className="fsc-sr-only">Insert</Dialog.Title>
           <div className="fsc-palette__search">
@@ -86,10 +101,20 @@ export function InsertPalette({ open, onOpenChange, items, onSelect, renderIcon,
                     data-index={i}
                     className="fsc-palette__item"
                     onMouseMove={() => i !== active && setActive(i)}
-                    onMouseDown={(e) => e.preventDefault()}
+                    onMouseDown={dragData ? undefined : (e) => e.preventDefault()} /* keep focus in the search box; draggable rows must not, or drag won't start */
                     onClick={() => choose(item)}
+                    draggable={!!dragData}
+                    onDragStart={dragData ? (e) => {
+                      const data = dragData(item);
+                      if (!data) { e.preventDefault(); return; }
+                      for (const [k, v] of Object.entries(data)) e.dataTransfer.setData(k, v);
+                      e.dataTransfer.effectAllowed = 'copy';
+                      // Fade the palette out of the way (after the browser captured the drag image).
+                      requestAnimationFrame(() => setDragging(true));
+                    } : undefined}
+                    onDragEnd={dragData ? () => { setDragging(false); onOpenChange(false); } : undefined}
                   >
-                    {renderIcon && <span className="fsc-palette__icon" aria-hidden>{renderIcon(item)}</span>}
+                    {renderIcon && <span className={`fsc-palette__icon${iconClassName ? ` ${iconClassName}` : ''}`} aria-hidden>{renderIcon(item)}</span>}
                     {item.label}
                     {item.hint && <span className="fsc-palette__hint">{item.hint}</span>}
                   </li>

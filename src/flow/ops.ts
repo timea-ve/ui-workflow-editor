@@ -485,3 +485,129 @@ export function duplicateAsOption(
   }
   return { doc: next, variantId, originalVariantId, flowId, frameIds: newFrameIds, idMap };
 }
+
+// ---------- flows & options (Phase 3: Connectors & Flows) ----------
+
+/** User name for a flow (key = option-set id for flows with options, else the start screen id). Empty → auto name. */
+export function renameFlow(doc: BoardDoc, flowKey: ID, name: string): BoardDoc {
+  const flowNames = { ...(doc.flowNames ?? {}) };
+  const trimmed = name.trim();
+  if (trimmed) {
+    if (flowNames[flowKey] === trimmed) return doc;
+    flowNames[flowKey] = trimmed;
+  } else {
+    if (!(flowKey in flowNames)) return doc;
+    delete flowNames[flowKey];
+  }
+  return { ...doc, flowNames };
+}
+
+/**
+ * Deletes an option: its screens (with their contents, links and connectors) and the option group.
+ * When only one option of the set is left, the set dissolves back into a plain flow
+ * (no lane; the flow's custom name moves to the plain-flow key, its start screen).
+ */
+export function deleteOption(doc: BoardDoc, variantId: ID): BoardDoc {
+  const v = doc.variants[variantId];
+  if (!v) return doc;
+  const frameIds = framesInVariant(doc, variantId).map((f) => f.id);
+  let next = frameIds.length ? deleteNodes(doc, frameIds) : doc;
+  if (next.variants[variantId]) {
+    const variants = { ...next.variants };
+    delete variants[variantId];
+    next = { ...next, variants };
+  }
+  const rest = variantsInFlow(next, v.flowId);
+  if (rest.length !== 1) return next;
+  const last = rest[0];
+  const frames = { ...next.frames };
+  const lastFrames = framesInVariant(next, last.id);
+  for (const f of lastFrames) { const { variantId: _v, ...plain } = f; frames[f.id] = plain; }
+  const elements = { ...next.elements };
+  for (const e of Object.values(next.elements)) if (e.variantId === last.id) { const { variantId: _v, ...plain } = e; elements[e.id] = plain; }
+  const connectors = { ...next.connectors };
+  for (const c of Object.values(next.connectors)) if (c.variantId === last.id) { const { variantId: _v, ...plain } = c; connectors[c.id] = plain; }
+  const variants = { ...next.variants };
+  delete variants[last.id];
+  let out: BoardDoc = { ...next, frames, elements, connectors, variants };
+  const name = next.flowNames?.[v.flowId];
+  if (name !== undefined) {
+    const flowNames = { ...out.flowNames };
+    delete flowNames[v.flowId];
+    const start = getStartFrame(out, lastFrames.map((f) => f.id));
+    if (start) flowNames[start] = name;
+    out = { ...out, flowNames };
+  }
+  return out;
+}
+
+/**
+ * Duplicate as option, keeping a custom flow name: a plain flow is keyed by its start screen,
+ * an option set by its set id, so the name moves to the new key.
+ */
+export function duplicateFlowAsOption(doc: BoardDoc, frameIds: ID[]): ReturnType<typeof duplicateAsOption> {
+  const r = duplicateAsOption(doc, frameIds);
+  const wasPlain = !frameIds.some((id) => { const vid = doc.frames[id]?.variantId; return !!vid && !!doc.variants[vid]; });
+  if (!wasPlain) return r;
+  const start = getStartFrame(doc, frameIds);
+  const name = start ? doc.flowNames?.[start] : undefined;
+  if (!start || name === undefined) return r;
+  const flowNames = { ...r.doc.flowNames, [r.flowId]: name };
+  delete flowNames[start];
+  return { ...r, doc: { ...r.doc, flowNames } };
+}
+
+/** The click link that starts at an element (an element has at most one). */
+export function linkOf(doc: BoardDoc, elementId: ID): ScreenLink | undefined {
+  return Object.values(doc.links).find((l) => l.sourceElementId === elementId);
+}
+
+/** Removes the element's click link (and its arrow). */
+export function unlinkElement(doc: BoardDoc, elementId: ID): BoardDoc {
+  const link = linkOf(doc, elementId);
+  return link ? deleteLink(doc, link.id) : doc;
+}
+
+/**
+ * Points an element's link at another screen, keeping the arrow's label and style.
+ * Creates the link when the element has none.
+ */
+export function retargetLink(doc: BoardDoc, elementId: ID, targetFrameId: ID): BoardDoc {
+  if (!doc.frames[targetFrameId] || !doc.elements[elementId]) return doc;
+  const link = linkOf(doc, elementId);
+  if (!link) return linkElementToScreen(doc, elementId, targetFrameId).doc;
+  if (link.targetFrameId === targetFrameId) return doc;
+  const c = link.connectorId ? doc.connectors[link.connectorId] : undefined;
+  if (!c) return linkElementToScreen(doc, elementId, targetFrameId).doc;
+  return {
+    ...doc,
+    links: { ...doc.links, [link.id]: { ...link, targetFrameId } },
+    connectors: { ...doc.connectors, [c.id]: { ...c, to: { nodeId: targetFrameId, anchor: 'auto' } } },
+  };
+}
+
+export type LinkableCheck = { ok: true; frameId: ID } | { ok: false; reason: string };
+
+/** Can this node be a link source? Only components inside a screen (not diagram shapes, headings, tables…). */
+export function canLinkElement(doc: BoardDoc, nodeId: ID): LinkableCheck {
+  if (doc.frames[nodeId]) return { ok: false, reason: 'Select a component inside the screen to link it.' };
+  const el = doc.elements[nodeId];
+  if (!el) return { ok: false, reason: 'Select a component inside a screen to link it.' };
+  const def = kitRegistry.get(el.type);
+  if (!el.parentId || !doc.frames[el.parentId]) {
+    return { ok: false, reason: def?.category === 'diagram' || !el.parentId ? 'Diagram shapes can’t link to screens. Use the arrow tool (A) to connect them.' : 'Put the component inside a screen to link it.' };
+  }
+  if (def?.linkable === false) return { ok: false, reason: `${def.label} can’t be a link. Try a button, text or list instead.` };
+  return { ok: true, frameId: el.parentId };
+}
+
+/** Connector routing / arrowheads. */
+export function updateConnectorStyle(
+  doc: BoardDoc, connectorId: ID, patch: Partial<Pick<Connector, 'style' | 'arrowheads'>>,
+): BoardDoc {
+  const c = doc.connectors[connectorId];
+  if (!c) return doc;
+  const next = { ...c, ...patch };
+  if (next.style === c.style && next.arrowheads === c.arrowheads) return doc;
+  return { ...doc, connectors: { ...doc.connectors, [connectorId]: next } };
+}

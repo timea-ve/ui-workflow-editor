@@ -1,7 +1,9 @@
 import { memo, useMemo } from 'react';
 import {
-  BaseEdge, EdgeLabelRenderer, getBezierPath, getSmoothStepPath, getStraightPath, type EdgeProps,
+  BaseEdge, EdgeLabelRenderer, getBezierPath, getSmoothStepPath, getStraightPath, useStore, type EdgeProps,
 } from '@xyflow/react';
+import { EdgeLabelEditor, EdgeTools } from '../editor/features/flows/EdgeControls';
+import { useIsEditingEdge } from '../editor/features/flows/edgeEditing';
 import { SketchArrow, SketchLines } from '../design/primitives';
 import { seedFromId } from '../kit/registry';
 import type { SketchFlowEdge } from './adapter';
@@ -46,7 +48,7 @@ function bezierPoints(d: string, steps = 16): Pt[] {
  * primitive so sketchy and clean styles match the kit. Labels sit on a surface-coloured pill.
  */
 export const SketchEdge = memo(function SketchEdge({
-  id, sourceX, sourceY, targetX, targetY, sourcePosition, targetPosition, data, selected,
+  id, source, target, sourceX, sourceY, targetX, targetY, sourcePosition, targetPosition, data, selected,
 }: EdgeProps<SketchFlowEdge>) {
   const { style } = useFlowView();
   const routing = data?.routing ?? 'step';
@@ -60,12 +62,13 @@ export const SketchEdge = memo(function SketchEdge({
   const seed = seedFromId(id);
   const tone = selected ? 'accent' : 'ink';
   const heads = data?.arrowheads ?? 'end';
+  const editing = useIsEditingEdge(id);
 
   return (
     <>
       <BaseEdge id={id} path={path} style={{ stroke: 'transparent', strokeWidth: 0 }} interactionWidth={16} />
       {points.length >= 2 && (
-        <g className="fs-sketch-edge">
+        <g className="fs-sketch-edge" data-source={source} data-target={target}>
           {heads === 'none'
             ? <SketchLines w={1} h={1} lines={[points]} style={style} seed={seed} stroke={tone} strokeWidth={2} />
             : <SketchArrow w={1} h={1} points={points} style={style} seed={seed} stroke={tone} strokeWidth={2} />}
@@ -74,16 +77,31 @@ export const SketchEdge = memo(function SketchEdge({
           )}
         </g>
       )}
-      {data?.label && (
-        <EdgeLabelRenderer>
-          <div
-            className={`fs-edge-label nodrag nopan${selected ? ' is-selected' : ''}`}
-            style={{ transform: `translate(-50%, -50%) translate(${labelX}px, ${labelY}px)` }}
-          >
-            {data.label}
-          </div>
-        </EdgeLabelRenderer>
-      )}
+      {editing
+        ? <EdgeLabelEditor id={id} x={labelX} y={labelY} />
+        : data?.label && <EdgeLabel id={id} label={data.label} x={labelX} y={labelY} selected={!!selected} />}
+      {selected && !editing && <EdgeTools id={id} x={labelX} y={labelY} />}
     </>
   );
 });
+
+/** Labels stay readable when zoomed out: below 70% zoom they're partly counter-scaled (quantised so few re-renders). */
+const labelScaleSelector = (s: { transform: [number, number, number] }) => {
+  const z = s.transform[2];
+  return z >= 0.7 ? 1 : Math.round(Math.min(1.8, Math.sqrt(0.7 / z)) * 10) / 10;
+};
+
+function EdgeLabel({ id, label, x, y, selected }: { id: string; label: string; x: number; y: number; selected: boolean }) {
+  const scale = useStore(labelScaleSelector);
+  return (
+    <EdgeLabelRenderer>
+      <div
+        className={`fs-edge-label nodrag nopan${selected ? ' is-selected' : ''}`}
+        data-edge-id={id}
+        style={{ transform: `translate(-50%, -50%) translate(${x}px, ${y}px)${scale !== 1 ? ` scale(${scale})` : ''}` }}
+      >
+        {label}
+      </div>
+    </EdgeLabelRenderer>
+  );
+}

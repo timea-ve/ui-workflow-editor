@@ -15,16 +15,23 @@ export interface InspectorProps {
   onChange: (key: string, value: unknown) => void;
   /** Extra sections below the fields (e.g. Link, Option). Use <InspectorSection>. */
   children?: ReactNode;
-  /** Shown when several items are selected. */
+  /** Shown when several items are selected. Children still render (e.g. align / distribute). */
   multiCount?: number;
+  /** Render as an <aside> landmark (default). Set false when the host already provides the landmark. */
+  landmark?: boolean;
+  className?: string;
 }
 
 /** Right-hand side panel: editable lo-fi props of the current selection. */
-export function Inspector({ selection, onChange, children, multiCount }: InspectorProps) {
+export function Inspector({ selection, onChange, children, multiCount, landmark = true, className }: InspectorProps) {
+  const Root = landmark ? 'aside' : 'div';
   return (
-    <aside className="fsc-inspector fsc-root" aria-label="Inspector">
+    <Root className={`fsc-inspector fsc-root${className ? ` ${className}` : ''}`} {...(landmark ? { 'aria-label': 'Inspector' } : {})}>
       {multiCount && multiCount > 1 ? (
-        <p className="fsc-inspector__empty">{multiCount} items selected. Select one item to edit its details.</p>
+        <>
+          <p className="fsc-inspector__empty">{multiCount} items selected. Select one item to edit its details.</p>
+          {children}
+        </>
       ) : !selection ? (
         <p className="fsc-inspector__empty">Select something on the canvas to edit it here.</p>
       ) : (
@@ -41,7 +48,7 @@ export function Inspector({ selection, onChange, children, multiCount }: Inspect
           {children}
         </>
       )}
-    </aside>
+    </Root>
   );
 }
 

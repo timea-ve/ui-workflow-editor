@@ -357,7 +357,7 @@ describe('React Flow adapter', () => {
     const kit = nodes.filter((n) => n.type === 'kit');
     expect(kit).toHaveLength(Object.keys(board.elements).length);
     const child = kit.find((n) => n.parentId);
-    expect(child?.extent).toBe('parent');
+    expect(child?.extent).toBeUndefined(); // re-parented on drop instead (components feature)
     // Parents precede children.
     const index = new Map(nodes.map((n, i) => [n.id, i]));
     for (const n of kit) if (n.parentId) expect(index.get(n.parentId)!).toBeLessThan(index.get(n.id)!);

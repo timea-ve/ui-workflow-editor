@@ -1,0 +1,237 @@
+/* Flows feature chrome: link picker, connector tools, flows panel, compare. Tokens only. */
+
+/* ── Link picker ─────────────────────────────────────────────── */
+.fs-link-picker {
+  position: fixed;
+  top: 72px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: min(360px, calc(100vw - 32px));
+  padding: var(--fs-space-2);
+  display: flex;
+  flex-direction: column;
+  gap: var(--fs-space-2);
+  font: var(--fs-ui-text-md) var(--fs-ui-font);
+  color: var(--fs-ink);
+}
+.fs-link-picker__hint {
+  display: flex;
+  align-items: center;
+  gap: var(--fs-space-2);
+  margin: 0;
+  padding: var(--fs-space-1) var(--fs-space-2) 0;
+  color: var(--fs-muted);
+  font-size: var(--fs-ui-text-sm);
+}
+.fs-link-picker__hint > span { flex: 1; }
+.fs-link-picker__hint svg { color: var(--fs-accent); flex: none; }
+.fs-link-picker__hint strong { color: var(--fs-ink); font-weight: 600; }
+.fs-link-picker__list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  max-height: 280px;
+  overflow: auto;
+}
+.fs-link-picker__item {
+  display: flex;
+  align-items: center;
+  gap: var(--fs-space-2);
+  min-height: 36px;
+  padding: 0 var(--fs-space-2);
+  border-radius: var(--fs-radius-sm);
+  cursor: pointer;
+}
+.fs-link-picker__item[aria-selected='true'] { background: var(--fs-hover); box-shadow: inset 2px 0 0 var(--fs-accent); }
+.fs-link-picker__item > span:nth-child(2) { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.fs-link-picker__item.is-danger { color: var(--fs-ink); border-top: 1px solid var(--fs-hairline); border-radius: 0; margin-top: var(--fs-space-1); }
+.fs-link-picker__meta { color: var(--fs-muted); font-size: var(--fs-ui-text-sm); }
+.fs-link-picker__thumb {
+  width: 12px;
+  height: 18px;
+  flex: none;
+  border: 1.5px solid var(--fs-line);
+  border-radius: 3px;
+}
+.fs-link-picker__empty { padding: var(--fs-space-2); color: var(--fs-muted); }
+
+body.fs-linking .fs-flow-canvas .react-flow__node-screen { cursor: pointer; }
+body.fs-linking .fs-flow-canvas .react-flow__node-screen::after {
+  content: '';
+  position: absolute;
+  inset: -4px;
+  border: 2px dashed var(--fs-accent);
+  border-radius: var(--fs-radius-md);
+  pointer-events: none;
+}
+body.fs-linking .fs-flow-canvas .react-flow__node-screen:hover::after { border-style: solid; background: var(--fs-accent-weak); opacity: 0.6; }
+
+/* ── Connector label editor + tools ──────────────────────────── */
+.fs-edge-label-input {
+  position: absolute;
+  pointer-events: all;
+  width: 180px;
+  padding: 2px 8px;
+  font: 14px/1.3 var(--fs-kit-font);
+  color: var(--fs-ink);
+  background: var(--fs-surface);
+  border: 1px solid var(--fs-selection);
+  border-radius: var(--fs-radius-sm);
+  outline: none;
+  box-shadow: 0 0 0 3px var(--fs-accent-weak);
+  text-align: center;
+}
+.fs-edge-tools {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  padding: 2px;
+  background: var(--fs-surface);
+  border: 1px solid var(--fs-hairline);
+  border-radius: var(--fs-radius-md);
+  box-shadow: var(--fs-shadow-2);
+  font: var(--fs-ui-text-sm) var(--fs-ui-font);
+}
+.fs-edge-tools__btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  min-width: 28px;
+  height: 28px;
+  padding: 0 6px;
+  border: 0;
+  border-radius: var(--fs-radius-sm);
+  background: none;
+  color: var(--fs-ink);
+  font: inherit;
+  cursor: pointer;
+}
+.fs-edge-tools__btn:hover { background: var(--fs-hover); }
+.fs-edge-tools__btn[aria-pressed='true'] { background: var(--fs-accent-weak); color: var(--fs-accent); }
+.fs-edge-tools__btn:focus-visible { outline: var(--fs-focus-width) solid var(--fs-focus-ring); outline-offset: 0; }
+.fs-edge-tools__sep { width: 1px; height: 18px; margin: 0 2px; background: var(--fs-hairline); }
+
+/* ── Flows panel ─────────────────────────────────────────────── */
+.fs-flows {
+  width: 248px;
+  padding: var(--fs-space-1);
+  font: var(--fs-ui-text-md) var(--fs-ui-font);
+  color: var(--fs-ink);
+  animation: none;
+}
+.fs-flows__toggle {
+  display: flex;
+  align-items: center;
+  gap: var(--fs-space-2);
+  width: 100%;
+  height: 32px;
+  padding: 0 var(--fs-space-2);
+  border: 0;
+  border-radius: var(--fs-radius-sm);
+  background: none;
+  color: inherit;
+  font: 600 var(--fs-ui-text-md) var(--fs-ui-font);
+  cursor: pointer;
+}
+.fs-flows__toggle:hover { background: var(--fs-hover); }
+.fs-flows__count { margin-left: auto; color: var(--fs-muted); font-weight: 400; }
+.fs-flows__list, .fs-flows__options { list-style: none; margin: 0; padding: 0; }
+.fs-flows__flow { padding: var(--fs-space-2) var(--fs-space-1); border-top: 1px solid var(--fs-hairline); }
+.fs-flows__flow-head { display: flex; align-items: center; gap: var(--fs-space-1); }
+.fs-flows__flow-name, .fs-flows__option-name {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  gap: var(--fs-space-2);
+  height: 28px;
+  padding: 0 var(--fs-space-1);
+  border: 0;
+  border-radius: var(--fs-radius-sm);
+  background: none;
+  color: inherit;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.fs-flows__flow-name { font-weight: 600; display: block; line-height: 28px; }
+.fs-flows__flow-name:hover, .fs-flows__option-name:hover { background: var(--fs-hover); }
+.fs-flows__flow[data-active] > .fs-flows__flow-head .fs-flows__flow-name { color: var(--fs-ink); box-shadow: inset 2px 0 0 var(--fs-accent); }
+.fs-flows__text { overflow: hidden; text-overflow: ellipsis; }
+.fs-flows__option { display: flex; align-items: center; gap: 2px; padding-left: var(--fs-space-2); }
+.fs-flows__letter {
+  display: grid;
+  place-items: center;
+  flex: none;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: var(--fs-ink);
+  color: var(--fs-surface);
+  font-size: var(--fs-ui-text-xs);
+  font-weight: 600;
+}
+.fs-flows__option[data-active] .fs-flows__letter { background: var(--fs-accent); color: var(--fs-on-accent); }
+.fs-flows__row-actions { display: flex; opacity: 0.0; transition: opacity var(--fs-dur-fast) var(--fs-ease-out); }
+.fs-flows__option:hover .fs-flows__row-actions,
+.fs-flows__option:focus-within .fs-flows__row-actions,
+.fs-flows__flow-head:hover .fs-flows__icon,
+.fs-flows__flow-head:focus-within .fs-flows__icon { opacity: 1; }
+.fs-flows__flow-head .fs-flows__icon { opacity: 0; }
+.fs-flows__icon { width: 26px; height: 26px; min-width: 26px; padding: 0; }
+.fs-flows__flow-actions { display: flex; gap: var(--fs-space-1); margin-top: var(--fs-space-1); padding-left: var(--fs-space-2); }
+.fs-flows__small { height: 26px; padding: 0 var(--fs-space-2); font-size: var(--fs-ui-text-sm); gap: 4px; }
+.fs-flows__small[aria-disabled='true'], .fsc-btn[aria-disabled='true'] { color: var(--fs-subtle); cursor: not-allowed; }
+.fs-flows__input { width: 100%; height: 28px; }
+.fs-flows__empty { margin: 0; padding: var(--fs-space-2); color: var(--fs-muted); font-size: var(--fs-ui-text-sm); line-height: 1.5; }
+@media (hover: none) { .fs-flows__row-actions, .fs-flows__flow-head .fs-flows__icon { opacity: 1; } }
+
+/* ── Lane rename ─────────────────────────────────────────────── */
+.fs-lane-input {
+  width: 200px;
+  height: 26px;
+  padding: 0 6px;
+  font: 600 14px var(--fs-ui-font);
+  color: var(--fs-ink);
+  border: 1px solid var(--fs-selection);
+  border-radius: var(--fs-radius-sm);
+  outline: none;
+  box-shadow: 0 0 0 3px var(--fs-accent-weak);
+}
+
+/* ── Compare ─────────────────────────────────────────────────── */
+.fs-compare {
+  position: fixed;
+  inset: 0;
+  z-index: var(--fs-z-modal);
+  display: flex;
+  flex-direction: column;
+  background: var(--fs-canvas);
+  font: var(--fs-ui-text-md) var(--fs-ui-font);
+  color: var(--fs-ink);
+}
+.fs-compare__bar {
+  display: flex;
+  align-items: center;
+  gap: var(--fs-space-3);
+  padding: var(--fs-space-2) var(--fs-space-4);
+  background: var(--fs-surface);
+  border-bottom: 1px solid var(--fs-hairline);
+}
+.fs-compare__hint { color: var(--fs-muted); font-size: var(--fs-ui-text-sm); }
+.fs-compare__heads, .fs-compare__panes { display: grid; grid-template-columns: 1fr 1fr; }
+.fs-compare__heads { background: var(--fs-surface); border-bottom: 1px solid var(--fs-hairline); }
+.fs-compare__picker {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--fs-space-1);
+  padding: var(--fs-space-2) var(--fs-space-4);
+}
+.fs-compare__picker + .fs-compare__picker, .fs-compare__pane + .fs-compare__pane { border-left: 1px solid var(--fs-line); }
+.fs-compare__panes { flex: 1; min-height: 0; }
+.fs-compare__pane { position: relative; min-width: 0; overflow: hidden; }
+.fs-compare__pane > .react-flow { position: absolute; inset: 0; }

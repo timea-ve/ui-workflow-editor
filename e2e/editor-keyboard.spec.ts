@@ -69,7 +69,10 @@ test('Tab reaches the toolbar and screens; Escape returns to select', async ({ p
   await page.keyboard.press('Escape');
   await expect(page.locator('.react-flow__node-screen.selected')).toHaveCount(0);
   // Tab from the toolbar's Play button lands on the canvas items.
-  await page.getByRole('button', { name: 'Play' }).focus();
+  await page.getByRole('group', { name: 'Tools' }).getByRole('button', { name: 'Play' }).focus();
+  await page.keyboard.press('Tab');
+  // The (collapsed) Flows panel sits between the toolbar and the canvas.
+  await expect(page.getByRole('region', { name: 'Flows' }).getByRole('button').first()).toBeFocused();
   await page.keyboard.press('Tab');
   await expect(page.locator('.react-flow__node-screen')).toBeFocused();
   await page.keyboard.press('Enter');

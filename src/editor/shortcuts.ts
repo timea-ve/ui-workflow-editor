@@ -34,6 +34,26 @@ export function shortcutGroups(mod: string): ShortcutGroup[] {
       ],
     },
     {
+      title: 'Flows & options',
+      items: [
+        { keys: ['L'], label: 'Link the selected component to a screen' },
+        { keys: ['Enter'], label: 'Edit text, or the label of a selected arrow (also double-click)' },
+        { keys: ['⇧', 'D'], label: 'Duplicate the selected flow as a new option' },
+        { keys: ['⇧', 'C'], label: 'Compare options side by side' },
+        { keys: [mod, '⇧', 'E'], label: 'Export PNG or PDF' },
+      ],
+    },
+    {
+      title: 'Play mode',
+      items: [
+        { keys: ['←'], label: 'Back (also Backspace)' },
+        { keys: ['→'], label: 'Follow the only link on this screen' },
+        { keys: ['R'], label: 'Restart' },
+        { keys: ['1–9'], label: 'Switch option' },
+        { keys: ['Esc'], label: 'Exit to the editor' },
+      ],
+    },
+    {
       title: 'Arrange',
       items: [
         { keys: [mod, '⇧', ']'], label: 'Bring to front' },
