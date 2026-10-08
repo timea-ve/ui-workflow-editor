@@ -30,3 +30,8 @@ Technical decisions are made by the Orchestrator; product/design decisions by th
 | 24 | 2026-10-08 | Phase 3 runs in two waves: editor core, dashboard and export/share in parallel first; canvas components and flows second | Dashboard and export don't depend on the editor, so this saves time without collisions. | Orchestrator (tech) | ✅ |
 | 25 | 2026-10-08 | Share links served by a tiny built-in server during development (files on disk), same code deploys to Vercel later | Keeps "one command to run" with no accounts or secrets. | Orchestrator (tech) | ✅ |
 | 26 | 2026-10-08 | Exports render from the saved board, not the screen you see | Exports look the same no matter where you're zoomed. | Orchestrator (tech) | ✅ |
+| 27 | 2026-10-08 | Screens resize in height only; width follows the device | Keeps screens true to device size; taller screens act as scrolling pages. | Orchestrator (UX detail within Gate 2 kit) | ✅ |
+| 28 | 2026-10-08 | Shortcuts: ⇧D duplicate as option, ⇧C compare, P play, L link, / insert | One key each for the core loop; all listed in the ? dialog. | Orchestrator | ✅ |
+| 29 | 2026-10-08 | After "link to new screen", the view glides to show both screens | You always see what you just made. | Orchestrator | ✅ |
+| 30 | 2026-10-08 | Arrows from a button leave its screen on the side facing the target | Avoids lines doubling back across the screen. | Orchestrator | ✅ |
+| 31 | 2026-10-08 | Option labels sit inside the lane's top-left corner | Always visible after "fit to screen". | Orchestrator | ✅ |

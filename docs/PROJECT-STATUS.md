@@ -4,7 +4,7 @@ _Last updated: 2026-10-08_
 
 | | |
 |---|---|
-| **Current phase** | Phase 3 — Build (Wave B in progress) |
+| **Current phase** | Phase 3 — Build ✅ complete, awaiting Gate 3 |
 | **Next gate** | ⛳ Gate 3 — hands-on demo (build a 5-screen sign-up flow with Option A/B) |
 
 ## Done
@@ -14,12 +14,13 @@ _Last updated: 2026-10-08_
 
 - Wave A ✅: real editor (autosave, undo/redo, snapping, copy/paste, shortcuts; 60 screens smooth), dashboard + 5 templates, PNG/PDF export, share links + share page. 354 unit + 25 end-to-end tests passing.
 
-## In progress (Wave B, parallel)
-- **Components on canvas** — insert palette, inspector, in-place text editing, resizing
-- **Connectors & Flows** — linking (L), flow names, Option A/B, Compare, Play
+- Wave B ✅: components on canvas (insert /, properties panel, text editing, resizing), linking (L), flows panel, Option A/B (⇧D), Compare (⇧C), Play (P). 401 unit + 38 end-to-end tests passing, including a robot run of the Gate 3 task.
+
+## In progress
+- ⛳ Gate 3 hands-on demo with the Director — see [gates/GATE-3.md](gates/GATE-3.md)
 
 ## Blocked
 - Nothing
 
 ## Up next
-- Integration → ⛳ Gate 3 demo
+- Phase 4 (QA & accessibility · performance · copy & onboarding) → ⛳ Gate 4
