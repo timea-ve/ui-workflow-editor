@@ -1,4 +1,4 @@
-# ⛳ Gate 2 — Visual direction + component kits
+# ⛳ Gate 2 — Visual direction + component kits — ✅ APPROVED (Clean lo-fi, violet accent; other recommendations accepted)
 
 _Date: 2026-10-08 · Detail: [design system](../phase-2/design-system.md) · [wireframe kit](../phase-2/wireframe-kit.md) · [diagram & flow](../phase-2/diagram-flow.md)_
 

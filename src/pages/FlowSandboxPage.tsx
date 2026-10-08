@@ -22,7 +22,7 @@ function targetFlowFrames(doc: BoardDoc, selection: ID[]): ID[] | undefined {
 
 export function FlowSandboxPage() {
   const [doc, setDoc] = useState<BoardDoc>(buildSandboxBoard);
-  const [style, setStyle] = useState<VisualStyle>('sketchy');
+  const [style, setStyle] = useState<VisualStyle>('clean');
   const [selection, setSelection] = useState<ID[]>([]);
   const [play, setPlay] = useState<{ frameId: ID; title: string } | null>(null);
 

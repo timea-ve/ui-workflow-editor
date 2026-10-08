@@ -17,9 +17,9 @@
   --fs-gray-8: #343432;
   --fs-gray-9: #1f1f1f;
 
-  /* ── The one accent (blue) ────────────────────────────────────── */
-  --fs-accent-hue: #2f5bd3;
-  --fs-accent-tint: #e8eefc;
+  /* ── The one accent (violet) ────────────────────────────────────── */
+  --fs-accent-hue: #5b3fd1;
+  --fs-accent-tint: #eeeafb;
 
   /* ── Semantic colour (names other agents already use) ─────────── */
   --fs-ink: var(--fs-gray-9);          /* body text, default sketch ink */
@@ -36,7 +36,7 @@
   --fs-on-accent: var(--fs-gray-0);    /* text/icons on accent fill */
 
   --fs-selection: var(--fs-accent);    /* selection outline + handles */
-  --fs-selection-fill: rgb(47 91 211 / 0.08);
+  --fs-selection-fill: rgb(91 63 209 / 0.08);
   --fs-link-marker: var(--fs-accent);  /* "clickable" badge on a link's source element */
   --fs-link-marker-size: 16px;
   --fs-focus-ring: var(--fs-accent);

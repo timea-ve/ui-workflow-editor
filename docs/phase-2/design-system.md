@@ -4,8 +4,8 @@ Owner: Design System Agent · Status: ready for Gate 2 · Preview: **`/chrome`**
 
 ## In plain language
 
-- **One look, two flavours.** Everything is grey plus one blue. You choose whether the wireframes on the canvas look **hand-drawn** (Option 1) or **neat and straight** (Option 2). The app around the canvas (toolbars, panels) looks the same in both.
-- **Blue means "you can act on this".** The single blue is used only for the selection outline, the focus ring, the main "Play" button and the small "clickable" marker on linked elements. It is never used as decoration.
+- **One look, two flavours.** Everything is grey plus one violet. You choose whether the wireframes on the canvas look **hand-drawn** (Option 1) or **neat and straight** (Option 2). The app around the canvas (toolbars, panels) looks the same in both.
+- **Violet means "you can act on this".** The single violet is used only for the selection outline, the focus ring, the main "Play" button and the small "clickable" marker on linked elements. It is never used as decoration.
 - **Everything is readable.** Every text and line colour has been measured against its background and passes the WCAG AA accessibility standard (results below). This is checked by an automated test, so it can't quietly regress.
 - **Keyboard-first, but not keyboard-only.** Each tool shows its one-letter shortcut in the corner (V, H, F, R, D, O, A, T, N, /, P), and every control also works with mouse, touch and screen reader.
 - **Calm by default.** Motion is short and switches off completely when the device asks for reduced motion. There is no red: errors use plain words and an icon instead of an alarm colour.
@@ -30,7 +30,7 @@ Existing names (`--fs-ink`, `--fs-muted`, `--fs-faint`, `--fs-surface`, `--fs-ca
 | Group | Tokens | Values |
 |---|---|---|
 | Grey ramp | `--fs-gray-0…9` | #ffffff, #f5f5f4, #ececea, #dddddb, #c6c6c2, #858582, #6b6b68, #545451, #343432, #1f1f1f |
-| Accent (the only colour) | `--fs-accent` / `--fs-accent-weak` | #2f5bd3 / #e8eefc |
+| Accent (the only colour) | `--fs-accent` / `--fs-accent-weak` | #5b3fd1 / #eeeafb (Director, Gate 2) |
 | Semantic | `--fs-ink`, `--fs-muted`, `--fs-subtle`, `--fs-line`, `--fs-hairline`, `--fs-hover`, `--fs-faint`, `--fs-surface`, `--fs-canvas`, `--fs-on-accent` | gray-9, gray-7, gray-6, gray-5, gray-3, gray-2, gray-4 (fills only, never text), white, per style, white |
 | Selection / link | `--fs-selection`, `--fs-selection-fill`, `--fs-link-marker`, `--fs-link-marker-size` | accent, accent-weak, accent, 16px |
 | Focus | `--fs-focus-ring`, `--fs-focus-width`, `--fs-focus-offset` | accent, 2px, 2px |
@@ -54,7 +54,7 @@ Text needs ≥ 4.5 : 1; UI strokes and the focus ring need ≥ 3 : 1.
 | ink #1f1f1f | 16.48 | 15.24 | 15.11 | 13.93 | 14.18 | body text, strokes | AA text ✅ |
 | muted #545451 | 7.60 | 7.03 | 6.96 | 6.42 | 6.54 | secondary text | AA text ✅ |
 | subtle #6b6b68 | 5.35 | 4.94 | 4.90 | 4.52 | 4.60 | hints, placeholders | AA text ✅ |
-| accent #2f5bd3 | 5.90 | 5.46 | 5.41 | 4.99 | 5.08 | selection, focus, links | AA text ✅ |
+| accent #5b3fd1 (chosen at Gate 2) | 6.83 on white · 5.78 on its tint | | | | | selection, focus, links | AA text ✅ (verified by contrast.test.ts) |
 | line #858582 | 3.70 | 3.42 | 3.39 | 3.13 | 3.18 | input borders, separators | AA UI (3:1) ✅ — not for text |
 
 Other pairs: white on accent (Play button) **5.90** ✅ · ink on faint fill (#c6c6c2, e.g. primary wireframe button) **9.62** ✅ · link marker (accent) on faint fill **3.45** ✅ (UI). Faint #c6c6c2 is decorative fill only and is never used for text.

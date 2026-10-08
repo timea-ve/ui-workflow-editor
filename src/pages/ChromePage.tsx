@@ -77,7 +77,7 @@ let toastSeq = 0;
 
 export function ChromePage() {
   const [params, setParams] = useSearchParams();
-  const style: VisualStyle = params.get('style') === 'clean' ? 'clean' : 'sketchy';
+  const style: VisualStyle = params.get('style') === 'sketchy' ? 'sketchy' : 'clean';
   const [board, setBoard] = useState<'empty' | 'flow'>('flow');
   const [status, setStatus] = useState<SaveStatus>('saved');
   const [title, setTitle] = useState('Sign-up flow');

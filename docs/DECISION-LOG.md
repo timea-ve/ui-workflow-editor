@@ -21,3 +21,9 @@ Technical decisions are made by the Orchestrator; product/design decisions by th
 | 15 | 2026-10-08 | npm (bundled with Node) instead of pnpm; single app folder | Nothing extra to install; simpler for one-command run. Share-link API added in Phase 3. | Orchestrator | ✅ |
 | 16 | 2026-10-08 | Self-hosted open-licence fonts (Kalam, Inter) and lucide icons (ISC) | No dependence on outside servers; free to use commercially. | Orchestrator | ✅ |
 | 17 | 2026-10-08 | Both styles drawn through one set of shared drawing primitives | Switching style is one setting, never per-component work. | Orchestrator | ✅ |
+| 18 | 2026-10-08 | Visual style: **Clean lo-fi** (straight grey lines, Inter) as the default | Tidier and more presentable. Sketchy code stays dormant (possible per-board switch later — parking lot). | Director (Gate 2 V1) | ✅ |
+| 19 | 2026-10-08 | Accent colour: **Violet #5b3fd1** (6.83:1 on white) | More distinctive; passes AA. | Director (Gate 2 V3) | ✅ |
+| 20 | 2026-10-08 | Handwritten font question dropped | Not needed with Clean style. | Director (Gate 2 V2) | ✅ |
+| 21 | 2026-10-08 | Toolbar floating left; shortcut letters always shown | Keeps top bar free; teaches shortcuts. | Director (Gate 2 V4, V5) | ✅ |
+| 22 | 2026-10-08 | Paragraph text linkable; no auto-dim behind modals; table rows not linkable in v1; screen name above frame | Recommendations accepted. | Director (Gate 2 K1–K4) | ✅ |
+| 23 | 2026-10-08 | New linked screen goes to the right; diagram shapes not clickable in Play; option copies exclude links leaving the flow; copied screens keep names | Recommendations accepted. | Director (Gate 2 F1–F4) | ✅ |
