@@ -19,3 +19,5 @@ Technical decisions are made by the Orchestrator; product/design decisions by th
 | 13 | 2026-10-08 | Links use the same arrow + a "clickable" marker on the source | Wireframes and diagrams are one thing. | Director (Gate 1 D5) | ✅ |
 | 14 | 2026-10-08 | No accounts in MVP; boards on device; share links account-free | Fastest path to first value. | Director (Gate 1 D6) | ✅ |
 | 15 | 2026-10-08 | npm (bundled with Node) instead of pnpm; single app folder | Nothing extra to install; simpler for one-command run. Share-link API added in Phase 3. | Orchestrator | ✅ |
+| 16 | 2026-10-08 | Self-hosted open-licence fonts (Kalam, Inter) and lucide icons (ISC) | No dependence on outside servers; free to use commercially. | Orchestrator | ✅ |
+| 17 | 2026-10-08 | Both styles drawn through one set of shared drawing primitives | Switching style is one setting, never per-component work. | Orchestrator | ✅ |

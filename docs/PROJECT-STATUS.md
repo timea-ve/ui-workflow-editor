@@ -4,20 +4,21 @@ _Last updated: 2026-10-08_
 
 | | |
 |---|---|
-| **Current phase** | Phase 2 — Design System · Wireframe Kit · Diagram Kit |
-| **Next gate** | ⛳ Gate 2 — visual direction (2 style options) + component kits |
+| **Current phase** | Phase 2 — ✅ complete |
+| **Next gate** | ⛳ Gate 2 — **awaiting Director decisions** ([GATE-2.md](gates/GATE-2.md)) |
 
 ## Done
-- Phase 1 discovery; ⛳ Gate 1 approved (all recommendations)
-- Project skeleton: `npm install && npm run dev` runs; tests pass
+- Phase 1 discovery; ⛳ Gate 1 approved
+- Design system: tokens, 2 style options, AA contrast verified, app chrome (`/chrome`)
+- Wireframe kit: 16 components + 3 device frames (`/gallery`)
+- Diagram & flow: 5 shapes, attached connectors, links, Option B duplication, Play proof (`/sandbox`)
+- 222 automated tests passing; build clean
 
 ## In progress
-- Design System agent → tokens, 2 style options, app chrome (`/chrome`)
-- Wireframe Kit agent → 16 lo-fi components + device frames (`/gallery`)
-- Diagram & Flow agent → shapes, connectors, links, options (`/sandbox`)
+- Director review of Gate 2 (13 decisions; 2 key: style + accent)
 
 ## Blocked
-- Nothing
+- Phase 3 waits on Gate 2 approval
 
 ## Up next
-- Integrate kits → Gate 2 one-pager with screenshots
+- Phase 3: Canvas Core → Wireframe components | Connectors & Flows | Boards/Storage | Export/Share → Gate 3 hands-on demo

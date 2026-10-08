@@ -1,0 +1,92 @@
+/* Gate 2 preview page (/chrome) — layout only. Not shipped in the editor. */
+
+.fsp-page {
+  display: grid;
+  grid-template-rows: auto auto auto 1fr;
+  height: 100vh;
+  min-height: 560px;
+  background: var(--fs-canvas);
+}
+
+/* Review controls strip (for the Director, not part of the product) */
+.fsp-review {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--fs-space-3) var(--fs-space-6);
+  padding: var(--fs-space-2) var(--fs-space-4);
+  background: var(--fs-gray-2);
+  border-bottom: 1px solid var(--fs-hairline);
+  font-size: var(--fs-ui-text-sm);
+}
+.fsp-review a { color: var(--fs-ink); text-underline-offset: 3px; }
+.fsp-review__group { display: flex; align-items: center; gap: var(--fs-space-2); }
+.fsp-review__label { color: var(--fs-muted); font-weight: 500; }
+.fsp-seg {
+  display: inline-flex;
+  padding: 2px;
+  border: 1px solid var(--fs-line);
+  border-radius: var(--fs-radius-md);
+  background: var(--fs-surface);
+}
+.fsp-seg button {
+  height: 28px;
+  padding: 0 var(--fs-space-3);
+  border: 0;
+  border-radius: 6px;
+  background: transparent;
+  color: var(--fs-ink);
+  font: 500 var(--fs-ui-text-sm) / 1 var(--fs-ui-font);
+  cursor: pointer;
+}
+.fsp-seg button:hover { background: var(--fs-hover); }
+.fsp-seg button[data-state='on'] { background: var(--fs-ink); color: var(--fs-surface); }
+.fsp-review select { height: 32px; min-height: 0; padding: 0 var(--fs-space-2); width: auto; }
+.fsp-focus-demo { outline: var(--fs-focus-width) solid var(--fs-focus-ring); outline-offset: var(--fs-focus-offset); }
+
+/* Editor body */
+.fsp-body { display: flex; min-height: 0; }
+.fsp-canvas {
+  position: relative;
+  flex: 1;
+  min-width: 0;
+  overflow: auto;
+  background-color: var(--fs-canvas);
+  background-image: radial-gradient(var(--fs-grid-dot) 1px, transparent 1.2px);
+  background-size: 24px 24px;
+}
+.fsp-canvas:focus-visible { outline-offset: -3px; }
+.fsp-toolbar { position: absolute; top: var(--fs-space-4); left: var(--fs-space-4); z-index: var(--fs-z-chrome); }
+.fsp-board { position: relative; width: 1010px; height: 860px; margin: var(--fs-space-6) 0 0 96px; }
+.fsp-empty { position: absolute; inset: 0; display: grid; place-items: center; }
+
+.fsp-screen-title {
+  position: absolute;
+  left: 0;
+  top: -22px;
+  font: 500 var(--fs-ui-text-xs) / 1 var(--fs-ui-font);
+  color: var(--fs-muted);
+  white-space: nowrap;
+}
+.fsp-selected { outline: 2px solid var(--fs-selection); outline-offset: 3px; }
+.fsp-handle {
+  position: absolute;
+  width: 8px; height: 8px;
+  background: var(--fs-surface);
+  border: 1.5px solid var(--fs-selection);
+  border-radius: 2px;
+}
+.fsp-hint {
+  position: absolute;
+  right: var(--fs-space-4);
+  bottom: var(--fs-space-4);
+  display: flex;
+  gap: var(--fs-space-2);
+  align-items: center;
+  padding: 6px var(--fs-space-3);
+  border-radius: var(--fs-radius-md);
+  background: var(--fs-surface);
+  box-shadow: var(--fs-shadow-1);
+  color: var(--fs-muted);
+  font-size: var(--fs-ui-text-xs);
+}

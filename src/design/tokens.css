@@ -1,34 +1,131 @@
-/* FlowSketch design tokens — placeholder values.
-   Owner: Design System agent. Two kit styles are switched with
+/* FlowSketch design tokens — Phase 2 (Design System agent).
+   Rules: grayscale + exactly ONE accent. WCAG AA: text ≥ 4.5:1, meaningful
+   UI strokes / focus ≥ 3:1. Contrast pairs are verified in contrast.test.ts.
+   The two candidate kit styles are switched with
    [data-kit-style="sketchy" | "clean"] on any ancestor element. */
 
 :root {
-  /* Grayscale + 1 accent */
-  --fs-ink: #1f1f1f;
-  --fs-muted: #5c5c5c;
-  --fs-faint: #b8b8b8;
-  --fs-surface: #ffffff;
-  --fs-canvas: #f6f6f4;
-  --fs-accent: #2f5bd3;
+  /* ── Grayscale ramp (neutral) ─────────────────────────────────── */
+  --fs-gray-0: #ffffff;
+  --fs-gray-1: #f5f5f4;
+  --fs-gray-2: #ececea;
+  --fs-gray-3: #dddddb;
+  --fs-gray-4: #c6c6c2;
+  --fs-gray-5: #858582;
+  --fs-gray-6: #6b6b68;
+  --fs-gray-7: #545451;
+  --fs-gray-8: #343432;
+  --fs-gray-9: #1f1f1f;
 
-  /* App chrome font */
-  --fs-ui-font: system-ui, -apple-system, 'Segoe UI', sans-serif;
+  /* ── The one accent (blue) ────────────────────────────────────── */
+  --fs-accent-hue: #2f5bd3;
+  --fs-accent-tint: #e8eefc;
 
-  /* Kit text scale */
+  /* ── Semantic colour (names other agents already use) ─────────── */
+  --fs-ink: var(--fs-gray-9);          /* body text, default sketch ink */
+  --fs-muted: var(--fs-gray-7);        /* secondary text (≥ 4.5:1) */
+  --fs-subtle: var(--fs-gray-6);       /* placeholder / hint text (≥ 4.5:1 on surface & canvas) */
+  --fs-faint: var(--fs-gray-4);        /* fills & decorative strokes only — never text */
+  --fs-surface: var(--fs-gray-0);      /* panels, screens, cards */
+  --fs-canvas: var(--fs-gray-1);       /* infinite canvas background */
+  --fs-hover: var(--fs-gray-2);        /* hover wash on chrome controls */
+  --fs-hairline: var(--fs-gray-3);     /* decorative dividers / panel edges */
+  --fs-line: var(--fs-gray-5);         /* meaningful UI strokes: inputs, toggles (≥ 3:1) */
+  --fs-accent: var(--fs-accent-hue);   /* selection, links, primary action, focus */
+  --fs-accent-weak: var(--fs-accent-tint); /* active-tool / selected-row wash */
+  --fs-on-accent: var(--fs-gray-0);    /* text/icons on accent fill */
+
+  --fs-selection: var(--fs-accent);    /* selection outline + handles */
+  --fs-selection-fill: rgb(47 91 211 / 0.08);
+  --fs-link-marker: var(--fs-accent);  /* "clickable" badge on a link's source element */
+  --fs-link-marker-size: 16px;
+  --fs-focus-ring: var(--fs-accent);
+  --fs-focus-width: 2px;
+  --fs-focus-offset: 2px;
+  --fs-grid-dot: var(--fs-gray-4);
+
+  /* ── Spacing (4 px base) ──────────────────────────────────────── */
+  --fs-space-0: 0;
+  --fs-space-1: 4px;
+  --fs-space-2: 8px;
+  --fs-space-3: 12px;
+  --fs-space-4: 16px;
+  --fs-space-5: 20px;
+  --fs-space-6: 24px;
+  --fs-space-8: 32px;
+  --fs-space-10: 40px;
+  --fs-space-12: 48px;
+
+  /* ── Radii ────────────────────────────────────────────────────── */
+  --fs-radius-sm: 4px;
+  --fs-radius-md: 8px;
+  --fs-radius-lg: 12px;
+  --fs-radius-pill: 999px;
+
+  /* ── Stroke widths (px, unitless for SVG) ─────────────────────── */
+  --fs-stroke-hair: 1;
+  --fs-stroke-1: 1.5;   /* default kit / diagram stroke */
+  --fs-stroke-2: 2;     /* selection outline, arrows */
+  --fs-stroke-3: 3;     /* emphasis (e.g. drop-target highlight) */
+
+  /* ── Shadows (minimal: floating chrome only) ──────────────────── */
+  --fs-shadow-1: 0 1px 2px rgb(20 20 18 / 0.06), 0 2px 8px rgb(20 20 18 / 0.06);
+  --fs-shadow-2: 0 4px 12px rgb(20 20 18 / 0.08), 0 12px 32px rgb(20 20 18 / 0.10);
+
+  /* ── Layers ───────────────────────────────────────────────────── */
+  --fs-z-canvas: 0;
+  --fs-z-lanes: 1;
+  --fs-z-items: 2;
+  --fs-z-selection: 3;
+  --fs-z-chrome: 10;
+  --fs-z-popover: 20;
+  --fs-z-modal: 30;
+  --fs-z-toast: 40;
+
+  /* ── Motion (zeroed under prefers-reduced-motion) ─────────────── */
+  --fs-dur-fast: 120ms;
+  --fs-dur-base: 180ms;
+  --fs-dur-slow: 280ms;
+  --fs-ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+
+  /* ── App chrome typography ────────────────────────────────────── */
+  --fs-ui-font: 'Inter Variable', Inter, system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --fs-ui-text-xs: 12px;
+  --fs-ui-text-sm: 13px;
+  --fs-ui-text-md: 14px;
+  --fs-ui-text-lg: 16px;
+  --fs-ui-text-xl: 20px;
+  --fs-ui-leading: 1.4;
+
+  /* ── Kit (inside screens) typography ──────────────────────────── */
   --fs-kit-text-sm: 12px;
   --fs-kit-text-md: 14px;
   --fs-kit-text-lg: 18px;
   --fs-kit-text-xl: 24px;
-
   --fs-kit-font: var(--fs-ui-font);
+  --fs-kit-radius: 6px;
 }
 
+/* Option 1 — Sketchy: hand-drawn strokes (Rough.js), Kalam handwriting, paper canvas. */
 [data-kit-style='sketchy'] {
-  --fs-kit-font: 'Comic Neue', 'Comic Sans MS', 'Chalkboard SE', cursive;
+  --fs-kit-font: 'Kalam', 'Comic Neue', 'Chalkboard SE', cursive;
+  --fs-canvas: #f7f6f2;
+  --fs-kit-radius: 0px;
 }
 
+/* Option 2 — Clean lo-fi: straight geometric lines, Inter, neutral canvas. */
 [data-kit-style='clean'] {
   --fs-kit-font: var(--fs-ui-font);
+  --fs-canvas: var(--fs-gray-1);
+  --fs-kit-radius: 6px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --fs-dur-fast: 0ms;
+    --fs-dur-base: 0ms;
+    --fs-dur-slow: 0ms;
+  }
 }
 
 *, *::before, *::after { box-sizing: border-box; }
@@ -37,6 +134,17 @@ html, body, #root {
   margin: 0;
   height: 100%;
   font-family: var(--fs-ui-font);
+  font-size: var(--fs-ui-text-md);
+  line-height: var(--fs-ui-leading);
   color: var(--fs-ink);
   background: var(--fs-canvas);
+  -webkit-font-smoothing: antialiased;
+}
+
+::selection { background: var(--fs-accent-weak); color: var(--fs-ink); }
+input, textarea { caret-color: var(--fs-accent); }
+
+:focus-visible {
+  outline: var(--fs-focus-width) solid var(--fs-focus-ring);
+  outline-offset: var(--fs-focus-offset);
 }

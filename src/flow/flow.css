@@ -1,0 +1,112 @@
+/* Canvas-level styles for screens, kit nodes, lanes, connectors and Play. Tokens only. */
+
+.fs-flow-canvas { background: var(--fs-canvas); }
+.fs-flow-canvas .react-flow__node { font-family: var(--fs-ui-font); }
+
+/* Handles: hidden until hover / selection, like Whimsical. */
+.fs-handle.react-flow__handle {
+  width: 10px;
+  height: 10px;
+  background: var(--fs-surface);
+  border: 2px solid var(--fs-selection);
+  opacity: 0;
+  transition: opacity 120ms ease-out;
+}
+.react-flow__node:hover > div > .fs-handle,
+.fs-kit-node.is-selected > .fs-handle,
+.fs-screen-node.is-selected > .fs-handle,
+.react-flow.fs-connecting .fs-handle { opacity: 1; }
+
+.fs-kit-node, .fs-screen-node { position: relative; }
+.fs-kit-node.is-selected,
+.fs-screen-node.is-selected { outline: var(--fs-focus-width) solid var(--fs-selection); outline-offset: 3px; }
+.fs-screen-node.is-selected { border-radius: 8px; }
+.react-flow__node:focus-visible { outline: var(--fs-focus-width) solid var(--fs-focus-ring); outline-offset: var(--fs-focus-offset); }
+
+.fs-placeholder {
+  display: grid;
+  place-items: center;
+  border: 1.5px dashed var(--fs-line);
+  border-radius: 4px;
+  color: var(--fs-muted);
+  font: 12px var(--fs-ui-font);
+  overflow: hidden;
+  padding: 4px;
+  text-align: center;
+}
+
+/* Option lanes */
+.fs-lane { position: relative; }
+.fs-lane-chip {
+  position: absolute;
+  top: 64px;
+  right: calc(100% + 16px);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 8px 6px 14px;
+  background: var(--fs-surface);
+  border: 1px solid var(--fs-hairline);
+  border-radius: var(--fs-radius-pill);
+  box-shadow: var(--fs-shadow-1);
+  white-space: nowrap;
+  pointer-events: auto;
+  font: 600 14px var(--fs-ui-font);
+  color: var(--fs-ink);
+}
+.fs-lane-play {
+  font: 600 12px var(--fs-ui-font);
+  color: var(--fs-on-accent);
+  background: var(--fs-accent);
+  border: 0;
+  border-radius: var(--fs-radius-pill);
+  padding: 4px 10px;
+  cursor: pointer;
+}
+.fs-lane-play:focus-visible { outline: var(--fs-focus-width) solid var(--fs-focus-ring); outline-offset: var(--fs-focus-offset); }
+
+/* Connector labels */
+.fs-edge-label {
+  position: absolute;
+  pointer-events: all;
+  padding: 2px 8px;
+  background: var(--fs-surface);
+  border: 1px solid var(--fs-hairline);
+  border-radius: var(--fs-radius-sm);
+  font: 12px var(--fs-kit-font);
+  color: var(--fs-ink);
+  white-space: nowrap;
+}
+.fs-edge-label.is-selected { border-color: var(--fs-selection); }
+
+/* Play */
+.fs-play {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  background: var(--fs-canvas);
+  z-index: var(--fs-z-modal);
+}
+.fs-play-bar {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 8px 16px;
+  background: var(--fs-surface);
+  border-bottom: 1px solid var(--fs-hairline);
+  font: 14px var(--fs-ui-font);
+}
+.fs-play-hint { color: var(--fs-muted); font-size: 12px; }
+.fs-play-stage { flex: 1; overflow: auto; outline: none; }
+.fs-play-hotspot {
+  padding: 0;
+  margin: 0;
+  border: 0;
+  background: none;
+  cursor: pointer;
+  border-radius: 6px;
+  box-shadow: 0 0 0 2px var(--fs-accent-weak);
+}
+.fs-play-hotspot:hover { box-shadow: 0 0 0 2px var(--fs-accent); }
+.fs-play-hotspot:focus-visible { outline: var(--fs-focus-width) solid var(--fs-focus-ring); outline-offset: var(--fs-focus-offset); }
