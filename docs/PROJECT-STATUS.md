@@ -4,21 +4,22 @@ _Last updated: 2026-10-08_
 
 | | |
 |---|---|
-| **Current phase** | Phase 2 — ✅ complete |
-| **Next gate** | ⛳ Gate 2 — **awaiting Director decisions** ([GATE-2.md](gates/GATE-2.md)) |
+| **Current phase** | Phase 3 — Build (Wave A in progress) |
+| **Next gate** | ⛳ Gate 3 — hands-on demo (build a 5-screen sign-up flow with Option A/B) |
 
 ## Done
 - Phase 1 discovery; ⛳ Gate 1 approved
-- Design system: tokens, 2 style options, AA contrast verified, app chrome (`/chrome`)
-- Wireframe kit: 16 components + 3 device frames (`/gallery`)
-- Diagram & flow: 5 shapes, attached connectors, links, Option B duplication, Play proof (`/sandbox`)
-- 222 automated tests passing; build clean
+- Phase 2 kits; ⛳ Gate 2 approved (Clean lo-fi, violet accent, all other recommendations)
+- Phase 3 setup: build contracts ([phase-3/CONTRACTS.md](phase-3/CONTRACTS.md)), app routes (`/`, `/b/:id`, `/s/:id`), board list, test setup
 
-## In progress
-- Director review of Gate 2 (13 decisions; 2 key: style + accent)
+## In progress (Wave A, parallel)
+- **Canvas Core** — the real editor: autosave, undo/redo, selection, snapping, copy/paste, shortcuts, 60-screen performance
+- **Platform** — dashboard, new/rename/duplicate/delete boards, 5 starter templates
+- **Export/Share** — PNG/PDF export, read-only share links, share view page
 
 ## Blocked
-- Phase 3 waits on Gate 2 approval
+- Nothing
 
 ## Up next
-- Phase 3: Canvas Core → Wireframe components | Connectors & Flows | Boards/Storage | Export/Share → Gate 3 hands-on demo
+- Wave B (after Canvas Core): components on canvas (insert, inspector, text editing) · links, flow names, Compare, Play
+- Integration → ⛳ Gate 3 demo

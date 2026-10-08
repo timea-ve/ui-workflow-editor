@@ -3,6 +3,7 @@ import type { NodeProps } from '@xyflow/react';
 import { DeviceFrame } from '../kit/wireframe/DeviceFrame';
 import { seedFromId } from '../kit/registry';
 import type { ScreenFlowNode } from './adapter';
+import { sameNodeView } from './memo';
 import { useFlowView } from './context';
 import { SideHandles } from './Handles';
 
@@ -16,4 +17,4 @@ export const ScreenNode = memo(function ScreenNode({ data, selected }: NodeProps
       <SideHandles />
     </div>
   );
-});
+}, sameNodeView);

@@ -2,6 +2,7 @@
 // and never mutates its input. See docs/phase-2/diagram-flow.md.
 
 import { nanoid } from 'nanoid';
+import { generateKeyBetween, generateNKeysBetween } from 'fractional-indexing';
 import {
   DEVICE_SIZES,
   type Anchor, type BoardDoc, type Connector, type Device, type Element, type ElementType,
@@ -16,16 +17,35 @@ export function emptyDoc(): BoardDoc {
   return { frames: {}, elements: {}, connectors: {}, links: {}, variants: {}, flowNames: {} };
 }
 
-// ---------- z-order (simple sortable strings for now; fractional indexing later) ----------
+// ---------- z-order (fractional indexes, compared with plain < — never localeCompare) ----------
 
-const zNum = (z: string) => Number.parseInt(z.replace(/^z/, ''), 10) || 0;
-const zStr = (n: number) => `z${String(n).padStart(8, '0')}`;
+/** ASCII comparison for fractional index keys. */
+export const compareZ = (a: string, b: string) => (a < b ? -1 : a > b ? 1 : 0);
+
+/** A key strictly after `a`. Tolerates legacy keys that aren't valid fractional indexes. */
+export function zAfter(a: string | null): string {
+  try { return generateKeyBetween(a, null); } catch { return `${a}V`; }
+}
+
+/** `n` ascending keys strictly after `a`. */
+export function zKeysAfter(a: string | null, n: number): string[] {
+  try { return generateNKeysBetween(a, null, n); } catch {
+    const out: string[] = [];
+    let k = a;
+    for (let i = 0; i < n; i++) { k = zAfter(k); out.push(k); }
+    return out;
+  }
+}
+
+export function maxZ(doc: BoardDoc): string | null {
+  let max: string | null = null;
+  for (const f of Object.values(doc.frames)) if (max === null || f.z > max) max = f.z;
+  for (const e of Object.values(doc.elements)) if (max === null || e.z > max) max = e.z;
+  return max;
+}
 
 function nextZ(doc: BoardDoc): string {
-  let max = 0;
-  for (const f of Object.values(doc.frames)) max = Math.max(max, zNum(f.z));
-  for (const e of Object.values(doc.elements)) max = Math.max(max, zNum(e.z));
-  return zStr(max + 1);
+  return zAfter(maxZ(doc));
 }
 
 const nodeExists = (doc: BoardDoc, id: ID) => !!doc.frames[id] || !!doc.elements[id];
@@ -366,7 +386,7 @@ export function boundsOf(rects: Rect[]): Rect | undefined {
 const LETTERS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
 
 export function variantsInFlow(doc: BoardDoc, flowId: ID): VariantGroup[] {
-  return Object.values(doc.variants).filter((v) => v.flowId === flowId).sort((a, b) => a.order.localeCompare(b.order));
+  return Object.values(doc.variants).filter((v) => v.flowId === flowId).sort((a, b) => compareZ(a.order, b.order));
 }
 
 export function framesInVariant(doc: BoardDoc, variantId: ID): Frame[] {
@@ -411,7 +431,7 @@ export function duplicateAsOption(
   } else {
     originalVariantId = nanoid();
     flowId = nanoid();
-    next.variants[originalVariantId] = { id: originalVariantId, flowId, label: 'Option A', order: zStr(0) };
+    next.variants[originalVariantId] = { id: originalVariantId, flowId, label: 'Option A', order: zAfter(null) };
     for (const f of sources) next.frames[f.id] = { ...f, variantId: originalVariantId };
     for (const id of childIds) next.elements[id] = { ...next.elements[id], variantId: originalVariantId };
     for (const c of internalConnectors) next.connectors[c.id] = { ...c, variantId: originalVariantId };
@@ -422,7 +442,7 @@ export function duplicateAsOption(
   const used = new Set(siblings.map((v) => v.label));
   const letter = [...LETTERS].find((l) => !used.has(`Option ${l}`)) ?? String(siblings.length + 1);
   const variantId = nanoid();
-  const order = zStr(Math.max(-1, ...siblings.map((v) => zNum(v.order))) + 1);
+  const order = zAfter(siblings.length ? siblings[siblings.length - 1].order : null);
   next.variants[variantId] = { id: variantId, flowId, label: `Option ${letter}`, duplicatedFromId: originalVariantId, order };
 
   // 3. Place below every existing lane of this flow.
@@ -437,17 +457,18 @@ export function duplicateAsOption(
   for (const id of nodeIds) idMap[id] = nanoid();
   for (const c of internalConnectors) idMap[c.id] = nanoid();
   for (const l of internalLinks) idMap[l.id] = nanoid();
-  let z = zNum(nextZ(next));
+  const zKeys = zKeysAfter(maxZ(next), sources.length + childIds.length);
+  let z = 0;
   const newFrameIds: ID[] = [];
   for (const f of sources) {
     const id = idMap[f.id];
     newFrameIds.push(id);
-    next.frames[id] = { ...f, id, y: f.y + dy, z: zStr(z++), variantId };
+    next.frames[id] = { ...f, id, y: f.y + dy, z: zKeys[z++], variantId };
   }
   for (const oldId of childIds) {
     const e = doc.elements[oldId];
     const id = idMap[oldId];
-    next.elements[id] = { ...e, id, parentId: idMap[e.parentId!], z: zStr(z++), props: structuredClone(e.props), variantId };
+    next.elements[id] = { ...e, id, parentId: idMap[e.parentId!], z: zKeys[z++], props: structuredClone(e.props), variantId };
   }
   for (const c of internalConnectors) {
     const id = idMap[c.id];

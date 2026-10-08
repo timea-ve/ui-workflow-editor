@@ -1,0 +1,122 @@
+/* Share popover + share view (/s/:id). Tokens only. */
+
+/* ── Popover ───────────────────────────────────────────────────── */
+.fs-share-anchor { position: relative; display: inline-flex; }
+.fs-share-pop {
+  position: absolute;
+  top: calc(100% + 6px);
+  right: 0;
+  width: min(360px, calc(100vw - 24px));
+  padding: var(--fs-space-4);
+}
+.fs-share-pop:focus-visible { outline: none; }
+.fs-share__title { margin: 0 0 var(--fs-space-3); font-size: var(--fs-ui-text-md); font-weight: 600; }
+.fs-share { display: grid; gap: var(--fs-space-3); }
+.fs-share__row { display: flex; align-items: flex-start; justify-content: space-between; gap: var(--fs-space-4); }
+.fs-share__label { margin: 0; font-size: var(--fs-ui-text-sm); font-weight: 600; }
+.fs-share__desc { margin: 2px 0 0; color: var(--fs-muted); font-size: var(--fs-ui-text-xs); line-height: 1.45; }
+.fs-share__link { display: flex; gap: var(--fs-space-2); }
+.fs-share__link .fsc-input { flex: 1; min-width: 0; color: var(--fs-muted); }
+.fs-share__foot { display: flex; align-items: center; justify-content: space-between; gap: var(--fs-space-2); }
+.fs-share__meta { color: var(--fs-muted); font-size: var(--fs-ui-text-xs); }
+.fs-share__error {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--fs-space-2);
+  margin: 0;
+  padding: var(--fs-space-2) var(--fs-space-3);
+  border: 1px solid var(--fs-hairline);
+  border-radius: var(--fs-radius-md);
+  background: var(--fs-canvas);
+  font-size: var(--fs-ui-text-sm);
+}
+.fs-share__error svg { flex: none; margin-top: 2px; }
+
+/* Switch */
+.fs-switch {
+  position: relative;
+  flex: none;
+  width: 40px;
+  height: 24px;
+  margin-top: 2px;
+  padding: 0;
+  border: 1px solid var(--fs-line);
+  border-radius: var(--fs-radius-pill);
+  background: var(--fs-hover);
+  cursor: pointer;
+  transition: background-color var(--fs-dur-fast) var(--fs-ease-out);
+}
+.fs-switch__thumb {
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  display: grid;
+  place-items: center;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: var(--fs-surface);
+  box-shadow: var(--fs-shadow-1);
+  color: var(--fs-muted);
+  transition: transform var(--fs-dur-fast) var(--fs-ease-out);
+}
+.fs-switch[aria-checked='true'] { background: var(--fs-accent); border-color: var(--fs-accent); }
+.fs-switch[aria-checked='true'] .fs-switch__thumb { transform: translateX(16px); color: var(--fs-accent); }
+.fs-switch:disabled { cursor: progress; }
+.fs-switch:focus-visible { outline: var(--fs-focus-width) solid var(--fs-focus-ring); outline-offset: var(--fs-focus-offset); }
+
+/* ── Share view ────────────────────────────────────────────────── */
+.fs-sharepage {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  background: var(--fs-canvas);
+}
+.fs-sharepage__head { flex: none; }
+.fs-sharepage__heading { display: grid; min-width: 0; }
+.fs-sharepage__title {
+  margin: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: var(--fs-ui-text-lg);
+  font-weight: 600;
+  line-height: 1.3;
+}
+.fs-sharepage__banner { margin: 0; color: var(--fs-muted); font-size: var(--fs-ui-text-xs); }
+.fs-sharepage__banner a { color: inherit; text-decoration: underline; text-underline-offset: 2px; }
+.fs-sharepage__banner a:hover { color: var(--fs-ink); }
+.fs-sharepage__stage { position: relative; flex: 1; min-height: 0; }
+
+.fs-sharepage__state {
+  display: grid;
+  place-content: center;
+  justify-items: center;
+  gap: var(--fs-space-3);
+  height: 100%;
+  padding: var(--fs-space-8);
+  text-align: center;
+  color: var(--fs-muted);
+}
+.fs-sharepage__state h1, .fs-sharepage__state h2 { margin: 0; color: var(--fs-ink); font-size: var(--fs-ui-text-xl); font-weight: 600; }
+.fs-sharepage__state p { margin: 0; max-width: 420px; font-size: var(--fs-ui-text-md); }
+.fs-sharepage__state .fsc-btn { margin-top: var(--fs-space-2); }
+
+/* Loading skeleton */
+.fs-skel { display: flex; gap: 120px; align-items: flex-start; justify-content: center; height: 100%; padding-top: 12vh; }
+.fs-skel__screen {
+  width: 180px;
+  height: 360px;
+  border-radius: 24px;
+  background: var(--fs-hover);
+  animation: fs-skel-pulse 1.4s ease-in-out infinite;
+}
+.fs-skel__line { width: 140px; height: 16px; border-radius: var(--fs-radius-sm); background: var(--fs-hover); }
+@keyframes fs-skel-pulse { 50% { opacity: 0.55; } }
+@media (prefers-reduced-motion: reduce) { .fs-skel__screen { animation: none; } }
+
+/* Read-only canvas: handles stay in layout (edges are routed to them) but are never shown. */
+.fs-readonly .fs-handle.react-flow__handle { visibility: hidden; pointer-events: none; }
+.fs-readonly .react-flow__node { cursor: default; }
+.fs-skel__item { display: grid; gap: var(--fs-space-2); }

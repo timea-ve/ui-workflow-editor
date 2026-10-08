@@ -27,3 +27,6 @@ Technical decisions are made by the Orchestrator; product/design decisions by th
 | 21 | 2026-10-08 | Toolbar floating left; shortcut letters always shown | Keeps top bar free; teaches shortcuts. | Director (Gate 2 V4, V5) | ✅ |
 | 22 | 2026-10-08 | Paragraph text linkable; no auto-dim behind modals; table rows not linkable in v1; screen name above frame | Recommendations accepted. | Director (Gate 2 K1–K4) | ✅ |
 | 23 | 2026-10-08 | New linked screen goes to the right; diagram shapes not clickable in Play; option copies exclude links leaving the flow; copied screens keep names | Recommendations accepted. | Director (Gate 2 F1–F4) | ✅ |
+| 24 | 2026-10-08 | Phase 3 runs in two waves: editor core, dashboard and export/share in parallel first; canvas components and flows second | Dashboard and export don't depend on the editor, so this saves time without collisions. | Orchestrator (tech) | ✅ |
+| 25 | 2026-10-08 | Share links served by a tiny built-in server during development (files on disk), same code deploys to Vercel later | Keeps "one command to run" with no accounts or secrets. | Orchestrator (tech) | ✅ |
+| 26 | 2026-10-08 | Exports render from the saved board, not the screen you see | Exports look the same no matter where you're zoomed. | Orchestrator (tech) | ✅ |

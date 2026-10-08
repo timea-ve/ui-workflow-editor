@@ -110,3 +110,45 @@
 }
 .fs-play-hotspot:hover { box-shadow: 0 0 0 2px var(--fs-accent); }
 .fs-play-hotspot:focus-visible { outline: var(--fs-focus-width) solid var(--fs-focus-ring); outline-offset: var(--fs-focus-offset); }
+
+/* Editor modes */
+.fs-flow-canvas.fs-readonly .fs-handle { display: none; }
+.fs-flow-canvas.fs-tool-pan .react-flow__pane,
+.fs-flow-canvas.fs-tool-pan .react-flow__node { cursor: grab; }
+.fs-flow-canvas.fs-tool-screen .react-flow__pane,
+.fs-flow-canvas.fs-tool-rect .react-flow__pane,
+.fs-flow-canvas.fs-tool-diamond .react-flow__pane,
+.fs-flow-canvas.fs-tool-ellipse .react-flow__pane,
+.fs-flow-canvas.fs-tool-text .react-flow__pane,
+.fs-flow-canvas.fs-tool-sticky .react-flow__pane,
+.fs-flow-canvas.fs-tool-screen .react-flow__node,
+.fs-flow-canvas.fs-tool-rect .react-flow__node,
+.fs-flow-canvas.fs-tool-diamond .react-flow__node,
+.fs-flow-canvas.fs-tool-ellipse .react-flow__node,
+.fs-flow-canvas.fs-tool-text .react-flow__node,
+.fs-flow-canvas.fs-tool-sticky .react-flow__node,
+.fs-flow-canvas.fs-tool-arrow .react-flow__node { cursor: crosshair; }
+.fs-flow-canvas.fs-tool-arrow .fs-handle { opacity: 0; pointer-events: none; }
+.fs-flow-canvas .react-flow__selection { background: var(--fs-selection-fill); border: 1px solid var(--fs-selection); }
+
+/* Snap / alignment guides (flow coordinates, inside the viewport) */
+.fs-guide {
+  position: absolute;
+  top: 0;
+  left: 0;
+  pointer-events: none;
+  background: var(--fs-accent);
+  z-index: 1000000; /* above React Flow's node z-indexes (see adapter.ts) */
+}
+.fs-guide[data-axis='x'] { width: 1px; }
+.fs-guide[data-axis='y'] { height: 1px; }
+
+.fs-arrow-preview {
+  position: fixed;
+  inset: 0;
+  width: 100vw;
+  height: 100vh;
+  pointer-events: none;
+  z-index: var(--fs-z-chrome);
+}
+.fs-arrow-preview line { stroke: var(--fs-selection); stroke-width: 2; stroke-dasharray: 6 4; }

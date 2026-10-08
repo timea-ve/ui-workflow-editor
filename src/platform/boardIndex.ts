@@ -48,6 +48,10 @@ export function deleteBoardMeta(id: ID) {
   delete all[id];
   write(all);
 }
+/** Put a previously removed board row back unchanged (used by "Undo" after delete). */
+export function restoreBoardMeta(board: Board) {
+  write({ ...read(), [board.id]: board });
+}
 export function subscribeBoards(cb: () => void): () => void {
   listeners.add(cb);
   const onStorage = (e: StorageEvent) => { if (e.key === KEY) cb(); };

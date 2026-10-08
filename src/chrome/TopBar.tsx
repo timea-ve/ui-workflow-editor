@@ -10,17 +10,19 @@ export interface TopBarProps {
   title: string;
   onTitleChange: (title: string) => void;
   saveStatus: SaveStatus;
-  onShare: () => void;
-  onExport: (format: ExportFormat) => void;
-  onCompare: () => void;
-  onPlay: () => void;
+  onShare?: () => void;
+  onExport?: (format: ExportFormat) => void;
+  onCompare?: () => void;
+  onPlay?: () => void;
   /** Compare needs at least two options; disable otherwise. */
   compareDisabled?: boolean;
   /** Optional slot left of the title (e.g. a link back to the board list). */
   leading?: ReactNode;
+  /** Replaces the default Share / Export / Compare / Play buttons (the editor mounts its action slot here). */
+  actions?: ReactNode;
 }
 
-export function TopBar({ title, onTitleChange, saveStatus, onShare, onExport, onCompare, onPlay, compareDisabled, leading }: TopBarProps) {
+export function TopBar({ title, onTitleChange, saveStatus, onShare, onExport, onCompare, onPlay, compareDisabled, leading, actions }: TopBarProps) {
   return (
     <header className="fsc-topbar fsc-root">
       {leading ?? <span className="fsc-topbar__brand" aria-hidden><BrandMark /></span>}
@@ -29,12 +31,13 @@ export function TopBar({ title, onTitleChange, saveStatus, onShare, onExport, on
         <SaveStatusIndicator status={saveStatus} />
       </div>
       <div className="fsc-topbar__actions">
+        {actions ?? <>
         <Tip label="Share a read-only link">
           <button type="button" className="fsc-btn" onClick={onShare}>
             <Share2 size={16} strokeWidth={ICON_STROKE} aria-hidden /> Share
           </button>
         </Tip>
-        <ExportMenu onExport={onExport} />
+        <ExportMenu onExport={(f) => onExport?.(f)} />
         <Tip label={compareDisabled ? 'Duplicate a flow as an option to compare' : 'Compare options side by side'} shortcut="⇧C">
           <button type="button" className="fsc-btn" onClick={compareDisabled ? undefined : onCompare}
             aria-disabled={compareDisabled || undefined} aria-keyshortcuts="Shift+C">
@@ -47,6 +50,7 @@ export function TopBar({ title, onTitleChange, saveStatus, onShare, onExport, on
             <Play size={15} strokeWidth={2} aria-hidden /> Play
           </button>
         </Tip>
+        </>}
       </div>
     </header>
   );

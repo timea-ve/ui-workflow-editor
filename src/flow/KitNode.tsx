@@ -6,6 +6,7 @@ import { LinkMarker } from '../design/primitives';
 import type { Element } from '../model/types';
 import type { VisualStyle } from '../kit/types';
 import type { KitFlowNode } from './adapter';
+import { sameNodeView } from './memo';
 import { useFlowView } from './context';
 import { SideHandles } from './Handles';
 
@@ -35,4 +36,4 @@ export const KitNode = memo(function KitNode({ data, selected }: NodeProps<KitFl
       <SideHandles />
     </div>
   );
-});
+}, sameNodeView);
