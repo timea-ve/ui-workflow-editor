@@ -22,3 +22,8 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# local share-link store (dev)
+.data/
+test-results/
+playwright-report/

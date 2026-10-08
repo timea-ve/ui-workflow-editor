@@ -13,7 +13,7 @@ export const SCREEN_GAP = 120;
 export const LANE_GAP = 200;
 
 export function emptyDoc(): BoardDoc {
-  return { frames: {}, elements: {}, connectors: {}, links: {}, variants: {} };
+  return { frames: {}, elements: {}, connectors: {}, links: {}, variants: {}, flowNames: {} };
 }
 
 // ---------- z-order (simple sortable strings for now; fractional indexing later) ----------
@@ -227,7 +227,8 @@ function removeNodes(doc: BoardDoc, frameIds: Set<ID>, elementIds: Set<ID>): Boa
   // Option groups with no screens left disappear.
   const usedVariants = new Set(Object.values(frames).map((f) => f.variantId).filter(Boolean));
   const variants = Object.fromEntries(Object.entries(doc.variants).filter(([id]) => usedVariants.has(id)));
-  return { frames, elements, connectors, links, variants };
+  const flowNames = Object.fromEntries(Object.entries(doc.flowNames ?? {}).filter(([id]) => !frameIds.has(id)));
+  return { frames, elements, connectors, links, variants, flowNames };
 }
 
 /** Deletes a screen and everything that depends on it: child elements, links in/out, connectors touching any of them. */
@@ -391,7 +392,7 @@ export function duplicateAsOption(
 
   const next: BoardDoc = {
     frames: { ...doc.frames }, elements: { ...doc.elements }, connectors: { ...doc.connectors },
-    links: { ...doc.links }, variants: { ...doc.variants },
+    links: { ...doc.links }, variants: { ...doc.variants }, flowNames: { ...doc.flowNames },
   };
 
   const sourceIds = new Set(sources.map((f) => f.id));

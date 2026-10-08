@@ -22,6 +22,8 @@ export interface Board {
   thumbnailUrl?: string;
   ownerId?: ID;
   teamId?: ID;
+  /** Set once the board has a public read-only link (see src/share). */
+  shareId?: ID;
 }
 
 export interface Frame {
@@ -99,4 +101,6 @@ export interface BoardDoc {
   connectors: Record<ID, Connector>;
   links: Record<ID, ScreenLink>;
   variants: Record<ID, VariantGroup>;
+  /** User-given flow names, keyed by Flow id (the start screen's id). Missing → auto name. */
+  flowNames: Record<ID, string>;
 }
