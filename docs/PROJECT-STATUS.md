@@ -4,21 +4,20 @@ _Last updated: 2026-10-08_
 
 | | |
 |---|---|
-| **Current phase** | Phase 1 — Discovery ✅ complete |
-| **Next gate** | ⛳ Gate 1 — **awaiting Director decisions** ([GATE-1.md](gates/GATE-1.md)) |
+| **Current phase** | Phase 2 — Design System · Wireframe Kit · Diagram Kit |
+| **Next gate** | ⛳ Gate 2 — visual direction (2 style options) + component kits |
 
 ## Done
-- Shared product brief (`docs/BRIEF.md`)
-- Competitive research → `docs/phase-1/research.md`
-- UX architecture → `docs/phase-1/ux-architecture.md`
-- Technical architecture → `docs/phase-1/tech-architecture.md`
-- Gate 1 one-pager → `docs/gates/GATE-1.md`
+- Phase 1 discovery; ⛳ Gate 1 approved (all recommendations)
+- Project skeleton: `npm install && npm run dev` runs; tests pass
 
 ## In progress
-- Director review of Gate 1 (7 decisions)
+- Design System agent → tokens, 2 style options, app chrome (`/chrome`)
+- Wireframe Kit agent → 16 lo-fi components + device frames (`/gallery`)
+- Diagram & Flow agent → shapes, connectors, links, options (`/sandbox`)
 
 ## Blocked
-- Phase 2 waits on Gate 1 approval
+- Nothing
 
 ## Up next
-- Phase 2 (parallel): Design System · Wireframe Kit · Diagram Kit, plus project skeleton → Gate 2
+- Integrate kits → Gate 2 one-pager with screenshots

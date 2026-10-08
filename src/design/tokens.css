@@ -1,0 +1,42 @@
+/* FlowSketch design tokens — placeholder values.
+   Owner: Design System agent. Two kit styles are switched with
+   [data-kit-style="sketchy" | "clean"] on any ancestor element. */
+
+:root {
+  /* Grayscale + 1 accent */
+  --fs-ink: #1f1f1f;
+  --fs-muted: #5c5c5c;
+  --fs-faint: #b8b8b8;
+  --fs-surface: #ffffff;
+  --fs-canvas: #f6f6f4;
+  --fs-accent: #2f5bd3;
+
+  /* App chrome font */
+  --fs-ui-font: system-ui, -apple-system, 'Segoe UI', sans-serif;
+
+  /* Kit text scale */
+  --fs-kit-text-sm: 12px;
+  --fs-kit-text-md: 14px;
+  --fs-kit-text-lg: 18px;
+  --fs-kit-text-xl: 24px;
+
+  --fs-kit-font: var(--fs-ui-font);
+}
+
+[data-kit-style='sketchy'] {
+  --fs-kit-font: 'Comic Neue', 'Comic Sans MS', 'Chalkboard SE', cursive;
+}
+
+[data-kit-style='clean'] {
+  --fs-kit-font: var(--fs-ui-font);
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+
+html, body, #root {
+  margin: 0;
+  height: 100%;
+  font-family: var(--fs-ui-font);
+  color: var(--fs-ink);
+  background: var(--fs-canvas);
+}
