@@ -17,12 +17,12 @@
   --fs-gray-8: #343432;
   --fs-gray-9: #1f1f1f;
 
-  /* ── The one accent (bitter lemon) ────────────────────────────────
-     Lime #d0ff00 is only ever a FILL behind dark ink (14:1). It is nearly invisible on white
-     (1.2:1), so lines, outlines, focus rings and accent text use its dark olive shade. */
-  --fs-accent-fill-hue: #d0ff00;
-  --fs-accent-hue: #4d6600;
-  --fs-accent-tint: #f6ffd6;
+  /* ── The one accent (soft electric lime) ────────────────────────────────
+     Lime #b6f23a is only ever a FILL behind dark ink (12.4:1). It is nearly invisible on white
+     (1.3:1), so lines, outlines, focus rings and accent text use its deep green shade. */
+  --fs-accent-fill-hue: #b6f23a;
+  --fs-accent-hue: #3f6b00;
+  --fs-accent-tint: #f3fcdf;
 
   /* ── Semantic colour (names other agents already use) ─────────── */
   --fs-ink: var(--fs-gray-9);          /* body text, default sketch ink */
@@ -40,7 +40,7 @@
   --fs-on-accent: var(--fs-gray-9);    /* text/icons on the lime fill */
 
   --fs-selection: var(--fs-accent);    /* selection outline + handles */
-  --fs-selection-fill: rgb(77 102 0 / 0.08);
+  --fs-selection-fill: rgb(63 107 0 / 0.08);
   --fs-link-marker: var(--fs-accent-fill);  /* "clickable" badge on a link's source element */
   --fs-link-marker-ring: var(--fs-accent);   /* its outline, so it reads on white */
   --fs-link-marker-size: 16px;

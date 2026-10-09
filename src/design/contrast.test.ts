@@ -113,6 +113,6 @@ describe('palette discipline', () => {
       const [r, g, b] = hexToRgb(h);
       return Math.max(r, g, b) - Math.min(r, g, b) > 12;
     });
-    expect(new Set(chromatic.map((h) => h.toLowerCase()))).toEqual(new Set(['#d0ff00', '#4d6600', '#f6ffd6']));
+    expect(new Set(chromatic.map((h) => h.toLowerCase()))).toEqual(new Set(['#b6f23a', '#3f6b00', '#f3fcdf']));
   });
 });
