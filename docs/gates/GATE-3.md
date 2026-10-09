@@ -1,6 +1,21 @@
-# ⛳ Gate 3 — Working demo — ⏳ AWAITING DIRECTOR (round 2, changes applied)
+# ⛳ Gate 3 — Working demo — ⏳ AWAITING DIRECTOR (round 3, changes applied)
 
 _Date: 2026-10-08 · Detail: [canvas core](../phase-3/canvas-core.md) · [components](../phase-3/components.md) · [flows](../phase-3/flows.md) · [platform](../phase-3/platform.md) · [export & share](../phase-3/export-share.md)_
+
+> **Round 3 (2026-10-09): lines, labels and undo.**
+> - **Labels on top:** "Submit", "Yes", "No" and other line labels now sit over the lines.
+> - **Miro-style lines (needs your OK):** lines go around screens instead of through them, pick the clearest side on their own, use rounded corners, hop over each other where they cross, and keep separate lanes. When several lines meet one side of a screen, each gets its own attachment point.
+> - **Onboarding "Skip":** now leaves the top of Intro and runs above the other screens into the top of Ready, so it no longer merges with Next. This is a general rule and already applies to all similar cases. You decide whether to keep it.
+> - **Undo / redo:** ⌘Z undoes, ⌘Y redoes (⌘⇧Z still works too), and there are Undo/Redo buttons at the bottom-left of the board.
+> - **Checks:** 938 logic tests and 44 browser tests pass, including the 50+ screen smoothness test.
+>
+> | Onboarding before | Onboarding after |
+> |---|---|
+> | ![](gate-3/10-onboarding-lines-before.png) | ![](gate-3/11-onboarding-lines-after.png) |
+> | **Settings before** | **Settings after** |
+> | ![](gate-3/12-settings-lines-before.png) | ![](gate-3/13-settings-lines-after.png) |
+>
+> Sign-up with labels on top and the undo/redo buttons: ![](gate-3/14-signup-labels-and-undo.png)
 
 > **Round 2 (2026-10-08): your changes are done.** You asked for the full component list, a muted grey look, a small context bar instead of the properties panel, grid snapping and icons. All of that is in:
 > - **40 wireframe components** in 6 palette sections (Text · Buttons & actions · Form inputs · Navigation · Content & layout · Feedback & overlays), plus Shapes, Screens and **70 icons**. Includes button states, paragraph lorem ↔ grey blocks, line and stacked charts, calendar, date picker, tooltip, toast and more.

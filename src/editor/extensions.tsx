@@ -6,6 +6,7 @@
 //   overlay        – full-editor overlays (e.g. Insert palette, Play mode, Compare view, dialogs)
 //   canvas         – inside the React Flow canvas (ViewportPortal / Panel children, e.g. inline text editor)
 import type { EditorExtension } from './EditorContext';
+import { UndoRedo } from './UndoRedo';
 import { ExportAction, ShareAction } from './integrations/ShareExport';
 import { CompareAction, FlowsPanel, FlowsRoot, PlayAction } from './features/flows';
 import { CanvasLayer, ContextBar, InsertPaletteSlot } from './features/components';
@@ -20,4 +21,5 @@ export const EDITOR_EXTENSIONS: EditorExtension[] = [
   { id: 'insert-palette', slot: 'overlay', render: () => <InsertPaletteSlot /> },
   { id: 'components-canvas', slot: 'canvas', render: () => <CanvasLayer /> },
   { id: 'context-bar', slot: 'canvas', render: () => <ContextBar /> },
+  { id: 'undo-redo', slot: 'canvas', render: () => <UndoRedo /> },
 ];

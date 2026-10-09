@@ -1,10 +1,10 @@
 # FlowSketch — Project Status
 
-_Last updated: 2026-10-08_
+_Last updated: 2026-10-09_
 
 | | |
 |---|---|
-| **Current phase** | Phase 3 — Build ✅ complete (incl. Gate 3 changes), awaiting Gate 3 round 2 |
+| **Current phase** | Phase 3 — Build ✅ complete (incl. Gate 3 changes), awaiting Gate 3 round 3 |
 | **Next gate** | ⛳ Gate 3 — hands-on demo (build a 5-screen sign-up flow with Option A/B) |
 
 ## Done
@@ -18,8 +18,10 @@ _Last updated: 2026-10-08_
 
 - Wave C ✅ (Director's Gate 3 changes): 40 wireframe components + 70 icons in 6 palette sections, context bar replaces the properties panel, grid + neighbour + equal-gap snapping, muted grey components. 926 unit + 43 end-to-end tests passing.
 
+- Gate 3 round 3 changes ✅: labels over lines, ⌘Y and undo/redo buttons, Miro-style line routing (Onboarding Skip fixed). 938 unit + 44 end-to-end tests passing.
+
 ## In progress
-- ⛳ Gate 3 round 2: hands-on demo with the Director — see [gates/GATE-3.md](gates/GATE-3.md)
+- ⛳ Gate 3 round 3: Director to approve the new line style — see [gates/GATE-3.md](gates/GATE-3.md)
 
 ## Blocked
 - Nothing

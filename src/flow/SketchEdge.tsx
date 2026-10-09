@@ -1,4 +1,4 @@
-import { memo, useMemo } from 'react';
+import { memo, useCallback, useMemo } from 'react';
 import {
   BaseEdge, EdgeLabelRenderer, getBezierPath, getSmoothStepPath, getStraightPath, useStore, type EdgeProps,
 } from '@xyflow/react';
@@ -8,6 +8,7 @@ import { SketchArrow, SketchLines } from '../design/primitives';
 import { seedFromId } from '../kit/registry';
 import type { SketchFlowEdge } from './adapter';
 import { useFlowView } from './context';
+import { pointsToPath } from './routing';
 
 type Pt = [number, number];
 
@@ -52,13 +53,23 @@ export const SketchEdge = memo(function SketchEdge({
 }: EdgeProps<SketchFlowEdge>) {
   const { style } = useFlowView();
   const routing = data?.routing ?? 'step';
-  const [path, labelX, labelY] = useMemo(() => {
+  const route = data?.route;
+  // The stored route is only valid while both ends sit where it was computed (not mid-drag).
+  const routeFresh = useStore(useCallback((s: { nodeLookup: Map<string, { internals: { positionAbsolute: { x: number; y: number } } }> }) => {
+    if (!route) return false;
+    const a = s.nodeLookup.get(source)?.internals.positionAbsolute;
+    const b = s.nodeLookup.get(target)?.internals.positionAbsolute;
+    const near = (p: { x: number; y: number } | undefined, q: { x: number; y: number }) => !!p && Math.abs(p.x - q.x) < 0.5 && Math.abs(p.y - q.y) < 0.5;
+    return near(a, route.from) && near(b, route.to);
+  }, [route, source, target]));
+  const [path, labelX, labelY, points] = useMemo((): [string, number, number, Pt[]] => {
+    if (route && routeFresh) return [pointsToPath(route.points), route.labelX, route.labelY, route.points];
     const args = { sourceX, sourceY, targetX, targetY, sourcePosition, targetPosition };
-    if (routing === 'straight') return getStraightPath(args);
-    if (routing === 'curved') return getBezierPath(args);
-    return getSmoothStepPath({ ...args, borderRadius: 0, offset: 24 });
-  }, [routing, sourceX, sourceY, targetX, targetY, sourcePosition, targetPosition]);
-  const points = useMemo(() => (routing === 'curved' ? bezierPoints(path) : pathToPoints(path)), [routing, path]);
+    const [d, lx, ly] = routing === 'straight' ? getStraightPath(args)
+      : routing === 'curved' ? getBezierPath(args)
+        : getSmoothStepPath({ ...args, borderRadius: 0, offset: 24 });
+    return [d, lx, ly, routing === 'curved' ? bezierPoints(d) : pathToPoints(d)];
+  }, [route, routeFresh, routing, sourceX, sourceY, targetX, targetY, sourcePosition, targetPosition]);
   const seed = seedFromId(id);
   const tone = selected ? 'accent' : 'ink';
   const heads = data?.arrowheads ?? 'end';

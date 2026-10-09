@@ -3,6 +3,7 @@
 import type { Edge, Node } from '@xyflow/react';
 import type { Anchor, BoardDoc, Connector, Element, Frame, ID, VariantGroup } from '../model/types';
 import { boundsOf, compareZ, framesInVariant, linkSourceIds, type Rect } from './ops';
+import { routeBoard, type Route } from './routing';
 
 export type ScreenNodeData = { frame: Frame };
 export type KitNodeData = { element: Element; isLinkSource: boolean };
@@ -12,6 +13,8 @@ export type SketchEdgeData = {
   routing: Connector['style'];
   arrowheads: Connector['arrowheads'];
   isLink: boolean;
+  /** Obstacle-aware elbow route (see routing.ts); absent → the edge falls back to React Flow's step path. */
+  route?: Route;
 };
 
 export type ScreenFlowNode = Node<ScreenNodeData, 'screen'>;
@@ -218,20 +221,24 @@ export function reconcileEdges(doc: BoardDoc, prev: readonly SketchFlowEdge[] = 
   const prevById = new Map<string, SketchFlowEdge>();
   for (const e of prev) prevById.set(e.id, e);
   const linkConnectors = new Set(Object.values(doc.links).map((l) => l.connectorId).filter(Boolean));
+  const routes = routeBoard(doc);
   return Object.values(doc.connectors).flatMap((c) => {
     const anchors = resolveConnectorAnchors(doc, c);
     if (!anchors) return [];
-    const [sourceHandle, targetHandle] = anchors;
+    const route = routes.get(c.id);
+    const [sourceHandle, targetHandle] = route ? [route.sourceSide, route.targetSide] : anchors;
     const isLink = linkConnectors.has(c.id);
     const isSelected = selected?.has(c.id) ?? false;
     const p = prevById.get(c.id);
     if (p && p.source === c.from.nodeId && p.target === c.to.nodeId && p.sourceHandle === sourceHandle && p.targetHandle === targetHandle
       && p.data?.label === c.label && p.data?.routing === c.style && p.data?.arrowheads === c.arrowheads && p.data?.isLink === isLink
+      && p.data?.route?.key === route?.key && p.data?.route?.from.x === route?.from.x && p.data?.route?.from.y === route?.from.y
+      && p.data?.route?.to.x === route?.to.x && p.data?.route?.to.y === route?.to.y
       && !!p.selected === isSelected) return [p];
     return [{
       id: c.id, type: 'sketch', source: c.from.nodeId, target: c.to.nodeId, sourceHandle, targetHandle,
       zIndex: EDGE_Z,
-      data: { label: c.label, routing: c.style, arrowheads: c.arrowheads, isLink },
+      data: { label: c.label, routing: c.style, arrowheads: c.arrowheads, isLink, ...(route ? { route } : {}) },
       ariaLabel: c.label ? `Connector '${c.label}'` : 'Connector',
       ...(isSelected ? { selected: true } : {}),
     } satisfies SketchFlowEdge];

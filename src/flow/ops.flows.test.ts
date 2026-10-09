@@ -167,6 +167,11 @@ describe('routing anchors', () => {
     const retry = Object.values(doc.elements).find((e) => e.props.label === 'Try again')!;
     const link = Object.values(doc.links).find((l) => l.sourceElementId === retry.id)!;
     const edge = reconcileEdges(doc).find((e) => e.id === link.connectorId)!;
-    expect([edge.sourceHandle, edge.targetHandle]).toEqual(['left', 'right']);
+    expect(edge.sourceHandle).toBe('left');
+    // After leaving its screen the line stays left of it (never runs back across the screen).
+    const frame = doc.frames[retry.parentId!];
+    const pts = edge.data!.route!.points;
+    expect(pts[0][0]).toBeGreaterThanOrEqual(frame.x);
+    for (const [x] of pts.slice(2)) expect(x).toBeLessThanOrEqual(frame.x);
   });
 });

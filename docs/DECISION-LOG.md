@@ -43,3 +43,7 @@ Technical decisions are made by the Orchestrator; product/design decisions by th
 | 37 | 2026-10-08 | "Active / selected item" options pick by name from the item list (not a number) | Nobody should have to count from 0. | Orchestrator | ✅ |
 | 38 | 2026-10-08 | Snap order: neighbours → equal gaps → 8px grid; dot grid every 24px, hidden when zoomed far out; Alt turns snapping off | Lines up without effort; calm background. | Orchestrator | ✅ |
 | 39 | 2026-10-08 | Kit components never use the violet accent (selected states use dark grey fills) | Accent stays reserved for the app itself (selection, links, Play). | Orchestrator | ✅ |
+| 40 | 2026-10-09 | Line labels sit above the lines | Labels stay readable. | Director (Gate 3 round 3) | ✅ |
+| 41 | 2026-10-09 | ⌘Y redo (⌘⇧Z kept) plus Undo/Redo buttons on the board | Familiar shortcut, and undo is visible to people who don't use shortcuts. | Director (Gate 3 round 3) | ✅ |
+| 42 | 2026-10-09 | Miro-style line routing: lines go around screens, choose sides automatically, have rounded corners, hop over crossings and keep separate lanes. Lines sharing a side get separate, ordered attachment points. Straight and curved line styles are unchanged | Flows are readable at a glance; Skip no longer merges with Next. | Orchestrator (proposed) | ⏳ Director to approve |
+| 43 | 2026-10-09 | Routing runs once per board change and is cached; while you drag, lines use the simple path and switch to the routed path when you let go | Keeps big boards smooth. | Orchestrator (tech) | ✅ |

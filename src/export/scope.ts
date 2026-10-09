@@ -5,6 +5,7 @@ import { DEVICE_TITLE_H } from '../kit/wireframe/DeviceFrame';
 import { LANE_PAD, absoluteRect, resolveAnchors } from '../flow/adapter';
 import { boundsOf, framesInVariant, type Rect } from '../flow/ops';
 import { pathToPoints } from '../flow/SketchEdge';
+import { routeBoard } from '../flow/routing';
 
 export type ExportScope = 'board' | 'selection' | 'option';
 export type ExportFormat = 'png' | 'pdf';
@@ -158,6 +159,8 @@ export function connectorGeometry(doc: BoardDoc, c: Connector): EdgeGeometry | u
   const from = absoluteRect(doc, c.from.nodeId);
   const to = absoluteRect(doc, c.to.nodeId);
   if (!from || !to) return undefined;
+  const route = routeBoard(doc).get(c.id);
+  if (route) return { points: route.points, labelX: route.labelX, labelY: route.labelY };
   const [sa, ta] = resolveAnchors(from, to, c.from.anchor, c.to.anchor) as [Side, Side];
   const [sourceX, sourceY] = sidePoint(from, sa);
   const [targetX, targetY] = sidePoint(to, ta);

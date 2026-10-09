@@ -20,7 +20,7 @@ export function shortcutGroups(mod: string): ShortcutGroup[] {
       title: 'Edit',
       items: [
         { keys: [mod, 'Z'], label: 'Undo' },
-        { keys: [mod, '⇧', 'Z'], label: 'Redo (also Ctrl Y)' },
+        { keys: [mod, 'Y'], label: `Redo (also ${mod} ⇧ Z)` },
         { keys: [mod, 'C'], label: 'Copy' },
         { keys: [mod, 'X'], label: 'Cut' },
         { keys: [mod, 'V'], label: 'Paste' },

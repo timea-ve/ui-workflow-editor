@@ -211,3 +211,15 @@
 .fs-guide[data-kind='gap'] { background: none; border: 0 dashed var(--fs-accent); }
 .fs-guide[data-kind='gap'][data-axis='y'] { height: 0; border-top-width: 1px; }
 .fs-guide[data-kind='gap'][data-axis='x'] { width: 0; border-left-width: 1px; }
+
+/* Undo / Redo, next to the zoom controls */
+.fs-undo-redo.react-flow__panel { display: flex; gap: 2px; margin-left: 56px; padding: 2px; background: var(--fs-surface);
+  border-radius: var(--fs-radius-sm); box-shadow: 0 0 2px 1px rgb(0 0 0 / 0.08); }
+.fs-undo-redo__btn { display: grid; place-items: center; width: 28px; height: 28px; border: 0; border-radius: 4px;
+  background: transparent; color: var(--fs-ink); cursor: pointer; }
+.fs-undo-redo__btn:hover:not(:disabled) { background: var(--fs-hover); }
+.fs-undo-redo__btn:focus-visible { outline: var(--fs-focus-width) solid var(--fs-focus-ring); outline-offset: 1px; }
+.fs-undo-redo__btn:disabled { color: var(--fs-muted); opacity: 0.5; cursor: default; }
+
+/* Connector labels sit on top of their lines (edges render at EDGE_Z in adapter.ts). */
+.react-flow__edgelabel-renderer { z-index: 100001; }

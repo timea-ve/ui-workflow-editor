@@ -41,6 +41,34 @@ test('add screens with F, connect with the arrow tool, undo/redo, and persist ac
   await expect(page.getByText('Screen 2', { exact: true })).toBeVisible();
 });
 
+test('undo/redo: ⌘Y redoes, and the on-board buttons work and disable when there is nothing to do', async ({ page }) => {
+  await openSeededBoard(page, `e2e-undo-${Date.now().toString(36)}`);
+  const box = await canvasBox(page);
+  const history = page.getByRole('region', { name: 'History' }).or(page.locator('.fs-undo-redo'));
+  const undo = history.getByRole('button', { name: 'Undo' });
+  const redo = history.getByRole('button', { name: 'Redo' });
+  await expect(undo).toBeDisabled();
+  await expect(redo).toBeDisabled();
+
+  await page.keyboard.press('f');
+  await page.mouse.click(box.x + box.width / 2, box.y + box.height / 2);
+  await expect(screens(page)).toHaveCount(1);
+  await expect(undo).toBeEnabled();
+
+  await page.keyboard.press(`${MOD}+z`);
+  await expect(screens(page)).toHaveCount(0);
+  await page.keyboard.press(`${MOD}+y`);
+  await expect(screens(page)).toHaveCount(1);
+
+  await undo.click();
+  await expect(screens(page)).toHaveCount(0);
+  await expect(undo).toBeDisabled();
+  await expect(redo).toBeEnabled();
+  await redo.click();
+  await expect(screens(page)).toHaveCount(1);
+  await expect(redo).toBeDisabled();
+});
+
 test('unknown board shows a calm not-found state', async ({ page }) => {
   await page.goto('/b/does-not-exist');
   await expect(page.getByRole('heading', { name: 'Board not found' })).toBeVisible();

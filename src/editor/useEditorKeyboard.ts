@@ -151,7 +151,7 @@ export function useEditorKeyboard(opts: EditorKeyboardOptions) {
 
       if (mod && !e.altKey) {
         if (key === 'z' && !e.shiftKey) { e.preventDefault(); api.undo(); return; }
-        if ((key === 'z' && e.shiftKey) || (key === 'y' && e.ctrlKey && !e.metaKey)) { e.preventDefault(); api.redo(); return; }
+        if ((key === 'z' && e.shiftKey) || (key === 'y' && !e.shiftKey)) { e.preventDefault(); api.redo(); return; }
         if (key === 'a' && !chrome) {
           e.preventDefault();
           const ids = selectAllIds(api.doc, sel.nodes);
