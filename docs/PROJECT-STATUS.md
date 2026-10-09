@@ -4,7 +4,7 @@ _Last updated: 2026-10-09_
 
 | | |
 |---|---|
-| **Current phase** | Phase 4 — Quality (QA & accessibility · performance · copy & onboarding) 🔄 |
+| **Current phase** | Phase 4 — Quality ✅ complete, awaiting Gate 4 |
 | **Next gate** | ⛳ Gate 4 — quality checklist passed, ready to share |
 
 ## Done
@@ -21,8 +21,10 @@ _Last updated: 2026-10-09_
 
 - Gate 3 round 3 changes ✅: labels over lines, ⌘Y and undo/redo buttons, Miro-style line routing (Onboarding Skip fixed). 938 unit + 44 end-to-end tests passing.
 
+- Phase 4 ✅: keyboard + WCAG AA + 3-browser checks, 4× faster lines, dashboard code halved, copy pass, first-run tour. 947 unit + 66 end-to-end tests passing.
+
 ## In progress
-- Phase 4: QA & accessibility, performance, copy & onboarding (running in parallel) — see [gates/GATE-3.md](gates/GATE-3.md)
+- ⛳ Gate 4: Director review — see [gates/GATE-4.md](gates/GATE-4.md) — see [gates/GATE-3.md](gates/GATE-3.md)
 
 ## Blocked
 - Nothing
