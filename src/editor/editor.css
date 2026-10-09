@@ -134,6 +134,7 @@
 .fse-dialog__title { margin: 0; font-size: var(--fs-ui-text-lg); font-weight: 600; }
 .fse-shortcuts { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: var(--fs-space-5) var(--fs-space-6); }
 .fse-shortcuts__group { margin: 0 0 var(--fs-space-2); font-size: var(--fs-ui-text-sm); font-weight: 600; color: var(--fs-muted); text-transform: uppercase; letter-spacing: 0.04em; }
+.fse-shortcuts__note { margin: var(--fs-space-5) 0 0; font-size: var(--fs-ui-text-sm); color: var(--fs-muted); }
 .fse-shortcuts dl { margin: 0; }
 .fse-shortcuts__row { display: flex; justify-content: space-between; align-items: center; gap: var(--fs-space-3); padding: 3px 0; font-size: var(--fs-ui-text-sm); }
 .fse-shortcuts__row dt { color: var(--fs-ink); }

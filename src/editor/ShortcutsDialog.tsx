@@ -42,6 +42,9 @@ export function ShortcutsDialog({ open, onOpenChange, onShowTour }: {
               </section>
             ))}
           </div>
+          <p className="fse-shortcuts__note">
+            Using Safari? Press <Kbd>⌥</Kbd> <Kbd>Tab</Kbd> to move between buttons, or turn on “Press Tab to highlight each item” in Safari’s Advanced settings.
+          </p>
         </Dialog.Content>
       </Dialog.Portal>
     </Dialog.Root>
