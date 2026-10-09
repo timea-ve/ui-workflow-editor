@@ -1,4 +1,4 @@
-# FlowSketch — Project Status
+# UI Workflow Editor (formerly FlowSketch) — Project Status
 
 _Last updated: 2026-10-09_
 

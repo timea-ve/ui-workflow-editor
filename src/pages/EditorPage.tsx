@@ -64,7 +64,7 @@ function BoardEditor({ boardId }: { boardId: string }) {
   }, [session, boardId]);
 
   useEffect(() => {
-    if (title !== null) document.title = `${title} — FlowSketch`;
+    if (title !== null) document.title = `${title} — UI Workflow Editor`;
   }, [title]);
 
   if (title === null) {

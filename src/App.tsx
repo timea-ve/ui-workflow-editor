@@ -28,10 +28,13 @@ const chrome = lazyPage(() => import('./pages/ChromePage'), (m) => m.ChromePage)
 
 // Deep links start fetching their page as soon as this module runs (vite.config.ts also preloads the
 // chunks from index.html), and the first render waits for it, so the editor appears in one go.
-const deepLink = typeof location === 'undefined' ? undefined
-  : location.pathname.startsWith('/b/') ? editor.preload()
-    : location.pathname.startsWith('/s/') ? share.preload()
-      : undefined;
+/** The app's sub-path without the trailing slash: '' at the domain root, '/ui-workflow-editor' on GitHub Pages. */
+const BASENAME = import.meta.env.BASE_URL.replace(/\/$/, '');
+const appPath = typeof location === 'undefined' ? undefined
+  : location.pathname.startsWith(`${BASENAME}/`) ? location.pathname.slice(BASENAME.length) : undefined;
+const deepLink = appPath?.startsWith('/b/') ? editor.preload()
+  : appPath?.startsWith('/s/') ? share.preload()
+    : undefined;
 deepLink?.catch(() => {});
 
 function useDeepLinkReady(): boolean {
@@ -60,7 +63,7 @@ export function App() {
   usePrefetchEditor();
   if (!useDeepLinkReady()) return null;
   return (
-    <BrowserRouter>
+    <BrowserRouter basename={BASENAME || undefined}>
       <Suspense fallback={<div className="fsc-root" aria-busy="true" />}>
       <Routes>
         <Route path="/" element={<DashboardPage />} />

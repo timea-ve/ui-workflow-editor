@@ -121,7 +121,7 @@ export function exportFileName(title: string, label: string, format: ExportForma
       .replace(/\s+/g, ' ')
       .trim()
       .replace(/^\.+/, '');
-  const base = clean(title).slice(0, 100) || 'FlowSketch board';
+  const base = clean(title).slice(0, 100) || 'UI Workflow Editor board';
   const part = clean(label).slice(0, 40);
   return `${part ? `${base} – ${part}` : base}.${format}`;
 }

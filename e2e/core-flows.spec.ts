@@ -54,7 +54,7 @@ test('export PNG and PDF from the editor', async ({ page }) => {
   }
 });
 
-test('share from the editor: the link opens a read-only copy', async ({ page, context }) => {
+test('share from the editor: the link opens a read-only copy', async ({ page, browser }) => {
   await openTemplate(page, 'signup');
   const count = await screens(page).count();
   await page.locator('.fsc-topbar').getByRole('button', { name: /^Share/ }).click();
@@ -62,14 +62,19 @@ test('share from the editor: the link opens a read-only copy', async ({ page, co
   await expect(pop).toBeVisible();
   await pop.getByRole('switch').click();
   const url = pop.getByRole('textbox', { name: 'Share link' });
-  await expect(url).toHaveValue(/\/s\/[\w-]+$/, { timeout: 10_000 });
+  await expect(url).toHaveValue(/\/s\/v1#[\w-]+$/, { timeout: 10_000 });
   const link = await url.inputValue();
 
-  const viewer = await context.newPage();
+  // A fresh browser (no saved boards): the link itself carries the copy.
+  const fresh = await browser.newContext();
+  const viewer = await fresh.newPage();
   await viewer.goto(link);
   await expect(viewer.locator('.react-flow__node-screen')).toHaveCount(count);
   await expect(viewer.locator('.fs-readonly .fs-handle').first()).toBeHidden();
   await expect(viewer.locator('meta[name="robots"]')).toHaveAttribute('content', /noindex/);
+  await viewer.getByRole('button', { name: 'Play', exact: true }).click();
+  await expect(viewer.getByRole('dialog', { name: /Playing/ })).toBeVisible();
+  await fresh.close();
 });
 
 test('undo / redo buttons on the board', async ({ page }) => {

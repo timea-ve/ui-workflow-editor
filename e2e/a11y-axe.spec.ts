@@ -1,7 +1,7 @@
 import AxeBuilder from '@axe-core/playwright';
 import { expect, test, type Page } from '@playwright/test';
 import { MOD, openSeededBoard } from './editor.helpers';
-import { publishFixture } from './share.fixture';
+import { shareLink } from './share.fixture';
 
 // WCAG 2.1 A/AA (incl. color-contrast) on every main surface and every dialog.
 //
@@ -105,9 +105,8 @@ test('editor: link picker, play and compare', async ({ page }) => {
   await page.keyboard.press('Escape');
 });
 
-test('share page and its share popover', async ({ page, request }) => {
-  const { id } = await publishFixture(request);
-  await page.goto(`/s/${id}`);
+test('share page and its share popover', async ({ page }) => {
+  await page.goto(await shareLink());
   await expect(page.locator('.react-flow__node-screen').first()).toBeVisible();
   expect(await scan(page)).toEqual([]);
   await page.getByRole('button', { name: 'Export PNG' }).click();

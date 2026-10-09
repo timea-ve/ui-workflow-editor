@@ -4,7 +4,7 @@ import { AlertCircle, Check, Copy, LoaderCircle, RefreshCw, Share2 } from 'lucid
 import type { BoardDoc, ID } from '../model/types';
 import { Toasts, type ToastMessage } from '../chrome/Toast';
 import { ICON_STROKE } from '../chrome/shared';
-import { getShareState, publishShare, revokeShare, ShareError, type ShareState } from './client';
+import { getShareState, publishShare, revokeShare, type ShareState } from './client';
 import './share.css';
 
 export interface SharePopoverProps {
@@ -18,11 +18,8 @@ export interface SharePopoverProps {
 type Busy = 'on' | 'update' | 'off' | null;
 
 function messageFor(e: unknown): string {
-  if (typeof navigator !== 'undefined' && navigator.onLine === false) {
-    return 'You’re offline. Connect to the internet to share — your board is still saved on this device.';
-  }
-  if (e instanceof ShareError) return e.message;
-  return 'Something went wrong. Try again in a moment.';
+  console.error(e);
+  return 'Couldn’t create the link. Try again in a moment.';
 }
 
 async function copyText(text: string, fallbackInput?: HTMLInputElement | null): Promise<boolean> {
@@ -67,7 +64,7 @@ export function SharePanel({ boardId, title, getDoc, notify }: SharePopoverProps
     try {
       const r = await publishShare(boardId, title, getDoc());
       setState(getShareState(boardId));
-      if (kind === 'update') toast(r.created ? 'New link created — the old one stopped working' : 'Link updated with your latest changes');
+      if (kind === 'update') toast(r.created ? 'Link is on' : 'New link ready — copy it to share your latest changes');
       else toast('Link is on');
     } catch (e) {
       setError(messageFor(e));
@@ -82,7 +79,7 @@ export function SharePanel({ boardId, title, getDoc, notify }: SharePopoverProps
     try {
       await revokeShare(boardId);
       setState(null);
-      toast('Link turned off');
+      toast('Link turned off here — links you already sent still work');
     } catch (e) {
       setError(messageFor(e));
     } finally {
@@ -109,8 +106,8 @@ export function SharePanel({ boardId, title, getDoc, notify }: SharePopoverProps
         <div>
           <p id={`${id}-label`} className="fs-share__label">Anyone with the link can view</p>
           <p id={`${id}-desc`} className="fs-share__desc">
-            {on ? 'Viewers see a read-only copy. It doesn’t change as you edit — choose “Update link” to share your latest changes.'
-              : 'Creates a read-only copy of this board as it is now. Nobody can edit it.'}
+            {on ? 'Anyone with the link can view a copy of this board as it is now. It doesn’t change as you edit — choose “Update link” for a new link with your latest changes.'
+              : 'Creates a link that holds a read-only copy of this board as it is now. Nobody can edit it.'}
           </p>
         </div>
         <button type="button" role="switch" className="fs-switch" aria-checked={on} aria-labelledby={`${id}-label`} aria-describedby={`${id}-desc`}

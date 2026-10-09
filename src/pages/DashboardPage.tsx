@@ -5,6 +5,7 @@ import type { Board } from '../model/types';
 import { BrandMark, ChromeProvider, Kbd, Tip, Toasts, isTypingTarget, type ToastMessage } from '../chrome';
 import { ICON_STROKE } from '../chrome/shared';
 import { renameBoard } from '../platform/boardIndex';
+import { getShareState } from '../share/client';
 import {
   commitPendingDeletes, createBoard, deleteBoard, duplicateBoard, flushPendingDeletes, UNDO_WINDOW_MS, type PendingDelete,
 } from '../platform/boards';
@@ -99,7 +100,9 @@ export function DashboardPage() {
       case 'copyLink': {
         if (!board.shareId) return;
         try {
-          await navigator.clipboard.writeText(`${location.origin}/s/${board.shareId}`);
+          const url = getShareState(board.id)?.url;
+          if (!url) throw new Error('no share link stored for this board');
+          await navigator.clipboard.writeText(url);
           toast({ message: copy.toast.linkCopied });
         } catch {
           toast({ message: copy.toast.linkCopyFailed });

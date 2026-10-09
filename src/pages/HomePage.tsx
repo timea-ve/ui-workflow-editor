@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 export function HomePage() {
   return (
     <main style={{ padding: 32 }}>
-      <h1>FlowSketch</h1>
+      <h1>UI Workflow Editor</h1>
       <p>Phase 2 preview</p>
       <ul>
         <li><Link to="/gallery">Component gallery (both style options)</Link></li>

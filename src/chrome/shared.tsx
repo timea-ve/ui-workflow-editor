@@ -51,7 +51,7 @@ export function Tip({ label, shortcut, side = 'bottom', children }: { label: str
   );
 }
 
-/** FlowSketch mark: two boxes joined by an arrow. Drawn for this project. */
+/** UI Workflow Editor mark: two boxes joined by an arrow. Drawn for this project. */
 export function BrandMark({ size = 16 }: { size?: number }) {
   return (
     <svg width={size} height={size} viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" aria-hidden>

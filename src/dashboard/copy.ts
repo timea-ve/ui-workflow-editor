@@ -1,8 +1,8 @@
 // All dashboard strings in one place (reviewed in docs/phase-4/copy-deck.md).
 
 export const copy = {
-  appName: 'FlowSketch',
-  pageTitle: 'Your boards · FlowSketch',
+  appName: 'UI Workflow Editor',
+  pageTitle: 'Your boards · UI Workflow Editor',
 
   newBoard: 'New board',
   newBoardShortcut: 'N',

@@ -2,6 +2,17 @@
 
 Owner: Export/Share agent. Scope per `CONTRACTS.md` (Export, Share, Read-only canvas).
 
+> **Update (Phase 4, Decision Log #49):** share links no longer use a server. The link itself carries the board:
+> `{title, doc}` as JSON → `CompressionStream('deflate-raw')` → base64url, in the URL fragment:
+> `<origin><base>s/v1#<data>` (`v1` is the format version). The fragment is never sent to any server.
+> The share page decodes it (`src/share/link.ts`), checks it with the same shape validation as before
+> (moved to `src/share/validate.ts`) and shows the usual read-only board, Play and Export. A cut-off or
+> garbled link shows "This link is incomplete."; old `/s/<id>` server links show "This link is no longer active."
+> In the popover, "Update link" makes a new link with the latest changes, and turning sharing off only
+> forgets the link on this device — links already sent keep working. A 60-screen board (stress fixture)
+> makes a ~40k-character link. The app is hosted on GitHub Pages (#48); `server/` is kept but no longer
+> mounted in `vite.config.ts`. "How to try" steps 2–4 and the API, Deploy and Security sections below describe that legacy server.
+
 ## In plain words
 
 - **Export:** you can save the whole board, just the selected screens, or one option (A/B) as a crisp PNG (2× resolution) or a PDF. Margins, screen names, arrows and labels are included.
@@ -31,14 +42,15 @@ Owner: Export/Share agent. Scope per `CONTRACTS.md` (Export, Share, Read-only ca
 | `src/export/StaticBoard.tsx` | A static, non-interactive board renderer (frames via `DeviceFrame`, elements via `ElementView`, lanes, link badges, connectors with labels) in the Clean style |
 | `src/export/exportBoard.ts` | `exportBoard(opts) → Blob` and `downloadBlob(blob, name)` (CONTRACTS signatures) |
 | `src/export/ExportDialog.tsx` | Radix dialog; `useExportShortcut(open)`; remembers the last choice in `localStorage['fs:export:v1']` |
-| `src/share/client.ts` | `publishShare`, `revokeShare`, `getShareState`, `fetchShare`; stores `{id, editToken}` per board in `localStorage['fs:shares:v1']`; keeps `Board.shareId` in sync |
+| `src/share/client.ts` | `publishShare` (builds the link), `revokeShare` (forgets it), `getShareState`; stores `{id, url, publishedAt}` per board in `localStorage['fs:shares:v2']`; keeps `Board.shareId` in sync |
+| `src/share/link.ts` | `encodeShare` / `decodeShare` (deflate-raw + base64url, 20 MB decompressed cap, validation), `sharePath` |
 | `src/share/SharePopover.tsx` | `SharePopover({boardId, title, getDoc})` with a Share button and a non-modal popover (`SharePanel` can be embedded on its own) |
 | `src/share/ReadOnlyBoard.tsx` | Read-only React Flow board (same node/edge components as `FlowCanvas`) |
-| `src/pages/SharePage.tsx` | `/s/:shareId` |
+| `src/pages/SharePage.tsx` | `/s/v1#<data>` |
 | `server/shareApi.ts` | Hono app `createShareApi({store, rateLimit?})` |
 | `server/store.ts` | `ShareStore` interface, `FileShareStore` (`.data/shares/<id>.json`, gitignored), `MemoryShareStore` (tests) |
-| `server/validate.ts` | BoardDoc shape validation |
-| `server/vitePlugin.ts` | Mounts the API in `vite` dev **and** `vite preview` |
+| `src/share/validate.ts` | BoardDoc shape validation (`server/validate.ts` re-exports it) |
+| `server/vitePlugin.ts` | Mounted the API in `vite` dev and `vite preview` (no longer used) |
 | `server/vercel.ts` | Vercel Functions entry (not deployed) |
 
 ### How export works

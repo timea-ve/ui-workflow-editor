@@ -1,4 +1,4 @@
-// FlowSketch data model. See docs/phase-1/tech-architecture.md §4.
+// UI Workflow Editor data model. See docs/phase-1/tech-architecture.md §4.
 // Flat maps keyed by id so each collection maps 1:1 onto a Y.Map later.
 
 export type ID = string;

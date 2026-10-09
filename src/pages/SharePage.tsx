@@ -1,13 +1,13 @@
 import { useCallback, useEffect, useMemo, useState, type ReactNode } from 'react';
-import { Link, useParams, useSearchParams } from 'react-router-dom';
+import { Link, useLocation, useParams, useSearchParams } from 'react-router-dom';
 import { ReactFlowProvider, useReactFlow } from '@xyflow/react';
-import { Download, Link2Off, Maximize, Play, RefreshCw } from 'lucide-react';
+import { Download, Link2Off, Maximize, Play } from 'lucide-react';
 import type { BoardDoc, ID } from '../model/types';
 import { BrandMark, ChromeProvider, ICON_STROKE, Tip } from '../chrome/shared';
 import { PlayView } from '../flow/PlayView';
 import { ExportDialog } from '../export/ExportDialog';
 import type { ExportFormat } from '../export/scope';
-import { fetchShare, ShareError } from '../share/client';
+import { decodeShare, SHARE_VERSION } from '../share/link';
 import { ReadOnlyBoard } from '../share/ReadOnlyBoard';
 import { isEmptyDoc, normalizeDoc, playStart } from '../share/play';
 import '../chrome/chrome.css';
@@ -17,9 +17,9 @@ type Load =
   | { kind: 'loading' }
   | { kind: 'ready'; title: string; doc: BoardDoc }
   | { kind: 'gone' }
-  | { kind: 'error' };
+  | { kind: 'broken' };
 
-/** Keep the share view out of search engines while it's open (the API also sends X-Robots-Tag). */
+/** Keep the share view out of search engines while it's open. */
 function useNoIndex() {
   useEffect(() => {
     const meta = document.createElement('meta');
@@ -38,7 +38,7 @@ function useDocumentTitle(title: string) {
   }, [title]);
 }
 
-/** Dev-only test hook: `/s/:id?formats=png,pdf` also offers PDF in the share view's export dialog. */
+/** Dev-only test hook: `/s/v1?formats=png,pdf#…` also offers PDF in the share view's export dialog. */
 function exportFormats(params: URLSearchParams): ExportFormat[] {
   if (import.meta.env.DEV && params.get('formats') === 'png,pdf') return ['png', 'pdf'];
   return ['png'];
@@ -46,24 +46,24 @@ function exportFormats(params: URLSearchParams): ExportFormat[] {
 
 export function SharePage() {
   const { shareId = '' } = useParams();
+  const { hash } = useLocation();
   const [params] = useSearchParams();
-  const [load, setLoad] = useState<Load>({ kind: 'loading' });
-  const [attempt, setAttempt] = useState(0);
+  // The board travels in the fragment (`/s/v1#<data>`). Older server links (`/s/<id>`) no longer work.
+  const legacy = shareId !== SHARE_VERSION;
+  const data = hash.replace(/^#/, '');
+  const [decoded, setDecoded] = useState<{ data: string; load: Load } | null>(null);
+  const load: Load = legacy ? { kind: 'gone' } : decoded?.data === data ? decoded.load : { kind: 'loading' };
   useNoIndex();
-  useDocumentTitle(load.kind === 'ready' ? `${load.title} · FlowSketch` : 'Shared board · FlowSketch');
+  useDocumentTitle(load.kind === 'ready' ? `${load.title} · UI Workflow Editor` : 'Shared board · UI Workflow Editor');
 
   useEffect(() => {
+    if (legacy) return;
     let alive = true;
-    setLoad({ kind: 'loading' });
-    fetchShare(shareId)
-      .then((s) => { if (alive) setLoad({ kind: 'ready', title: s.title || 'Untitled board', doc: normalizeDoc(s.doc) }); })
-      .catch((e: unknown) => {
-        if (!alive) return;
-        const gone = e instanceof ShareError && (e.kind === 'not-found' || e.kind === 'revoked');
-        setLoad({ kind: gone ? 'gone' : 'error' });
-      });
+    decodeShare(data)
+      .then((s) => { if (alive) setDecoded({ data, load: { kind: 'ready', title: s.title || 'Untitled board', doc: normalizeDoc(s.doc) } }); })
+      .catch(() => { if (alive) setDecoded({ data, load: { kind: 'broken' } }); });
     return () => { alive = false; };
-  }, [shareId, attempt]);
+  }, [legacy, data]);
 
   return (
     <ChromeProvider>
@@ -82,13 +82,11 @@ export function SharePage() {
                     <p>Ask the owner for a new link.</p>
                   </div>
                 )}
-                {load.kind === 'error' && (
+                {load.kind === 'broken' && (
                   <div className="fs-sharepage__state" role="alert">
-                    <h1>Couldn’t load this board</h1>
-                    <p>Check your connection, then try again.</p>
-                    <button type="button" className="fsc-btn fsc-btn--outline" onClick={() => setAttempt((n) => n + 1)}>
-                      <RefreshCw size={16} strokeWidth={ICON_STROKE} aria-hidden /> Try again
-                    </button>
+                    <Link2Off size={28} strokeWidth={ICON_STROKE} aria-hidden />
+                    <h1>This link is incomplete.</h1>
+                    <p>Part of it may have been cut off when it was copied — ask for a new one.</p>
                   </div>
                 )}
               </main>
@@ -105,7 +103,7 @@ function ShareHeader({ title, children }: { title: string; children?: ReactNode 
       <span className="fsc-topbar__brand" aria-hidden><BrandMark /></span>
       <div className="fsc-topbar__title fs-sharepage__heading">
         <p className="fs-sharepage__title">{title}</p>
-        <p className="fs-sharepage__banner">View only · made with <Link to="/">FlowSketch</Link></p>
+        <p className="fs-sharepage__banner">View only · made with <Link to="/">UI Workflow Editor</Link></p>
       </div>
       {children && <div className="fsc-topbar__actions">{children}</div>}
     </header>

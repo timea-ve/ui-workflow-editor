@@ -1,5 +1,6 @@
 // Fixture board for share/export e2e: Home --(Continue button)--> Details, plus a connector label.
-import type { APIRequestContext } from '@playwright/test';
+import type { BoardDoc } from '../src/model/types';
+import { encodeShare, sharePath } from '../src/share/link';
 
 export const fixtureDoc = {
   frames: {
@@ -19,8 +20,7 @@ export const fixtureDoc = {
   flowNames: {},
 };
 
-export async function publishFixture(request: APIRequestContext, doc: unknown = fixtureDoc, title = 'Checkout e2e') {
-  const res = await request.post('/api/shares', { data: { title, doc } });
-  if (res.status() !== 201) throw new Error(`publish failed: ${res.status()} ${await res.text()}`);
-  return (await res.json()) as { id: string; editToken: string };
+/** Path of a share link carrying `doc` (relative to baseURL), e.g. `/s/v1#<data>`. */
+export async function shareLink(doc: unknown = fixtureDoc, title = 'Checkout e2e'): Promise<string> {
+  return `/${sharePath(await encodeShare(title, doc as BoardDoc))}`;
 }

@@ -1,9 +1,8 @@
 import { expect, test } from '@playwright/test';
-import { fixtureDoc, publishFixture } from './share.fixture';
+import { shareLink } from './share.fixture';
 
-test('shared board renders read-only, plays, and is noindex', async ({ page, request }) => {
-  const { id } = await publishFixture(request);
-  await page.goto(`/s/${id}`);
+test('shared board renders read-only, plays, and is noindex', async ({ page }) => {
+  await page.goto(await shareLink());
 
   await expect(page.getByText('Checkout e2e')).toBeVisible();
   await expect(page.getByText(/View only · made with/)).toBeVisible();
@@ -38,43 +37,32 @@ test('shared board renders read-only, plays, and is noindex', async ({ page, req
   await expect(play).toBeHidden();
 });
 
-test('revoked link shows a calm message', async ({ page, request }) => {
-  const { id, editToken } = await publishFixture(request);
-  const del = await request.delete(`/api/shares/${id}`, { headers: { 'x-edit-token': editToken } });
-  expect(del.status()).toBe(200);
-  await page.goto(`/s/${id}`);
+test('old server links show a calm message', async ({ page }) => {
+  await page.goto('/s/doesNotExist0000000000');
   await expect(page.getByRole('heading', { name: 'This link is no longer active.' })).toBeVisible();
   await expect(page.getByText('Ask the owner for a new link.')).toBeVisible();
 });
 
-test('unknown link shows the same message', async ({ page }) => {
-  await page.goto('/s/doesNotExist0000000000');
-  await expect(page.getByRole('heading', { name: 'This link is no longer active.' })).toBeVisible();
+test('a cut-off or garbled link says it is incomplete', async ({ page }) => {
+  const link = await shareLink();
+  for (const bad of [link.slice(0, Math.floor(link.length * 0.6)), '/s/v1', '/s/v1#not-a-board']) {
+    await page.goto('about:blank');
+    await page.goto(bad);
+    await expect(page.getByRole('heading', { name: 'This link is incomplete.' })).toBeVisible();
+    await expect(page.getByText('ask for a new one')).toBeVisible();
+  }
 });
 
-test('updating the link shows the latest copy', async ({ page, request }) => {
-  const { id, editToken } = await publishFixture(request);
-  const put = await request.put(`/api/shares/${id}`, {
-    headers: { 'x-edit-token': editToken },
-    data: { title: 'Renamed board', doc: fixtureDoc },
-  });
-  expect(put.status()).toBe(200);
-  await page.goto(`/s/${id}`);
-  await expect(page.getByText('Renamed board')).toBeVisible();
+test('the link carries its own copy: works with no saved data', async ({ browser }) => {
+  const context = await browser.newContext();
+  const page = await context.newPage();
+  await page.goto(await shareLink(undefined, 'Fresh copy'));
+  await expect(page.getByText('Fresh copy')).toBeVisible();
+  await expect(page.locator('.react-flow__node-screen')).toHaveCount(2);
+  await context.close();
 });
 
-test('empty board says so', async ({ page, request }) => {
-  const { id } = await publishFixture(request, { frames: {}, elements: {}, connectors: {}, links: {}, variants: {}, flowNames: {} }, 'Empty');
-  await page.goto(`/s/${id}`);
+test('empty board says so', async ({ page }) => {
+  await page.goto(await shareLink({ frames: {}, elements: {}, connectors: {}, links: {}, variants: {}, flowNames: {} }, 'Empty'));
   await expect(page.getByRole('heading', { name: 'Nothing here yet' })).toBeVisible();
-});
-
-test('server down shows retry', async ({ page }) => {
-  let fail = true;
-  await page.route('**/api/shares/*', (route) => (fail ? route.abort('failed') : route.continue()));
-  await page.goto('/s/aaaaaaaaaaaaaaaaaaaaaa');
-  await expect(page.getByRole('alert')).toContainText('Couldn’t load this board');
-  fail = false;
-  await page.getByRole('button', { name: 'Try again' }).click();
-  await expect(page.getByRole('heading', { name: 'This link is no longer active.' })).toBeVisible();
 });

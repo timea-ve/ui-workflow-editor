@@ -73,7 +73,7 @@ export async function exportBoard(opts: ExportOptions): Promise<Blob> {
     const { jsPDF } = await import('jspdf');
     const page = pdfPageSize(width, height);
     const pdf = new jsPDF({ orientation: page.orientation, unit: 'pt', format: [page.w, page.h], compress: true });
-    pdf.setProperties({ title: opts.title, creator: 'FlowSketch' });
+    pdf.setProperties({ title: opts.title, creator: 'UI Workflow Editor' });
     pdf.addImage(canvas, 'PNG', 0, 0, page.w, page.h, undefined, 'FAST');
     return pdf.output('blob');
   } catch (e) {

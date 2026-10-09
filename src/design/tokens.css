@@ -1,4 +1,4 @@
-/* FlowSketch design tokens — Phase 2 (Design System agent).
+/* UI Workflow Editor design tokens — Phase 2 (Design System agent).
    Rules: grayscale + exactly ONE accent. WCAG AA: text ≥ 4.5:1, meaningful
    UI strokes / focus ≥ 3:1. Contrast pairs are verified in contrast.test.ts.
    The two candidate kit styles are switched with

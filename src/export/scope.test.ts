@@ -132,7 +132,7 @@ describe('naming', () => {
     expect(exportFileName('Checkout flow', 'Whole board', 'png')).toBe('Checkout flow – Whole board.png');
     expect(exportFileName('a/b:c*?"<>|d', 'Selection', 'pdf')).toBe('a b c d – Selection.pdf');
     expect(exportFileName('  ...hidden ', 'Option B', 'png')).toBe('hidden – Option B.png');
-    expect(exportFileName('', 'Whole board', 'png')).toBe('FlowSketch board – Whole board.png');
+    expect(exportFileName('', 'Whole board', 'png')).toBe('UI Workflow Editor board – Whole board.png');
     expect(exportFileName('x'.repeat(300), '', 'png')).toBe(`${'x'.repeat(100)}.png`);
   });
 });
