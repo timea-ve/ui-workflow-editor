@@ -1,0 +1,121 @@
+/* Context bar: floating options for the selection (see ContextBar.tsx). Same look as the connector
+   toolbar (.fs-edge-tools in flows.css) so both read as one family. */
+.fs-ctx-bar {
+  position: absolute;
+  z-index: 6; /* above the viewport and edge labels, below app overlays */
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  padding: 2px;
+  background: var(--fs-surface);
+  border: 1px solid var(--fs-hairline);
+  border-radius: var(--fs-radius-md);
+  box-shadow: var(--fs-shadow-2);
+  color: var(--fs-ink);
+  font: var(--fs-ui-text-sm) var(--fs-ui-font);
+  white-space: nowrap;
+  pointer-events: auto;
+}
+.fs-ctx-bar__title {
+  padding: 0 6px 0 8px;
+  color: var(--fs-muted);
+  font-size: var(--fs-ui-text-xs);
+  font-weight: 600;
+  user-select: none;
+}
+.fs-ctx-bar__btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  min-width: 28px;
+  height: 28px;
+  padding: 0 6px;
+  border: 0;
+  border-radius: var(--fs-radius-sm);
+  background: none;
+  color: var(--fs-ink);
+  font: inherit;
+  cursor: pointer;
+}
+.fs-ctx-bar__btn:hover:not(:disabled) { background: var(--fs-hover); }
+.fs-ctx-bar__btn[aria-pressed='true'],
+.fs-ctx-bar__btn[data-state='open'] { background: var(--fs-accent-weak); color: var(--fs-accent); }
+.fs-ctx-bar__btn:disabled { color: var(--fs-subtle); cursor: not-allowed; }
+.fs-ctx-bar__btn:focus-visible { outline: var(--fs-focus-width) solid var(--fs-focus-ring); outline-offset: 0; }
+.fs-ctx-bar__btn--text { padding: 0 8px; }
+.fs-ctx-bar__select { padding: 0 4px 0 8px; }
+.fs-ctx-bar__select svg { color: var(--fs-muted); }
+.fs-ctx-bar__sep { flex: none; width: 1px; height: 18px; margin: 0 2px; background: var(--fs-hairline); }
+.fs-ctx-bar__input {
+  box-sizing: border-box;
+  height: 28px;
+  padding: 0 8px;
+  border: 1px solid transparent;
+  border-radius: var(--fs-radius-sm);
+  background: none;
+  color: var(--fs-ink);
+  font: inherit;
+}
+.fs-ctx-bar__input:hover { background: var(--fs-hover); }
+.fs-ctx-bar__input:focus { outline: none; border-color: var(--fs-accent); background: var(--fs-surface); }
+.fs-ctx-bar__num { display: inline-flex; align-items: center; gap: 4px; padding-left: 6px; color: var(--fs-muted); }
+.fs-ctx-bar__num .fs-ctx-bar__input { padding: 0 4px; color: var(--fs-ink); }
+
+/* Popovers & menus opened from the bar */
+.fsc-menu.fs-ctx-menu { min-width: 160px; }
+.fs-ctx-menu__label { padding: 6px 8px 4px; color: var(--fs-muted); font-size: var(--fs-ui-text-xs); font-weight: 600; }
+.fs-ctx-pop {
+  z-index: 50;
+  padding: var(--fs-space-2);
+  font: var(--fs-ui-text-sm) var(--fs-ui-font);
+  color: var(--fs-ink);
+}
+.fs-ctx-pop:focus-visible { outline: none; }
+/* No enter animation: Radix Presence can leave a popover stuck open if Esc lands mid-animation. */
+.fs-ctx-pop, .fs-ctx-menu { animation: none; }
+.fs-ctx-pop__head { padding: 0 2px 6px; color: var(--fs-muted); font-size: var(--fs-ui-text-xs); font-weight: 600; }
+.fs-ctx-pop__note { margin: 6px 2px 0; color: var(--fs-muted); font-size: var(--fs-ui-text-xs); }
+
+.fs-ctx-icons { width: calc(8 * 32px + 2 * var(--fs-space-2)); }
+.fs-ctx-icons .fsc-input { width: 100%; box-sizing: border-box; margin-bottom: var(--fs-space-2); }
+.fs-ctx-icons__grid { display: grid; grid-template-columns: repeat(8, 32px); max-height: 232px; overflow: auto; }
+.fs-ctx-icons__grid .fs-ctx-bar__btn { width: 32px; height: 32px; padding: 0; }
+
+.fs-ctx-items { width: 280px; }
+.fs-ctx-items__list { margin: 0; padding: 0; list-style: none; max-height: 280px; overflow: auto; }
+.fs-ctx-items__row { display: flex; align-items: center; gap: 2px; margin-bottom: 4px; }
+.fs-ctx-items__row .fsc-input { flex: 1; min-width: 0; height: 30px; }
+.fs-ctx-items__row .fs-ctx-bar__btn { min-width: 24px; height: 24px; padding: 0; color: var(--fs-muted); }
+.fs-ctx-items__row .fs-ctx-bar__btn:disabled { color: var(--fs-hairline); }
+.fs-ctx-items__add { width: 100%; justify-content: flex-start; padding: 0 8px; color: var(--fs-accent); }
+
+.fs-ctx-more { width: 240px; padding: var(--fs-space-1); }
+.fs-ctx-form { display: grid; gap: var(--fs-space-2); padding: var(--fs-space-2); border-bottom: 1px solid var(--fs-hairline); margin-bottom: var(--fs-space-1); }
+.fs-ctx-form .fsc-input, .fs-ctx-form .fsc-select, .fs-ctx-form .fsc-textarea { width: 100%; box-sizing: border-box; }
+.fs-ctx-form__size { display: grid; grid-template-columns: 1fr 1fr; gap: var(--fs-space-2); }
+.fs-ctx-form__size .fsc-input:disabled { color: var(--fs-muted); background: var(--fs-canvas); cursor: not-allowed; }
+.fs-ctx-form__row { display: flex; align-items: center; justify-content: space-between; gap: var(--fs-space-2); }
+.fs-ctx-form__check { display: flex; align-items: center; gap: var(--fs-space-2); }
+.fs-ctx-actions { display: grid; }
+.fs-ctx-actions__btn {
+  display: flex;
+  align-items: center;
+  gap: var(--fs-space-2);
+  height: 32px;
+  padding: 0 var(--fs-space-2);
+  border: 0;
+  border-radius: var(--fs-radius-sm);
+  background: none;
+  color: var(--fs-ink);
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+.fs-ctx-actions__btn:hover, .fs-ctx-actions__btn:focus-visible { background: var(--fs-accent-weak); color: var(--fs-accent); outline: none; }
+.fs-ctx-actions__label { flex: 1; }
+
+@media (prefers-reduced-motion: no-preference) {
+  .fs-ctx-bar { animation: fs-ctx-in 120ms ease-out; }
+}
+@keyframes fs-ctx-in { from { opacity: 0; transform: translateY(2px); } }

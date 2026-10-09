@@ -238,7 +238,7 @@ export function setNodeBox(doc: BoardDoc, id: ID, box: Box): BoardDoc {
   return withElement(doc, { ...e, ...box });
 }
 
-/** Inspector W/H: respects resize axes, min size and the parent screen (keeps top-left, shifts back inside if needed). */
+/** Context bar W/H: respects resize axes, min size and the parent screen (keeps top-left, shifts back inside if needed). */
 export function setNodeSize(doc: BoardDoc, id: ID, size: { w?: number; h?: number }): BoardDoc {
   const rules = resizeRules(doc, id);
   const cur = doc.frames[id] ?? doc.elements[id];

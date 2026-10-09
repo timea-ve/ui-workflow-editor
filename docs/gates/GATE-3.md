@@ -1,18 +1,23 @@
-# ⛳ Gate 3 — Working demo — 🔁 CHANGES REQUESTED (Wave C in progress)
+# ⛳ Gate 3 — Working demo — ⏳ AWAITING DIRECTOR (round 2, changes applied)
 
 _Date: 2026-10-08 · Detail: [canvas core](../phase-3/canvas-core.md) · [components](../phase-3/components.md) · [flows](../phase-3/flows.md) · [platform](../phase-3/platform.md) · [export & share](../phase-3/export-share.md)_
 
-> **Director feedback (2026-10-08):** expand the kit to the full component list (text, buttons and actions, form inputs, navigation, content and layout, feedback and overlays). Also:
-> - Components use a muted grey palette.
-> - A small **context bar** on selection replaces the big properties panel.
-> - Snap to a grid and to each other.
-> - Wireframes, flowchart shapes, connectors and icons all live on one canvas.
+> **Round 2 (2026-10-08): your changes are done.** You asked for the full component list, a muted grey look, a small context bar instead of the properties panel, grid snapping and icons. All of that is in:
+> - **40 wireframe components** in 6 palette sections (Text · Buttons & actions · Form inputs · Navigation · Content & layout · Feedback & overlays), plus Shapes, Screens and **70 icons**. Includes button states, paragraph lorem ↔ grey blocks, line and stacked charts, calendar, date picker, tooltip, toast and more.
+> - **Context bar:** select anything and a small bar appears above it with that item's own options (e.g. Button → style + state; Tabs → edit tab names, pick the active tab by name). Rarer options sit under ⋯. Keyboard: **⌘.** jumps into the bar, **Esc** returns. The right-hand panel is gone, so the canvas is full width.
+> - **Snapping:** items line up with neighbours first, then with equal gaps, then with an 8px grid. A faint dot grid shows the grid. Hold **Alt** to place freely.
+> - **Muted grey:** every component draws in soft greys; text still meets the WCAG AA contrast standard.
+> - **Checks:** 927 logic tests and 43 browser tests pass, including the robot run of your Gate 3 task.
 >
-> Being built as Phase 3 Wave C; see [phase-3/WAVE-C.md](../phase-3/WAVE-C.md). The gate will be re-presented afterwards.
+> | Context bar: Button state | Context bar: Tabs | All components (overview) |
+> |---|---|---|
+> | ![](gate-3/07-context-bar-button.png) | ![](gate-3/08-context-bar-tabs.png) | ![](gate-3/09-component-gallery.png) |
+>
+> Full-size gallery: open **http://localhost:5173/gallery**. Details: [phase-3/WAVE-C.md](../phase-3/WAVE-C.md).
 
 ## 1. What was done
 - **The real app works end to end.** It has a dashboard with 5 templates and a full editor with autosave, undo, snapping and copy/paste. A board with 60 screens stays smooth.
-- **Screens and components:** add a screen with **F**. Press **/** to search and insert any component, or drag it in. You can edit text in place, resize, and drag elements between screens. The right panel shows the selected item's properties.
+- **Screens and components:** add a screen with **F**. Press **/** to search and insert any component, or drag it in. You can edit text in place, resize, and drag elements between screens. A small context bar above the selection shows its options.
 - **Flows:** press **L** on a button and choose a screen, or **New screen**. The arrow stays attached. **⇧D** makes Option B, **⇧C** compares options side by side, and **P** clicks through the flow.
 - **Share and export:** create a read-only link, or export to PNG/PDF. Everything is saved on this device and survives a refresh.
 - **Checks:** 401 logic tests and 38 browser tests pass. A robot runs your exact Gate 3 task (5 screens, Option B, Compare, Play, refresh) every time. While rehearsing it I found and fixed 4 bugs:
@@ -34,8 +39,8 @@ Run `npm install && npm run dev`, then open **http://localhost:5173**.
 | Dashboard | 5 linked screens | Option A + B |
 |---|---|---|
 | ![](gate-3/01-dashboard-first-run.png) | ![](gate-3/02-five-linked-screens.png) | ![](gate-3/03-option-a-and-b.png) |
-| **Insert (/) + properties** | **Compare** | **Play** |
-| ![](gate-3/04-insert-palette-and-inspector.png) | ![](gate-3/05-compare.png) | ![](gate-3/06-play.png) |
+| **Insert (/)** | **Compare** | **Play** |
+| ![](gate-3/04-insert-palette.png) | ![](gate-3/05-compare.png) | ![](gate-3/06-play.png) |
 
 ## 3. Decisions I need from you
 My recommendation is **in bold**. D1 is the main one: did the demo meet the bar?
@@ -54,6 +59,8 @@ _Already applied (no action needed): boards made from templates are named after 
 ## 4. Risks or trade-offs
 - **Arrows can cross other screens** when links skip over a screen; they never cross their own screen. A smarter route-around is planned for Phase 4.
 - **Exported arrows** take a slightly simpler route than on the canvas. Same connections, small visual difference.
+- **The context bar can cover the item just above the selection.** Click empty canvas first to reach it (Whimsical behaves the same way).
+- **Icons look clean even in the dormant Sketchy style.** No impact on Clean lo-fi, which is the one you chose.
 - **Share links only work on this computer** until we deploy. Hosting is about $0–25/month (as in Gate 1).
 - **No accounts:** clearing browser data loses boards on that device. This was agreed at Gate 1, and export is the backup.
 

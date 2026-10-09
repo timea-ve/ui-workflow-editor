@@ -25,6 +25,8 @@ export interface PropField {
    */
   kind: 'text' | 'multiline' | 'boolean' | 'select' | 'number' | 'items' | 'icon';
   options?: string[];
+  /** For a `number` that is a 0-based index into another `items` prop: the bar shows a menu of those item names. */
+  itemsFrom?: string;
   /** Where the context bar shows it: right on the bar, or inside its "More" popover. Default decided by the bar. */
   bar?: 'inline' | 'more';
 }

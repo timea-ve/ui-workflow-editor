@@ -12,6 +12,7 @@ export const modal: KitItemDef<ModalProps> = {
   type: 'modal',
   label: 'Modal',
   category: 'wireframe',
+  group: 'feedback',
   keywords: ['modal', 'dialog', 'popup', 'alert', 'confirm', 'sheet', 'overlay'],
   defaultSize: { w: 311, h: 220 },
   minSize: { w: 120, h: 72 },
@@ -25,11 +26,11 @@ export const modal: KitItemDef<ModalProps> = {
   },
   textProp: 'title',
   editableProps: [
-    { key: 'title', label: 'Title', kind: 'text' },
+    { key: 'title', label: 'Title', kind: 'text', bar: 'inline' },
     { key: 'body', label: 'Body', kind: 'multiline' },
-    { key: 'primary', label: 'Primary button', kind: 'text' },
+    { key: 'primary', label: 'Primary button', kind: 'text', bar: 'inline' },
     { key: 'secondary', label: 'Secondary button (empty = hide)', kind: 'text' },
-    { key: 'showClose', label: 'Show close button', kind: 'boolean' },
+    { key: 'showClose', label: 'Close button', kind: 'boolean' },
   ],
   linkable: true,
   render: (p, { w, h, style, seed }) => {

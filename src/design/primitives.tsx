@@ -11,7 +11,24 @@ const generator = rough.generator();
 
 export type Tone = 'ink' | 'muted' | 'faint' | 'accent' | 'surface' | 'none';
 
-const toneVar = (t: Tone) => (t === 'none' ? 'none' : `var(--fs-${t})`);
+type ToneRole = 'stroke' | 'fill' | 'text';
+
+/**
+ * Kit drawings use the muted kit palette (tokens.css `.fs-kit-scope`) where it is defined, and the
+ * plain semantic tokens elsewhere (e.g. connectors, lanes). Accent and surface never change.
+ */
+const KIT_TONE: Record<ToneRole, Partial<Record<Tone, string>>> = {
+  stroke: { ink: '--fs-kit-stroke', muted: '--fs-kit-stroke-soft', faint: '--fs-kit-stroke-soft' },
+  fill: { ink: '--fs-kit-fill-strong', muted: '--fs-kit-stroke', faint: '--fs-kit-fill' },
+  text: { ink: '--fs-kit-text', muted: '--fs-kit-text-muted' },
+};
+
+export function toneVar(t: Tone, role: ToneRole = 'stroke'): string {
+  if (t === 'none') return 'none';
+  const kit = KIT_TONE[role][t];
+  return kit ? `var(${kit}, var(--fs-${t}))` : `var(--fs-${t})`;
+}
+const fillVar = (t: Tone) => toneVar(t, 'fill');
 
 interface ShapeBase {
   style: VisualStyle;
@@ -29,7 +46,7 @@ function roughPaths(drawable: ReturnType<typeof generator.rectangle>, stroke: To
       <path
         key={`${keyPrefix}${i}`}
         d={p.d}
-        fill={isFill ? toneVar(fill) : 'none'}
+        fill={isFill ? fillVar(fill) : 'none'}
         stroke={isFill ? 'none' : toneVar(stroke)}
         strokeWidth={isFill ? 0 : sw}
         strokeDasharray={dashed && !isFill ? '6 5' : undefined}
@@ -100,7 +117,7 @@ export function SketchRect({ w, h, radius = 0, style, seed, stroke = 'ink', fill
     <svg width={w} height={h} style={svgStyle} aria-hidden>
       {paths ?? (
         <rect x={inset} y={inset} width={Math.max(0, w - strokeWidth)} height={Math.max(0, h - strokeWidth)} rx={radius}
-          fill={toneVar(fill)} stroke={toneVar(stroke)} strokeWidth={strokeWidth} strokeDasharray={dashed ? '6 5' : undefined} />
+          fill={fillVar(fill)} stroke={toneVar(stroke)} strokeWidth={strokeWidth} strokeDasharray={dashed ? '6 5' : undefined} />
       )}
     </svg>
   );
@@ -113,7 +130,7 @@ export function SketchEllipse({ w, h, style, seed, stroke = 'ink', fill = 'none'
   );
   return (
     <svg width={w} height={h} style={svgStyle} aria-hidden>
-      {paths ?? <ellipse cx={w / 2} cy={h / 2} rx={(w - strokeWidth) / 2} ry={(h - strokeWidth) / 2} fill={toneVar(fill)} stroke={toneVar(stroke)} strokeWidth={strokeWidth} strokeDasharray={dashed ? '6 5' : undefined} />}
+      {paths ?? <ellipse cx={w / 2} cy={h / 2} rx={(w - strokeWidth) / 2} ry={(h - strokeWidth) / 2} fill={fillVar(fill)} stroke={toneVar(stroke)} strokeWidth={strokeWidth} strokeDasharray={dashed ? '6 5' : undefined} />}
     </svg>
   );
 }
@@ -128,7 +145,7 @@ export function SketchPolygon({ w, h, points, style, seed, stroke = 'ink', fill 
   );
   return (
     <svg width={w} height={h} style={svgStyle} aria-hidden>
-      {paths ?? <polygon points={points.map((p) => p.join(',')).join(' ')} fill={toneVar(fill)} stroke={toneVar(stroke)} strokeWidth={strokeWidth} strokeLinejoin="round" strokeDasharray={dashed ? '6 5' : undefined} />}
+      {paths ?? <polygon points={points.map((p) => p.join(',')).join(' ')} fill={fillVar(fill)} stroke={toneVar(stroke)} strokeWidth={strokeWidth} strokeLinejoin="round" strokeDasharray={dashed ? '6 5' : undefined} />}
     </svg>
   );
 }
@@ -168,7 +185,7 @@ export function KitText({ children, size = 'md', tone = 'ink', weight, align = '
         fontFamily: 'var(--fs-kit-font)',
         fontSize: `var(--fs-kit-text-${size})`,
         lineHeight: 1.25,
-        color: toneVar(tone),
+        color: toneVar(tone, 'text'),
         fontWeight: weight,
         textAlign: align,
         overflow: 'hidden',

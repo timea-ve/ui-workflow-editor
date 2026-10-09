@@ -31,3 +31,17 @@ const getApi = () => (state.editable ? state.api : null);
 export function useEditableBridge(): ComponentsBridge | null {
   return useSyncExternalStore(subscribe, getApi, getApi);
 }
+
+// Which node is being edited inline (the context bar hides meanwhile). Published by CanvasLayer.
+let editingId: ID | null = null;
+const editingListeners = new Set<() => void>();
+export function setEditingId(id: ID | null) {
+  if (id === editingId) return;
+  editingId = id;
+  editingListeners.forEach((l) => l());
+}
+const subscribeEditing = (l: () => void) => { editingListeners.add(l); return () => { editingListeners.delete(l); }; };
+const getEditingId = () => editingId;
+export function useEditingId(): ID | null {
+  return useSyncExternalStore(subscribeEditing, getEditingId, getEditingId);
+}

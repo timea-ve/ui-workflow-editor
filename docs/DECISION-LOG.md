@@ -35,7 +35,11 @@ Technical decisions are made by the Orchestrator; product/design decisions by th
 | 29 | 2026-10-08 | After "link to new screen", the view glides to show both screens | You always see what you just made. | Orchestrator | ✅ |
 | 30 | 2026-10-08 | Arrows from a button leave its screen on the side facing the target | Avoids lines doubling back across the screen. | Orchestrator | ✅ |
 | 31 | 2026-10-08 | Option labels sit inside the lane's top-left corner | Always visible after "fit to screen". | Orchestrator | ✅ |
-| 32 | 2026-10-08 | Kit expanded to the Director's full list (~45 components): text, actions, inputs, navigation, content and layout incl. charts, feedback and overlays | Covers the screens product teams actually sketch. | Director (Gate 3 feedback) | 🔁 building |
-| 33 | 2026-10-08 | A small context bar on the selection replaces the right-hand properties panel | Calmer; options sit next to what you're editing. | Director (Gate 3 feedback) | 🔁 building |
-| 34 | 2026-10-08 | Muted grey palette for all components; snap to an 8px grid and to neighbours | Screens read as "thinking", and things line up without effort. | Director (Gate 3 feedback) | 🔁 building |
-| 35 | 2026-10-08 | Real icon set (curated open-licence lucide icons) usable on its own or inside components | Wireframes, shapes, arrows and icons on one canvas. | Director (Gate 3 feedback) / Orchestrator (icon source) | 🔁 building |
+| 32 | 2026-10-08 | Kit expanded to the Director's full list (~45 components): text, actions, inputs, navigation, content and layout incl. charts, feedback and overlays | Covers the screens product teams actually sketch. | Director (Gate 3 feedback) | ✅ |
+| 33 | 2026-10-08 | A small context bar on the selection replaces the right-hand properties panel | Calmer; options sit next to what you're editing. | Director (Gate 3 feedback) | ✅ |
+| 34 | 2026-10-08 | Muted grey palette for all components; snap to an 8px grid and to neighbours | Screens read as "thinking", and things line up without effort. | Director (Gate 3 feedback) | ✅ |
+| 35 | 2026-10-08 | Real icon set (curated open-licence lucide icons) usable on its own or inside components | Wireframes, shapes, arrows and icons on one canvas. | Director (Gate 3 feedback) / Orchestrator (icon source) | ✅ |
+| 36 | 2026-10-08 | Context bar shows up to 3 options inline; selects open as small menus; the rest go under ⋯. ⌘. focuses the bar | Stays small and readable; keyboard reachable. | Orchestrator | ✅ |
+| 37 | 2026-10-08 | "Active / selected item" options pick by name from the item list (not a number) | Nobody should have to count from 0. | Orchestrator | ✅ |
+| 38 | 2026-10-08 | Snap order: neighbours → equal gaps → 8px grid; dot grid every 24px, hidden when zoomed far out; Alt turns snapping off | Lines up without effort; calm background. | Orchestrator | ✅ |
+| 39 | 2026-10-08 | Kit components never use the violet accent (selected states use dark grey fills) | Accent stays reserved for the app itself (selection, links, Play). | Orchestrator | ✅ |

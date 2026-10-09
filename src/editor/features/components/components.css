@@ -1,14 +1,5 @@
-/* Wireframe-on-canvas: inspector, resize handles, inline text editing, palette previews, drop target. */
-
-/* The Inspector panel only exists while something is selected. */
-.fse-right:empty { display: none; }
-
-.fsc-inspector.fs-inspector-panel { width: 100%; border-left: 0; }
-.fs-inspector-tools { display: flex; flex-wrap: wrap; gap: var(--fs-space-1); }
-.fs-inspector-size { display: grid; grid-template-columns: 1fr 1fr; gap: var(--fs-space-2); }
-.fs-inspector-size .fsc-input:disabled { color: var(--fs-muted); background: var(--fs-canvas); cursor: not-allowed; }
-.fs-inspector-note { margin: 0; color: var(--fs-muted); font-size: var(--fs-ui-text-xs); line-height: 1.4; }
-.fsc-btn.fs-inspector-link { justify-content: flex-start; gap: var(--fs-space-2); width: 100%; }
+/* Wireframe-on-canvas: resize handles, inline text editing, palette previews, drop target.
+   The context bar has its own stylesheet (contextBar.css). */
 
 /* Resize handles (corners only; side midpoints are connection handles). */
 .fs-resize-handle {
@@ -82,6 +73,19 @@
 .fs-palette-device { box-sizing: border-box; border: 1.5px solid currentColor; border-radius: 2px; }
 .fs-palette-device--mobile, .fs-palette-device--tablet { border-radius: 3px; }
 .fsc-palette__item[draggable='true'] { cursor: grab; }
+/* Icons section: a compact grid of tiles (label is the tooltip + screen-reader text). */
+.fsc-palette__item.fsc-palette__item--tile {
+  display: inline-flex;
+  justify-content: center;
+  width: 40px;
+  min-height: 40px;
+  padding: 0;
+  margin: 1px;
+  vertical-align: top;
+  color: var(--fs-muted);
+}
+.fsc-palette__item--tile .fsc-palette__icon { width: 24px; height: 24px; }
+.fsc-palette__item--tile[aria-selected='true'] { color: var(--fs-accent); }
 .fsc-palette.is-dragging { opacity: 0; pointer-events: none; }
 
 @media (prefers-reduced-motion: no-preference) {

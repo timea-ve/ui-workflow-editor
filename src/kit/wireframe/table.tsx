@@ -11,6 +11,7 @@ export const table: KitItemDef<TableProps> = {
   type: 'table',
   label: 'Table',
   category: 'wireframe',
+  group: 'content',
   keywords: ['table', 'grid', 'data', 'spreadsheet', 'rows', 'columns'],
   defaultSize: { w: 327, h: 160 },
   minSize: { w: 80, h: 40 },
@@ -18,9 +19,9 @@ export const table: KitItemDef<TableProps> = {
   defaultProps: { columns: 'Name, Status, Date', rows: 4, showHeader: true },
   textProp: 'columns',
   editableProps: [
-    { key: 'columns', label: 'Columns (comma-separated)', kind: 'text' },
-    { key: 'rows', label: 'Number of rows', kind: 'number' },
-    { key: 'showHeader', label: 'Show header row', kind: 'boolean' },
+    { key: 'columns', label: 'Columns', kind: 'items', bar: 'inline' },
+    { key: 'rows', label: 'Rows', kind: 'number', bar: 'inline' },
+    { key: 'showHeader', label: 'Header row', kind: 'boolean' },
   ],
   linkable: false,
   render: (p, { w, h, style, seed }) => {

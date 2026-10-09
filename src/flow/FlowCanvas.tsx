@@ -4,7 +4,7 @@ import {
 } from 'react';
 import {
   Background, BackgroundVariant, ConnectionMode, ConnectionLineType, Controls, MiniMap, ReactFlow, ViewportPortal,
-  ReactFlowProvider, applyNodeChanges, useReactFlow, useStoreApi,
+  ReactFlowProvider, applyNodeChanges, useReactFlow, useStore, useStoreApi,
   type Connection, type EdgeChange, type NodeChange, type NodeMouseHandler, type OnConnectEnd, type OnSelectionChangeFunc,
 } from '@xyflow/react';
 import type { Anchor, BoardDoc, ID } from '../model/types';
@@ -28,6 +28,10 @@ const isLane = (id: string) => id.startsWith('lane:');
 const PLACE_TOOLS = new Set<ToolId>(['screen', 'rect', 'diamond', 'ellipse', 'text', 'sticky']);
 /** Snap distance in screen pixels. */
 const SNAP_PX = 6;
+/** Moves land on this grid when no neighbour alignment/spacing wins (resize uses the same 8px). */
+const SNAP_GRID = 8;
+/** Below this zoom the dot grid is noise; hide it. */
+const DOTS_MIN_ZOOM = 0.4;
 
 export type CanvasOp = (doc: BoardDoc) => BoardDoc;
 export interface CanvasApplyOptions { label?: string; mergeKey?: string }
@@ -183,7 +187,7 @@ function CanvasInner(props: FlowCanvasProps) {
     const box = unionBox(boxes);
     if (!box) return moves;
     const zoom = storeApi.getState().transform[2] || 1;
-    const r = snapBox(box, d.targets, SNAP_PX / zoom);
+    const r = snapBox(box, d.targets, SNAP_PX / zoom, { grid: SNAP_GRID });
     if (showGuides) {
       setGuides(r.guides.map((g) => ({
         ...g,
@@ -347,7 +351,7 @@ function CanvasInner(props: FlowCanvasProps) {
         deleteKeyCode={readOnly || manageKeyboard ? null : ['Backspace', 'Delete']}
         proOptions={{ hideAttribution: false }}
       >
-        <Background variant={BackgroundVariant.Dots} gap={24} size={1.5} color="var(--fs-grid-dot)" />
+        <DotGrid />
         {showControls && <Controls showInteractive={false} />}
         {showMiniMap && <MiniMap pannable zoomable nodeColor="var(--fs-faint)" maskColor="rgb(245 245 244 / 0.7)" />}
         {guides.length > 0 && (
@@ -366,6 +370,11 @@ function CanvasInner(props: FlowCanvasProps) {
   );
 }
 
+function DotGrid() {
+  const show = useStore((st) => st.transform[2] >= DOTS_MIN_ZOOM);
+  return show ? <Background variant={BackgroundVariant.Dots} gap={24} size={1.25} color="var(--fs-grid-dot)" /> : null;
+}
+
 function GuideLines({ guides }: { guides: Guide[] }) {
   return (
     <>
@@ -374,6 +383,7 @@ function GuideLines({ guides }: { guides: Guide[] }) {
           key={i}
           className="fs-guide"
           data-axis={g.axis}
+          data-kind={g.kind}
           style={g.axis === 'x'
             ? { transform: `translate(${g.pos}px, ${g.from}px)`, height: g.to - g.from }
             : { transform: `translate(${g.from}px, ${g.pos}px)`, width: g.to - g.from }}

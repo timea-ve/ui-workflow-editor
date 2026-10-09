@@ -12,17 +12,31 @@ import { ICON_GLYPHS } from './_helpers';
 const ALL: WireframeType[] = [
   'header', 'nav', 'button', 'input', 'checkbox', 'toggle', 'dropdown', 'card',
   'list', 'table', 'image', 'text', 'heading', 'modal', 'tabs', 'icon',
+  'caption', 'link', 'icon-button', 'fab', 'textarea', 'search', 'radio', 'slider', 'datepicker',
+  'sidebar', 'menu', 'breadcrumbs', 'pagination', 'video', 'avatar', 'calendar', 'line-chart',
+  'stacked-chart', 'divider', 'tooltip', 'toast', 'badge', 'progress', 'spinner',
 ];
 const STYLES: VisualStyle[] = ['sketchy', 'clean'];
 
-const TEXT_ONLY = ['text', 'heading'];
+const TEXT_ONLY = ['text', 'heading', 'caption', 'link'];
 
 afterEach(cleanup);
 
 describe('wireframe kit', () => {
-  it('registers all 16 wireframe types', () => {
+  it('registers all 40 wireframe types', () => {
     expect(wireframeKit.map((d) => d.type).sort()).toEqual([...ALL].sort());
     for (const t of ALL) expect(kitRegistry.get(t)?.category).toBe('wireframe');
+  });
+
+  it('puts every component in a palette section, and index fields point at an items list', () => {
+    for (const def of wireframeKit) {
+      expect(def.group, def.type).toBeTruthy();
+      for (const f of def.editableProps) {
+        if (!f.itemsFrom) continue;
+        expect(f.kind).toBe('number');
+        expect(def.editableProps.find((g) => g.key === f.itemsFrom)?.kind, `${def.type}.${f.key}`).toBe('items');
+      }
+    }
   });
 
   for (const def of wireframeKit) {

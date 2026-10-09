@@ -1,5 +1,5 @@
 // Corner resize handles for the selected node. Pointer-only affordance; keyboard users resize with
-// Alt+Shift+Arrows or the Inspector's W/H fields. One undo step per resize (committed on pointer up).
+// Alt+Shift+Arrows or the context bar's W/H fields (More). One undo step per resize (committed on pointer up).
 import { memo, useRef, type PointerEvent as ReactPointerEvent } from 'react';
 import { useStore, useStoreApi, type ReactFlowState } from '@xyflow/react';
 import type { ID } from '../../../model/types';

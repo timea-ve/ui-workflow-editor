@@ -1,7 +1,10 @@
 import type { CSSProperties } from 'react';
 import type { KitItemDef, VisualStyle } from './types';
 
-/** Renders one kit item at a given size. Used by the gallery and (later) the canvas nodes. */
+/**
+ * Renders one kit item at a given size (canvas nodes, gallery, palette previews, export, share, play).
+ * `fs-kit-scope` switches the drawing primitives to the muted kit palette (tokens.css).
+ */
 export function KitItemView({
   def, props, w, h, style, seed, className,
 }: {
@@ -19,7 +22,7 @@ export function KitItemView({
   const merged = { ...def.defaultProps, ...props };
   const box: CSSProperties = { position: 'relative', width, height };
   return (
-    <div className={className} style={box} role="img" aria-label={def.describe(merged)} data-kit-style={style}>
+    <div className={`fs-kit-scope${className ? ` ${className}` : ''}`} style={box} role="img" aria-label={def.describe(merged)} data-kit-style={style}>
       {def.render(merged, { w: width, h: height, style, seed })}
     </div>
   );

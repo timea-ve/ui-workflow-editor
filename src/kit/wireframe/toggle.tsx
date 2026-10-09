@@ -8,6 +8,7 @@ export const toggle: KitItemDef<ToggleProps> = {
   type: 'toggle',
   label: 'Toggle',
   category: 'wireframe',
+  group: 'inputs',
   keywords: ['toggle', 'switch', 'on off', 'setting', 'preference'],
   defaultSize: { w: 327, h: 32 },
   minSize: { w: 44, h: 24 },
@@ -16,7 +17,7 @@ export const toggle: KitItemDef<ToggleProps> = {
   textProp: 'label',
   editableProps: [
     { key: 'label', label: 'Label', kind: 'text' },
-    { key: 'on', label: 'On', kind: 'boolean' },
+    { key: 'on', label: 'On', kind: 'boolean', bar: 'inline' },
   ],
   linkable: false,
   render: (p, { w, h, style, seed }) => {

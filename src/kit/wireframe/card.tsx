@@ -11,6 +11,7 @@ export const card: KitItemDef<CardProps> = {
   type: 'card',
   label: 'Card',
   category: 'wireframe',
+  group: 'content',
   keywords: ['card', 'tile', 'panel', 'container', 'product', 'article'],
   defaultSize: { w: 327, h: 240 },
   minSize: { w: 80, h: 48 },
@@ -18,9 +19,9 @@ export const card: KitItemDef<CardProps> = {
   defaultProps: { title: 'Card title', body: 'A short description that explains what this card is about.', hasImage: true },
   textProp: 'title',
   editableProps: [
-    { key: 'title', label: 'Title', kind: 'text' },
+    { key: 'title', label: 'Title', kind: 'text', bar: 'inline' },
     { key: 'body', label: 'Body', kind: 'multiline' },
-    { key: 'hasImage', label: 'Show image', kind: 'boolean' },
+    { key: 'hasImage', label: 'Image', kind: 'boolean', bar: 'inline' },
   ],
   linkable: true,
   render: (p, { w, h, style, seed }) => {

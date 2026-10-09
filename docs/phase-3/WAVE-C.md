@@ -13,3 +13,13 @@ Requested by the Director at Gate 3. Three agents work in parallel with no overl
 - `PropField.kind` adds `items` (comma-separated string edited as a list) and `icon` (name from `KIT_ICON_NAMES`). Optional `PropField.bar: 'inline' | 'more'`.
 - `KitItemDef.group`: `text | actions | inputs | navigation | content | feedback`.
 - `src/kit/icons.tsx` provides `KIT_ICONS`, `KIT_ICON_NAMES` and `<KitIcon name size />`.
+
+## Result (integrated by the Orchestrator)
+- Reports: [kit-a.md](kit-a.md), [kit-b.md](kit-b.md), [context-bar.md](context-bar.md).
+- Integration added `PropField.itemsFrom`. A `number` prop that is an index into an `items` prop is shown on the bar as a menu of item names (Tabs, Mobile tab bar, Radio, Menu, Sidebar).
+- 927 unit tests, 43 e2e tests, tsc and lint all clean.
+
+### Parking lot (from agents, for the Director)
+- An icon per item in the list editor; editable chart data; date ranges across months; an optional animated spinner (respecting reduced motion); tooltips and menus attached to another element.
+- "Play from this screen"; text-style controls on the bar; equal-gap snapping while resizing.
+- Switching Header to "web" could also widen it to desktop width.

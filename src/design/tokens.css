@@ -42,7 +42,7 @@
   --fs-focus-ring: var(--fs-accent);
   --fs-focus-width: 2px;
   --fs-focus-offset: 2px;
-  --fs-grid-dot: var(--fs-gray-4);
+  --fs-grid-dot: var(--fs-gray-3);
 
   /* ── Spacing (4 px base) ──────────────────────────────────────── */
   --fs-space-0: 0;
@@ -104,6 +104,24 @@
   --fs-kit-text-xl: 24px;
   --fs-kit-font: var(--fs-ui-font);
   --fs-kit-radius: 6px;
+}
+
+/* ── Kit palette: muted greys so screens read as "thinking", not final design ──
+   Applied only where kit items and device frames are drawn (canvas nodes, gallery,
+   palette previews, export, share, play). App chrome keeps --fs-ink; selection and
+   links keep the accent. design/primitives.tsx resolves tones to these tokens. */
+.fs-kit-scope,
+[data-kit-style][role='group'] {
+  --fs-kit-stroke: var(--fs-gray-5);      /* component outlines (≥ 3:1 on surface) */
+  --fs-kit-stroke-soft: #b4b4b0;          /* secondary / decorative strokes only */
+  --fs-kit-fill: var(--fs-gray-2);        /* placeholder & "filled" shapes */
+  --fs-kit-fill-strong: var(--fs-gray-7); /* solid fills (surface text on it ≥ 4.5:1) */
+  --fs-kit-text: #474745;                 /* text (≥ 4.5:1 on surface, canvas and kit fill) */
+  --fs-kit-text-muted: var(--fs-gray-6);  /* secondary text (≥ 4.5:1 on surface, canvas and kit fill) */
+  /* Anything drawn with raw tokens or currentColor (e.g. icons) follows the same palette. */
+  --fs-ink: var(--fs-kit-text);
+  --fs-muted: var(--fs-kit-text-muted);
+  color: var(--fs-kit-text);
 }
 
 /* Option 1 — Sketchy: hand-drawn strokes (Rough.js), Kalam handwriting, paper canvas. */

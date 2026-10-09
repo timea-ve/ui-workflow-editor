@@ -207,3 +207,7 @@
   z-index: var(--fs-z-chrome);
 }
 .fs-arrow-preview line { stroke: var(--fs-selection); stroke-width: 2; stroke-dasharray: 6 4; }
+/* Equal-spacing markers: short segments across the matching gaps */
+.fs-guide[data-kind='gap'] { background: none; border: 0 dashed var(--fs-accent); }
+.fs-guide[data-kind='gap'][data-axis='y'] { height: 0; border-top-width: 1px; }
+.fs-guide[data-kind='gap'][data-axis='x'] { width: 0; border-left-width: 1px; }

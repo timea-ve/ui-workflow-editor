@@ -64,11 +64,11 @@ test('Director demo: 5-screen sign-up flow with Option A/B, compare, play, reloa
   await page.waitForTimeout(400);
   await shot(page, '03-option-a-and-b');
 
-  // Inspector + insert palette look.
+  // Insert palette look.
   await screens(page).nth(1).click({ position: { x: 20, y: 300 } });
   await page.keyboard.press('/');
   await page.waitForTimeout(200);
-  await shot(page, '04-insert-palette-and-inspector');
+  await shot(page, '04-insert-palette');
   await page.keyboard.press('Escape');
 
   // Compare.

@@ -7,7 +7,7 @@ import { isTypingTarget } from '../../../chrome/tools';
 import { renameFrame } from '../../../flow/ops';
 import type { ID } from '../../../model/types';
 import { useEditor } from '../../EditorContext';
-import { setBridge, type ComponentsBridge } from './bridge';
+import { setBridge, setEditingId, type ComponentsBridge } from './bridge';
 import { focusNode, insertPaletteItem } from './insert';
 import { absRect, frameAtPoint, nudgeSize, setElementText, textPropOf, GRID } from './ops';
 import { DRAG_MIME, paletteItem } from './paletteItems';
@@ -15,7 +15,7 @@ import { DRAG_MIME, paletteItem } from './paletteItems';
 interface Editing { id: ID; kind: 'element' | 'frame'; multiline: boolean; initial: string }
 
 const inChrome = (t: EventTarget | null) =>
-  !!(t as HTMLElement | null)?.closest?.('.fsc-topbar, .fsc-toolbar, .fse-left__panel, .fse-right, .fse-device-hint, button, a, [role="menu"], [role="dialog"], [role="listbox"]')
+  !!(t as HTMLElement | null)?.closest?.('.fsc-topbar, .fsc-toolbar, .fse-left__panel, .fse-right, .fse-device-hint, .fs-ctx-bar, button, a, [role="menu"], [role="dialog"], [role="listbox"]')
   && !(t as HTMLElement).closest('.react-flow__node');
 
 export function CanvasLayer() {
@@ -25,6 +25,8 @@ export function CanvasLayer() {
   const [editing, setEditing] = useState<Editing | null>(null);
   const editingRef = useRef(editing);
   editingRef.current = editing;
+  useEffect(() => { setEditingId(editing?.id ?? null); }, [editing]);
+  useEffect(() => () => setEditingId(null), []);
   const domNode = useStore((s) => s.domNode);
 
   const startEdit = useCallback((id: ID): boolean => {

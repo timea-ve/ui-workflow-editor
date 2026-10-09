@@ -8,6 +8,7 @@ export const checkbox: KitItemDef<CheckboxProps> = {
   type: 'checkbox',
   label: 'Checkbox',
   category: 'wireframe',
+  group: 'inputs',
   keywords: ['checkbox', 'check', 'tick', 'agree', 'option', 'form'],
   defaultSize: { w: 240, h: 24 },
   minSize: { w: 24, h: 20 },
@@ -16,7 +17,7 @@ export const checkbox: KitItemDef<CheckboxProps> = {
   textProp: 'label',
   editableProps: [
     { key: 'label', label: 'Label', kind: 'text' },
-    { key: 'checked', label: 'Checked', kind: 'boolean' },
+    { key: 'checked', label: 'Checked', kind: 'boolean', bar: 'inline' },
   ],
   linkable: false,
   render: (p, { w, h, style, seed }) => {

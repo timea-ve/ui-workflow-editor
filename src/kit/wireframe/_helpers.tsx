@@ -228,3 +228,161 @@ export function IconGlyph({
   }
   return <Box x={x} y={y} w={s} h={s}>{body}</Box>;
 }
+
+// ── Kit set B helpers (navigation, content, feedback) ─────────────────────────
+
+import { KitIcon } from '../icons';
+
+/** Token-coloured kit icon (lucide) placed in an absolute box. */
+export function IconAt({ name, x = 0, y = 0, size, tone = 'ink', strokeWidth }: { name: string; x?: number; y?: number; size: number; tone?: Tone; strokeWidth?: number }) {
+  if (size < 6) return null;
+  return (
+    <Box x={x} y={y} w={size} h={size} style={{ color: tone === 'none' ? 'transparent' : `var(--fs-${tone})`, display: 'grid', placeItems: 'center' }}>
+      <KitIcon name={name} size={size} strokeWidth={strokeWidth ?? (size <= 16 ? 2 : 1.75)} />
+    </Box>
+  );
+}
+
+const ICON_BY_WORD: [RegExp, string][] = [
+  [/home|dashboard|overview/i, 'home'], [/search|explore|discover/i, 'search'], [/setting|preference/i, 'settings'],
+  [/profile|account|me\b/i, 'user'], [/team|people|member|contact|user/i, 'users'], [/message|chat|inbox/i, 'message'],
+  [/mail|email/i, 'mail'], [/notification|alert|activity/i, 'bell'], [/calendar|schedule|event/i, 'calendar'],
+  [/file|doc|report/i, 'file'], [/project|folder|librar/i, 'folder'], [/task|todo|list/i, 'list'],
+  [/cart|basket|checkout/i, 'cart'], [/shop|store|order/i, 'shopping-bag'], [/save|bookmark|starred|favou?rite/i, 'bookmark'],
+  [/like|heart/i, 'heart'], [/help|support|faq/i, 'help'], [/log ?out|sign ?out/i, 'log-out'], [/edit|rename/i, 'edit'],
+  [/delete|remove|trash/i, 'trash'], [/share/i, 'share'], [/copy|duplicate/i, 'copy'], [/download|export/i, 'download'],
+  [/upload|import/i, 'upload'], [/map|location|place/i, 'map-pin'], [/photo|image|gallery/i, 'image'], [/video/i, 'video'],
+  [/music|audio/i, 'music'], [/billing|payment|card|plan/i, 'credit-card'], [/lock|security|privacy/i, 'lock'],
+  [/analytic|stat|insight/i, 'sliders'], [/add|new|create/i, 'plus'], [/star/i, 'star'],
+];
+const ICON_FALLBACKS = ['circle', 'square', 'star', 'grid', 'folder', 'file'];
+
+/** Picks a plausible icon for a nav/menu label (falls back to generic shapes). */
+export function iconForLabel(label: string, i: number): string {
+  for (const [re, name] of ICON_BY_WORD) if (re.test(label)) return name;
+  return ICON_FALLBACKS[i % ICON_FALLBACKS.length];
+}
+
+/** Pseudo-random but deterministic value in [0, 1) for chart jitter. */
+export function hash01(n: number): number {
+  const x = Math.sin(n * 12.9898 + 78.233) * 43758.5453;
+  return x - Math.floor(x);
+}
+
+export const CHART_SHAPES = ['rising', 'falling', 'wave', 'flat'] as const;
+export type ChartShape = (typeof CHART_SHAPES)[number];
+
+/** Deterministic series in [0, 1] for lo-fi charts. */
+export function chartSeries(shape: unknown, n: number, salt = 0): number[] {
+  const count = Math.max(2, n);
+  return Array.from({ length: count }, (_, i) => {
+    const t = i / (count - 1);
+    const jitter = (hash01(i + 1 + salt * 31) - 0.5) * 0.16;
+    let v: number;
+    switch (shape) {
+      case 'falling': v = 0.85 - t * 0.6; break;
+      case 'wave': v = 0.5 + 0.3 * Math.sin(t * Math.PI * 2.2 + salt); break;
+      case 'flat': v = 0.5; break;
+      default: v = 0.2 + t * 0.6;
+    }
+    return Math.min(1, Math.max(0, v + jitter));
+  });
+}
+
+// ─── Kit set A helpers (text, actions, inputs) ───────────────────────────────
+// Owner: Kit A agent. Kept in one block so Kit B can append independently.
+// (Uses the KitIcon import declared in the Kit B block above.)
+
+export const BUTTON_STATES = ['default', 'hover', 'pressed', 'disabled'] as const;
+export type ButtonState = (typeof BUTTON_STATES)[number];
+export const toButtonState = (v: unknown): ButtonState =>
+  (BUTTON_STATES as readonly unknown[]).includes(v) ? (v as ButtonState) : 'default';
+/** Screen-reader suffix for a non-default state, e.g. ", disabled". */
+export const stateSuffix = (v: unknown): string => {
+  const s = toButtonState(v);
+  return s === 'default' ? '' : `, ${s}`;
+};
+
+type FaceShape = 'rect' | 'circle';
+
+function FaceShapeOf({ shape, w, h, radius, style, seed, stroke, fill, strokeWidth }: {
+  shape: FaceShape; w: number; h: number; radius: number; style: VisualStyle; seed: number; stroke: Tone; fill: Tone; strokeWidth?: number;
+}) {
+  if (shape === 'circle') return <SketchEllipse w={w} h={h} style={style} seed={seed} stroke={stroke} fill={fill} strokeWidth={strokeWidth} />;
+  return <RoundedRect w={w} h={h} radius={radius} style={style} seed={seed} stroke={stroke} fill={fill} strokeWidth={strokeWidth} />;
+}
+
+/**
+ * Button background in one of four interaction states, drawn with tokens only:
+ * hover = a light ink wash, pressed = a stronger wash plus an inner top shadow,
+ * disabled = faint stroke and a washed-out fill.
+ */
+export function ButtonFace({
+  w, h, radius = 6, shape = 'rect', filled, state, style, seed,
+}: { w: number; h: number; radius?: number; shape?: FaceShape; filled: boolean; state: ButtonState; style: VisualStyle; seed: number }) {
+  if (w <= 2 || h <= 2) return null;
+  if (state === 'disabled') {
+    return (
+      <div style={{ position: 'absolute', inset: 0, opacity: filled ? 0.55 : 1 }}>
+        <FaceShapeOf shape={shape} w={w} h={h} radius={radius} style={style} seed={seed} stroke="faint" fill={filled ? 'faint' : 'none'} />
+      </div>
+    );
+  }
+  const wash = state === 'hover' ? 0.08 : state === 'pressed' ? 0.18 : 0;
+  const r = shape === 'circle' ? Math.min(w, h) / 2 : radius;
+  return (
+    <>
+      <FaceShapeOf shape={shape} w={w} h={h} radius={radius} style={style} seed={seed} stroke="ink" fill={filled ? 'faint' : 'surface'} />
+      {wash > 0 && (
+        <div style={{ position: 'absolute', inset: 0, opacity: wash }}>
+          <FaceShapeOf shape={shape} w={w} h={h} radius={radius} style={style} seed={seed} stroke="none" fill="ink" />
+        </div>
+      )}
+      {state === 'pressed' && w > 2 * r + 4 && (
+        <div style={{ position: 'absolute', inset: 0, opacity: 0.45 }}>
+          <SketchLines w={w} h={h} lines={[[[Math.max(r, 4), 3.5], [w - Math.max(r, 4), 3.5]]]} style={style} seed={seed + 9} stroke="muted" strokeWidth={2} />
+        </div>
+      )}
+    </>
+  );
+}
+
+/** A curated kit icon (src/kit/icons.tsx) drawn in a token colour, stroke scaled to read at any size. */
+export function KitIconAt({ name, x = 0, y = 0, size, tone = 'ink' }: { name: string; x?: number; y?: number; size: number; tone?: Tone }) {
+  if (size < 4) return null;
+  const px = Math.min(3, Math.max(1.5, size / 14));
+  return (
+    <Box x={x} y={y} w={size} h={size} style={{ color: toneVar(tone), display: 'grid', placeItems: 'center' }}>
+      <KitIcon name={name} size={size} strokeWidth={(px * 24) / size} />
+    </Box>
+  );
+}
+
+const BAR_PATTERN = [1, 0.93, 0.97, 0.86, 0.95, 0.9, 0.98, 0.84];
+
+/**
+ * Grey "greeked" copy: one rounded faint bar per line that fits in `h`,
+ * varying in length, with a shorter last line — like real paragraph text.
+ */
+export function PlaceholderBars({
+  w, h, size = 'md', align = 'left', style, seed, tone = 'faint', maxLines,
+}: { w: number; h: number; size?: TextSize; align?: CSSProperties['textAlign']; style: VisualStyle; seed: number; tone?: Tone; maxLines?: number }) {
+  const lineH = TEXT_PX[size] * LINE_HEIGHT;
+  const n = Math.min(maxLines ?? Infinity, linesThatFit(h, size));
+  const barH = Math.max(4, Math.round(TEXT_PX[size] * 0.6));
+  const off = Math.abs(Math.floor(seed)) % BAR_PATTERN.length;
+  return (
+    <>
+      {Array.from({ length: n }, (_, i) => {
+        const frac = n > 1 && i === n - 1 ? 0.58 : BAR_PATTERN[(i + off) % BAR_PATTERN.length];
+        const bw = Math.max(4, Math.round(w * frac));
+        const x = align === 'center' ? (w - bw) / 2 : align === 'right' ? w - bw : 0;
+        return (
+          <At key={i} x={x} y={i * lineH + (lineH - barH) / 2} w={bw} h={barH}>
+            <RoundedRect w={bw} h={barH} radius={barH / 2} style={style} seed={seed + i} stroke="none" fill={tone} strokeWidth={1} />
+          </At>
+        );
+      })}
+    </>
+  );
+}

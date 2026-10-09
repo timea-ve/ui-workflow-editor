@@ -8,6 +8,7 @@ export const image: KitItemDef<ImageProps> = {
   type: 'image',
   label: 'Image',
   category: 'wireframe',
+  group: 'content',
   keywords: ['image', 'picture', 'photo', 'placeholder', 'banner', 'avatar', 'media'],
   defaultSize: { w: 327, h: 180 },
   minSize: { w: 16, h: 16 },
@@ -16,7 +17,7 @@ export const image: KitItemDef<ImageProps> = {
   textProp: 'alt',
   editableProps: [
     { key: 'alt', label: 'Description', kind: 'text' },
-    { key: 'shape', label: 'Shape', kind: 'select', options: ['rectangle', 'circle'] },
+    { key: 'shape', label: 'Shape', kind: 'select', options: ['rectangle', 'circle'], bar: 'inline' },
   ],
   linkable: true,
   render: (p, { w, h, style, seed }) => {

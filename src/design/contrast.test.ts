@@ -62,6 +62,48 @@ describe.each(Object.entries(STYLES))('token pairs meet WCAG AA (%s)', (_name, s
   });
 });
 
+// Muted kit palette: resolved inside the kit scope (canvas items, device frames, exports).
+const kitBlock = Object.entries(blocks).find(([sel]) => sel.includes('.fs-kit-scope'))?.[1] ?? {};
+const KIT_PAIRS: [string, string, keyof typeof AA][] = [
+  ['--fs-kit-text', '--fs-surface', 'text'],
+  ['--fs-kit-text', '--fs-canvas', 'text'],
+  ['--fs-kit-text', '--fs-kit-fill', 'text'],
+  ['--fs-kit-text-muted', '--fs-surface', 'text'],
+  ['--fs-kit-text-muted', '--fs-canvas', 'text'],
+  ['--fs-kit-text-muted', '--fs-kit-fill', 'text'],
+  ['--fs-surface', '--fs-kit-fill-strong', 'text'],
+  ['--fs-kit-stroke', '--fs-surface', 'ui'],
+  ['--fs-kit-stroke', '--fs-canvas', 'ui'],
+  // Raw tokens and currentColor inside the kit scope resolve to the kit text colours.
+  ['--fs-ink', '--fs-kit-fill', 'text'],
+  ['--fs-muted', '--fs-surface', 'text'],
+];
+
+describe.each(Object.entries(STYLES))('muted kit palette meets WCAG AA (%s)', (_name, scopes) => {
+  const kitScopes = [...scopes, kitBlock];
+  it('is defined in a kit scope, not on :root (app chrome keeps its ink)', () => {
+    expect(kitBlock['--fs-kit-text']).toBeDefined();
+    expect(root['--fs-kit-text']).toBeUndefined();
+  });
+  it.each(KIT_PAIRS)('%s on %s (%s)', (fg, bg, kind) => {
+    const ratio = contrastRatio(resolveToken(fg, kitScopes), resolveToken(bg, kitScopes));
+    expect(ratio).toBeGreaterThanOrEqual(AA[kind]);
+  });
+  it('is quieter than the chrome ink', () => {
+    const ink = contrastRatio(resolveToken('--fs-ink', scopes), resolveToken('--fs-surface', scopes));
+    const kit = contrastRatio(resolveToken('--fs-kit-text', kitScopes), resolveToken('--fs-surface', kitScopes));
+    const stroke = contrastRatio(resolveToken('--fs-kit-stroke', kitScopes), resolveToken('--fs-surface', kitScopes));
+    expect(kit).toBeLessThan(ink);
+    expect(stroke).toBeLessThan(kit);
+  });
+  it('stays grayscale', () => {
+    for (const v of Object.values(kitBlock).filter((x) => /^#[0-9a-f]{6}$/i.test(x))) {
+      const [r, g, b] = hexToRgb(v);
+      expect(Math.max(r, g, b) - Math.min(r, g, b)).toBeLessThanOrEqual(12);
+    }
+  });
+});
+
 describe('palette discipline', () => {
   it('has exactly one chromatic colour (the accent)', () => {
     const hexes = Object.values(root).filter((v) => /^#[0-9a-f]{6}$/i.test(v));

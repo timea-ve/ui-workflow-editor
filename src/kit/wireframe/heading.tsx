@@ -9,6 +9,7 @@ export const heading: KitItemDef<HeadingProps> = {
   type: 'heading',
   label: 'Heading',
   category: 'wireframe',
+  group: 'text',
   keywords: ['heading', 'title', 'headline', 'h1', 'h2', 'h3'],
   defaultSize: { w: 327, h: 36 },
   minSize: { w: 24, h: 20 },
@@ -17,8 +18,8 @@ export const heading: KitItemDef<HeadingProps> = {
   textProp: 'text',
   editableProps: [
     { key: 'text', label: 'Text', kind: 'text' },
-    { key: 'level', label: 'Level', kind: 'select', options: ['H1', 'H2', 'H3'] },
-    { key: 'align', label: 'Alignment', kind: 'select', options: ['left', 'center', 'right'] },
+    { key: 'level', label: 'Level', kind: 'select', options: ['H1', 'H2', 'H3'], bar: 'inline' },
+    { key: 'align', label: 'Alignment', kind: 'select', options: ['left', 'center', 'right'], bar: 'inline' },
   ],
   linkable: false,
   render: (p, { w, h }) => (

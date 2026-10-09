@@ -8,6 +8,8 @@ export interface InsertItem {
   keywords?: string[];
   /** Optional right-aligned hint, e.g. a shortcut. */
   hint?: string;
+  /** Render as a compact tile (icon only, label as tooltip) that flows in a grid with its neighbours. */
+  tile?: boolean;
 }
 
 function score(item: InsertItem, q: string): number {

@@ -23,10 +23,17 @@ export function focusNode(id: ID) {
  */
 export function insertPaletteItem(api: EditorApi, item: PaletteItem, at?: Point): ID | undefined {
   if (api.readOnly) return undefined;
+  if (item.target.kind === 'tool') {
+    // Connectors are drawn, not placed: switch to the tool and say how to use it.
+    api.setTool(item.target.tool);
+    api.announce('Arrow tool: drag from one shape or screen to another');
+    return undefined;
+  }
   let id: ID | undefined;
   let message = '';
   const op = (doc: BoardDoc): BoardDoc => {
     const t = item.target;
+    if (t.kind === 'tool') return doc;
     if (t.kind === 'screen') {
       const r = placeScreen(doc, at ?? api.viewportCenter(), t.device);
       id = r.id;
@@ -34,7 +41,8 @@ export function insertPaletteItem(api: EditorApi, item: PaletteItem, at?: Point)
       return r.doc;
     }
     const frameId = at ? frameAtPoint(doc, at) : targetFrameFor(doc, api.selection.nodes);
-    const r = frameId && !at ? insertIntoFrame(doc, t.type, frameId) : insertAtPoint(doc, t.type, at ?? api.viewportCenter(), frameId);
+    const r = frameId && !at ? insertIntoFrame(doc, t.type, frameId, t.props)
+      : insertAtPoint(doc, t.type, at ?? api.viewportCenter(), frameId, t.props);
     id = r.id;
     message = `${item.label} added${frameId ? ` to ${doc.frames[frameId].name}` : ''}`;
     return r.doc;

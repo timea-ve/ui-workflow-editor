@@ -1,8 +1,9 @@
-// The "/" Insert palette in the editor: claims the `insert` command, lists every component, shape
-// and screen with a lo-fi preview, inserts on Enter / click, and supports dragging onto the canvas.
+// The "/" Insert palette in the editor: claims the `insert` command, lists every component, shape,
+// screen and icon with a lo-fi preview, inserts on Enter / click, and supports dragging onto the canvas.
 import { memo, useCallback, useRef, useState } from 'react';
 import { InsertPalette } from '../../../chrome/InsertPalette';
 import type { InsertItem } from '../../../chrome/insertSearch';
+import { KitIcon } from '../../../kit/icons';
 import { KitItemView } from '../../../kit/KitItemView';
 import { kitRegistry } from '../../../kit/registry';
 import { DEVICE_SIZES, type ID } from '../../../model/types';
@@ -16,6 +17,9 @@ const PREVIEW_H = 32;
 /** A tiny, static rendering of the real kit item / device frame, scaled to fit the row. */
 export const PalettePreview = memo(function PalettePreview({ item }: { item: PaletteItem }) {
   const t = item.target;
+  if (t.kind === 'tool') return <span className="fs-palette-preview"><KitIcon name="arrow-right" size={20} strokeWidth={1.5} /></span>;
+  const preset = t.kind === 'element' && t.type === 'icon' ? Object.values(t.props ?? {})[0] : undefined;
+  if (typeof preset === 'string') return <KitIcon name={preset} size={20} strokeWidth={1.5} />;
   if (t.kind === 'screen') {
     // Device outlines at true aspect ratio (a scaled-down device frame would lose its strokes).
     const d = DEVICE_SIZES[t.device];
@@ -43,7 +47,8 @@ export const PalettePreview = memo(function PalettePreview({ item }: { item: Pal
 });
 
 const renderIcon = (item: InsertItem) => <PalettePreview item={item as PaletteItem} />;
-const dragData = (item: InsertItem) => ({ [DRAG_MIME]: item.id, 'text/plain': item.label });
+const dragData = (item: InsertItem) =>
+  ((item as PaletteItem).target.kind === 'tool' ? undefined : { [DRAG_MIME]: item.id, 'text/plain': item.label });
 
 export function InsertPaletteSlot() {
   const api = useEditor();
@@ -81,7 +86,7 @@ export function InsertPaletteSlot() {
       modal={false}
       dragData={dragData}
       onCloseAutoFocus={onCloseAutoFocus}
-      placeholder="Search components, shapes and screens…"
+      placeholder="Search components, shapes, screens and icons…"
     />
   );
 }

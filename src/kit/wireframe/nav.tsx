@@ -10,18 +10,19 @@ const GLYPHS: IconGlyphName[] = ['home', 'search', 'plus', 'user', 'more', 'star
 
 export const nav: KitItemDef<NavProps> = {
   type: 'nav',
-  label: 'Navigation bar',
+  label: 'Mobile tab bar',
   category: 'wireframe',
-  keywords: ['nav', 'navigation', 'tab bar', 'bottom bar', 'menu', 'links'],
+  group: 'navigation',
+  keywords: ['nav', 'navigation', 'tab bar', 'mobile tab bar', 'bottom bar', 'bottom navigation', 'bottom tabs', 'footer nav', 'menu', 'links'],
   defaultSize: { w: 375, h: 64 },
   minSize: { w: 120, h: 36 },
   resize: 'horizontal',
   defaultProps: { items: 'Home, Search, Saved, Profile', active: 0, showIcons: true },
   textProp: 'items',
   editableProps: [
-    { key: 'items', label: 'Items (comma-separated)', kind: 'text' },
-    { key: 'active', label: 'Active item (0 = first)', kind: 'number' },
-    { key: 'showIcons', label: 'Show icons', kind: 'boolean' },
+    { key: 'items', label: 'Tabs', kind: 'items', bar: 'inline' },
+    { key: 'active', label: 'Active tab', kind: 'number', itemsFrom: 'items', bar: 'inline' },
+    { key: 'showIcons', label: 'Icons', kind: 'boolean' },
   ],
   linkable: true,
   render: (p, { w, h, style, seed }) => {
@@ -57,6 +58,6 @@ export const nav: KitItemDef<NavProps> = {
   describe: (p) => {
     const items = splitList(p.items);
     const active = items[toInt(p.active, 0, 0, Math.max(0, items.length - 1))];
-    return `Navigation with ${items.length} item${items.length === 1 ? '' : 's'}: ${items.join(', ') || 'none'}${active ? `; '${active}' selected` : ''}`;
+    return `Mobile tab bar with ${items.length} item${items.length === 1 ? '' : 's'}: ${items.join(', ') || 'none'}${active ? `; '${active}' selected` : ''}`;
   },
 };

@@ -17,6 +17,7 @@ export const list: KitItemDef<ListProps> = {
   type: 'list',
   label: 'List',
   category: 'wireframe',
+  group: 'content',
   keywords: ['list', 'rows', 'items', 'feed', 'table view', 'contacts', 'settings'],
   defaultSize: { w: 327, h: 224 },
   minSize: { w: 80, h: 40 },
@@ -24,10 +25,10 @@ export const list: KitItemDef<ListProps> = {
   defaultProps: { count: 4, items: 'Inbox, Starred, Sent, Drafts', showAvatar: true, showChevron: true },
   textProp: 'items',
   editableProps: [
-    { key: 'count', label: 'Number of rows', kind: 'number' },
-    { key: 'items', label: 'Row titles (comma-separated)', kind: 'text' },
-    { key: 'showAvatar', label: 'Show avatar', kind: 'boolean' },
-    { key: 'showChevron', label: 'Show chevron', kind: 'boolean' },
+    { key: 'count', label: 'Rows', kind: 'number', bar: 'inline' },
+    { key: 'items', label: 'Row titles', kind: 'items', bar: 'inline' },
+    { key: 'showAvatar', label: 'Avatar', kind: 'boolean' },
+    { key: 'showChevron', label: 'Chevron', kind: 'boolean' },
   ],
   linkable: true,
   render: (p, { w, h, style, seed }) => {

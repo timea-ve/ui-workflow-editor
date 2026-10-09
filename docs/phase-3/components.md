@@ -1,5 +1,7 @@
 # Wireframe on canvas: phase 3, wave B
 
+> **Wave C update:** the Inspector panel described below has been replaced by a floating context bar. See [context-bar.md](context-bar.md).
+
 ## Summary
 - **Insert palette (`/` or the toolbar "+").** You can search all 16 wireframe components, 5 shapes and 3 screen sizes. Each item has a small lo-fi preview, and the palette works fully from the keyboard: type to filter, ↑/↓ to move, Enter to insert, Esc to close.
   - If a screen (or something inside one) is selected, the new item is stacked below that screen's lowest element with a 16px gap. Otherwise it goes to the centre of the view.

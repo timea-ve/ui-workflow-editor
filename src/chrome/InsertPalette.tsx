@@ -51,9 +51,16 @@ export function InsertPalette({
   const onKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
     const n = results.length;
     if (!n) return;
+    const tile = results[active]?.tile;
     if (e.key === 'ArrowDown' || e.key === 'ArrowUp') {
       e.preventDefault();
-      setActive((a) => (e.key === 'ArrowDown' ? (a + 1) % n : (a - 1 + n) % n));
+      const down = e.key === 'ArrowDown';
+      const inGrid = tile ? gridNeighbour(listRef.current, active, down) : undefined;
+      setActive((a) => inGrid ?? (down ? (a + 1) % n : (a - 1 + n) % n));
+    } else if (tile && (e.key === 'ArrowRight' || e.key === 'ArrowLeft')) {
+      // In a tile grid, left/right move between tiles (the caret stays put).
+      e.preventDefault();
+      setActive((a) => (e.key === 'ArrowRight' ? Math.min(a + 1, n - 1) : Math.max(a - 1, 0)));
     } else if (e.key === 'Enter') {
       e.preventDefault();
       choose(results[active]);
@@ -99,7 +106,8 @@ export function InsertPalette({
                     role="option"
                     aria-selected={i === active}
                     data-index={i}
-                    className="fsc-palette__item"
+                    className={`fsc-palette__item${item.tile ? ' fsc-palette__item--tile' : ''}`}
+                    title={item.tile ? item.label : undefined}
                     onMouseMove={() => i !== active && setActive(i)}
                     onMouseDown={dragData ? undefined : (e) => e.preventDefault()} /* keep focus in the search box; draggable rows must not, or drag won't start */
                     onClick={() => choose(item)}
@@ -114,9 +122,9 @@ export function InsertPalette({
                     } : undefined}
                     onDragEnd={dragData ? () => { setDragging(false); onOpenChange(false); } : undefined}
                   >
-                    {renderIcon && <span className={`fsc-palette__icon${iconClassName ? ` ${iconClassName}` : ''}`} aria-hidden>{renderIcon(item)}</span>}
-                    {item.label}
-                    {item.hint && <span className="fsc-palette__hint">{item.hint}</span>}
+                    {renderIcon && <span className={`fsc-palette__icon${iconClassName && !item.tile ? ` ${iconClassName}` : ''}`} aria-hidden>{renderIcon(item)}</span>}
+                    {item.tile ? <span className="fsc-sr-only">{item.label}</span> : item.label}
+                    {item.hint && !item.tile && <span className="fsc-palette__hint">{item.hint}</span>}
                   </li>
                 </PaletteRow>
               ))}
@@ -133,6 +141,23 @@ export function InsertPalette({
       </Dialog.Portal>
     </Dialog.Root>
   );
+}
+
+/** Index of the tile in the next/previous visual row nearest horizontally (grid ↑↓), if any. */
+function gridNeighbour(list: HTMLElement | null, index: number, down: boolean): number | undefined {
+  const items = list ? [...list.querySelectorAll<HTMLElement>('[data-index]')] : [];
+  const cur = items.find((el) => Number(el.dataset.index) === index);
+  if (!cur) return undefined;
+  const { top, left } = cur.getBoundingClientRect();
+  let best: { i: number; dy: number; dx: number } | undefined;
+  for (const el of items) {
+    const r = el.getBoundingClientRect();
+    const dy = down ? r.top - top : top - r.top;
+    if (dy < 4) continue;
+    const dx = Math.abs(r.left - left);
+    if (!best || dy < best.dy - 4 || (Math.abs(dy - best.dy) <= 4 && dx < best.dx)) best = { i: Number(el.dataset.index), dy, dx };
+  }
+  return best?.i;
 }
 
 function PaletteRow({ heading, children }: { heading?: string; children: ReactNode }) {
