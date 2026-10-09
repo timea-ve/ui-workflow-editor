@@ -85,6 +85,9 @@ export function CanvasLayer() {
       if (sel.length !== 1) return;
       const id = sel[0];
       if ((e.key === 'Enter' || e.key === 'F2') && a.tool === 'select' && !e.altKey && !e.metaKey && !e.ctrlKey && !e.shiftKey) {
+        // Tab moved focus to another item: Enter selects that one (React Flow) instead of editing the old selection.
+        const focused = (e.target as HTMLElement | null)?.closest?.<HTMLElement>('.react-flow__node[data-id], .react-flow__edge[data-id]');
+        if (focused && focused.dataset.id !== id) return;
         if (!startEdit(id)) return;
         e.preventDefault();
         e.stopPropagation();

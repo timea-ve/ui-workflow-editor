@@ -10,7 +10,7 @@ export function UndoRedo() {
   const api = useEditor();
   if (api.readOnly) return null;
   return (
-    <Panel position="bottom-left" className="fs-undo-redo" aria-label="History">
+    <Panel position="bottom-left" className="fs-undo-redo" role="group" aria-label="History">
       <button type="button" className="fs-undo-redo__btn" onClick={api.undo} disabled={!api.canUndo}
         aria-label="Undo" title={`Undo (${mod}Z)`}>
         <Undo2 size={16} strokeWidth={1.75} aria-hidden />

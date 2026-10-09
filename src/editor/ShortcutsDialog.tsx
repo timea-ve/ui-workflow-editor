@@ -1,16 +1,28 @@
 import * as Dialog from '@radix-ui/react-dialog';
-import { X } from 'lucide-react';
-import { Kbd, MOD_KEY } from '../chrome/shared';
+import { Lightbulb, X } from 'lucide-react';
+import { ICON_STROKE, Kbd, MOD_KEY } from '../chrome/shared';
 import { shortcutGroups } from './shortcuts';
+import { useReturnFocus } from '../chrome/returnFocus';
 
-export function ShortcutsDialog({ open, onOpenChange }: { open: boolean; onOpenChange: (open: boolean) => void }) {
+export function ShortcutsDialog({ open, onOpenChange, onShowTour }: {
+  open: boolean;
+  onOpenChange: (open: boolean) => void;
+  /** Re-opens the first-run tour (hidden when not given, e.g. read-only). */
+  onShowTour?: () => void;
+}) {
+  const returnFocus = useReturnFocus(open);
   return (
     <Dialog.Root open={open} onOpenChange={onOpenChange}>
       <Dialog.Portal>
         <Dialog.Overlay className="fse-dialog-overlay" />
-        <Dialog.Content className="fse-dialog fsc-root" aria-describedby={undefined}>
+        <Dialog.Content className="fse-dialog fsc-root" aria-describedby={undefined} onCloseAutoFocus={returnFocus}>
           <div className="fse-dialog__head">
             <Dialog.Title className="fse-dialog__title">Keyboard shortcuts</Dialog.Title>
+            {onShowTour && (
+              <button type="button" className="fsc-btn fsc-btn--outline fse-dialog__aside" onClick={onShowTour}>
+                <Lightbulb size={16} strokeWidth={ICON_STROKE} aria-hidden /> Show quick tour
+              </button>
+            )}
             <Dialog.Close className="fsc-btn fsc-btn--icon" aria-label="Close">
               <X size={16} aria-hidden />
             </Dialog.Close>

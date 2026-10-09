@@ -28,6 +28,7 @@ test('Director demo: 5-screen sign-up flow with Option A/B, compare, play, reloa
 
   await page.getByRole('button', { name: /^New board/ }).first().click();
   await expect(page).toHaveURL(/\/b\//);
+  await expect(page.locator('.fse-editor .react-flow')).toBeVisible(); // editor ready for keys
 
   // Screen 1 (mobile) with a heading + button; then 4 more screens via L → "New screen".
   await page.keyboard.press('f');

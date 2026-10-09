@@ -38,7 +38,7 @@ function surfaceColor(): string {
 export async function exportBoard(opts: ExportOptions): Promise<Blob> {
   const doc = scopeDoc(opts.doc, opts);
   const b = contentBounds(doc);
-  if (!b) throw new ExportError('empty', 'There is nothing to export in this scope.');
+  if (!b) throw new ExportError('empty', 'Nothing to export here yet. Add a screen, or choose Whole board.');
   const width = Math.ceil(b.w + EXPORT_MARGIN * 2);
   const height = Math.ceil(b.h + EXPORT_MARGIN * 2);
   const background: ExportBackground = opts.format === 'pdf' ? 'white' : opts.background;

@@ -405,7 +405,8 @@ button.fsc-chip:hover { background: var(--fs-hover); }
   color: var(--fs-muted);
 }
 .fsc-coach__title { margin: 0; color: var(--fs-ink); font-size: var(--fs-ui-text-lg); font-weight: 600; }
-.fsc-coach__hints { display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: var(--fs-space-2) var(--fs-space-3); margin: 0; font-size: var(--fs-ui-text-sm); }
-.fsc-coach__hints span { display: inline-flex; align-items: center; gap: 6px; }
-.fsc-coach__dot { color: var(--fs-subtle); }
+.fsc-coach__steps { display: grid; gap: var(--fs-space-2); margin: 0; padding: 0; list-style: none; font-size: var(--fs-ui-text-md); color: var(--fs-ink); }
+.fsc-coach__steps li { display: grid; grid-template-columns: 28px auto; align-items: center; gap: var(--fs-space-2); text-align: left; }
+.fsc-coach__steps .fsc-kbd { justify-self: center; }
+.fsc-coach__more { margin: var(--fs-space-1) 0 0; font-size: var(--fs-ui-text-sm); color: var(--fs-muted); }
 .fsc-coach .fsc-btn { margin-top: var(--fs-space-1); }

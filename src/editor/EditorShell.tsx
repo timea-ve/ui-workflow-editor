@@ -1,9 +1,9 @@
 // The board editor: layout (top bar, toolbar, canvas, named slots), the Editor API context, tools,
 // clipboard, z-order and keyboard shortcuts. Document state lives in a BoardStore (Yjs).
-import { useCallback, useMemo, useRef, useState, useSyncExternalStore, type ReactNode } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState, useSyncExternalStore, type ReactNode } from 'react';
 import { ReactFlowProvider, useReactFlow } from '@xyflow/react';
-import { Keyboard } from 'lucide-react';
-import { Announcer, ChromeProvider, Tip, Toasts, Toolbar, TopBar, type SaveStatus, type ToastMessage } from '../chrome';
+import { AlertTriangle, Keyboard } from 'lucide-react';
+import { Announcer, ChromeProvider, CoachMark, Tip, Toasts, Toolbar, TopBar, type SaveStatus, type ToastMessage } from '../chrome';
 import { ICON_STROKE } from '../chrome/shared';
 import type { ToolAction, ToolId } from '../chrome/tools';
 import { FlowCanvas, type FlowCanvasHandle } from '../flow/FlowCanvas';
@@ -18,6 +18,8 @@ import {
 import { EDITOR_EXTENSIONS } from './extensions';
 import { isPlacementTool, placeScreen, placeShape } from './placement';
 import { ShortcutsDialog } from './ShortcutsDialog';
+import { FirstRunTour } from './tour/FirstRunTour';
+import { markTourSeen, shouldAutoShowTour } from './tour/tourState';
 import { useEditorKeyboard } from './useEditorKeyboard';
 import './editor.css';
 
@@ -63,6 +65,15 @@ function EditorInner({
   const [announcement, setAnnouncement] = useState('');
   const [toasts, setToasts] = useState<ToastMessage[]>([]);
   const [shortcutsOpen, setShortcutsOpen] = useState(false);
+  // First-run tour: shown by itself once (see tour/tourState.ts), re-openable from the shortcuts dialog.
+  const [tour, setTour] = useState<{ run: number; focus: boolean } | null>(() => (!readOnly && shouldAutoShowTour() ? { run: 0, focus: false } : null));
+  useEffect(() => { if (tour) markTourSeen(); }, [tour]);
+  const closeTour = useCallback(() => setTour(null), []);
+  const openTour = useCallback(() => {
+    setShortcutsOpen(false);
+    setTour((t) => ({ run: (t?.run ?? 0) + 1, focus: true }));
+  }, []);
+  const storageTrouble = useLasting(saveStatus === 'error', 3000);
   const commands = useMemo(() => new CommandRegistry(), []);
 
   const announce = useCallback((message: string) => {
@@ -176,6 +187,16 @@ function EditorInner({
               </>
             )}
           />
+          {tour && !readOnly && <FirstRunTour key={tour.run} doc={doc} onClose={closeTour} autoFocus={tour.focus} />}
+          {storageTrouble && !readOnly && (
+            <div className="fse-save-alert fsc-root" role="alert">
+              <AlertTriangle size={16} strokeWidth={ICON_STROKE} aria-hidden />
+              <span>
+                <strong>Changes aren't being saved.</strong> Your browser's storage may be full or turned off (for example, in a private window).
+                Keep this tab open while we try again, and use Export to keep a copy.
+              </span>
+            </div>
+          )}
           <div className="fse-body">
             {!readOnly && (
               <div className="fse-left">
@@ -207,7 +228,7 @@ function EditorInner({
               </FlowCanvas>
               {tool === 'screen' && <DeviceHint device={device} onChange={setDevice} />}
               {Object.keys(doc.frames).length === 0 && Object.keys(doc.elements).length === 0 && !readOnly && tool === 'select' && (
-                <p className="fse-empty">Press <kbd className="fsc-kbd">F</kbd> and click to add your first screen.</p>
+                <div className="fse-empty"><CoachMark /></div>
               )}
             </main>
             {rightPanel && <aside className="fse-right" aria-label="Inspector">{rightPanel}</aside>}
@@ -215,11 +236,22 @@ function EditorInner({
           {slot('overlay')}
           <Toasts toasts={toasts} onDismiss={(id) => setToasts((t) => t.filter((x) => x.id !== id))} />
           <Announcer message={announcement} />
-          <ShortcutsDialog open={shortcutsOpen} onOpenChange={setShortcutsOpen} />
+          <ShortcutsDialog open={shortcutsOpen} onOpenChange={setShortcutsOpen} onShowTour={readOnly ? undefined : openTour} />
         </div>
       </CommandContext.Provider>
     </EditorContext.Provider>
   );
+}
+
+/** True once `value` has stayed true for `ms` (avoids flashing alerts for blips). */
+function useLasting(value: boolean, ms: number) {
+  const [lasting, setLasting] = useState(false);
+  useEffect(() => {
+    if (!value) { setLasting(false); return; }
+    const t = setTimeout(() => setLasting(true), ms);
+    return () => clearTimeout(t);
+  }, [value, ms]);
+  return lasting;
 }
 
 function ExtensionSlot({ ext }: { ext: EditorExtension }) {

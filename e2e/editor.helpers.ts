@@ -8,6 +8,7 @@ export async function openSeededBoard(page: Page, id: string, title = 'E2E board
   await page.evaluate(({ id, title }) => {
     const now = Date.now();
     localStorage.setItem('fs:boards:v1', JSON.stringify({ [id]: { id, title, schemaVersion: 1, createdAt: now, updatedAt: now } }));
+    localStorage.setItem('fs:tour:v1', 'seen'); // keep the first-run tour out of seeded tests
   }, { id, title });
   await page.goto(`/b/${id}`);
   await expect(page.locator('.react-flow')).toBeVisible();

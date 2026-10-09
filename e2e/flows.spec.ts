@@ -137,12 +137,14 @@ test('duplicate as Option B, rename it, Compare opens synced panes', async ({ pa
   await expect(lanes.nth(0)).toContainText('Option A');
   await expect(lanes.nth(1)).toContainText('Option B');
 
-  // Rename Option B inline on its lane (double-click).
-  await lanes.nth(1).locator('.fs-lane-chip-label').dblclick();
+  // Rename Option B inline on its lane (double-click). The first click zooms to
+  // Option B, which can cull Option A's lane off-screen, so locate by name, not index.
+  const laneB = lanes.filter({ hasText: 'Option B' });
+  await laneB.locator('.fs-lane-chip-label').dblclick();
   const input = page.getByRole('textbox', { name: 'Option name' });
   await input.fill('Option B – short form');
   await input.press('Enter');
-  await expect(lanes.nth(1)).toContainText('Option B – short form');
+  await expect(laneB).toContainText('Option B – short form');
 
   // The flows panel lists the flow with both options; rename the flow there.
   const panel = page.getByRole('region', { name: 'Flows' });

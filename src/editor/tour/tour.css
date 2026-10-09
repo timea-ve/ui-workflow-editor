@@ -1,0 +1,49 @@
+/* First-run tour tip (see FirstRunTour.tsx). Non-modal: only the card itself takes clicks. */
+.fse-tour {
+  position: fixed;
+  z-index: var(--fs-z-popover);
+  width: 272px;
+  padding: var(--fs-space-3) var(--fs-space-4) var(--fs-space-3);
+  background: var(--fs-surface);
+  border: 1px solid var(--fs-hairline);
+  border-radius: var(--fs-radius-lg);
+  box-shadow: var(--fs-shadow-2);
+  color: var(--fs-ink);
+  font-size: var(--fs-ui-text-sm);
+  line-height: var(--fs-ui-leading);
+  animation: fsc-pop var(--fs-dur-base) var(--fs-ease-out);
+}
+.fse-tour__head { display: flex; align-items: center; justify-content: space-between; margin: -4px -8px 0 0; }
+.fse-tour__count { color: var(--fs-accent); font-size: var(--fs-ui-text-xs); font-weight: 500; }
+.fse-tour__close { width: 28px; height: 28px; min-height: 28px; }
+.fse-tour__title { margin: 2px 0 4px; font-size: var(--fs-ui-text-md); font-weight: 600; }
+.fse-tour__body { margin: 0; color: var(--fs-muted); }
+.fse-tour__body .fsc-kbd { margin: 0 2px; }
+.fse-tour__foot { display: flex; justify-content: flex-end; gap: var(--fs-space-2); margin-top: var(--fs-space-3); }
+.fse-tour__skip { color: var(--fs-muted); }
+
+/* Small pointer towards the UI the tip is about. */
+.fse-tour__arrow {
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  background: var(--fs-surface);
+  border: 1px solid var(--fs-hairline);
+  transform: rotate(45deg);
+}
+.fse-tour[data-placement='right'] .fse-tour__arrow {
+  left: -6px;
+  top: clamp(14px, calc(var(--fse-tour-arrow, 24px) - 5px), calc(100% - 24px));
+  border-top: 0;
+  border-right: 0;
+}
+.fse-tour[data-placement='bottom'] .fse-tour__arrow {
+  top: -8px;
+  left: clamp(14px, calc(var(--fse-tour-arrow, 24px) - 5px), calc(100% - 24px));
+  border-right: 0;
+  border-bottom: 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .fse-tour { animation: none; }
+}

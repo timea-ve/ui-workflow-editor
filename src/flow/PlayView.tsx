@@ -171,7 +171,9 @@ export function PlayView({ doc, startFrameId, style, title, onExit, options, ini
         </div>
         <p className="fs-play-note" role="status">
           {flash ? 'Click a highlighted item to move on.'
-            : spots.length === 0 ? (broken ? 'A link here points to a screen that was removed.' : 'End of this path — press R to restart or ← to go back.')
+            : spots.length === 0 ? (broken ? 'A link here goes to a screen that was deleted.'
+              : history.stack.length === 1 ? 'No links on this screen yet. Link a button to another screen to click through.'
+                : 'End of this path — press R to restart or ← to go back.')
               : ''}
         </p>
       </div>

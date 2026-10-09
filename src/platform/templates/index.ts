@@ -18,11 +18,11 @@ export interface TemplateDef {
 }
 
 export const TEMPLATES: TemplateDef[] = [
-  { id: 'signup', name: 'Sign-up', description: 'Welcome, form, success, plus an “email taken” error path.', screenCount: 4, build: buildSignup },
-  { id: 'onboarding', name: 'Onboarding', description: 'Intro slides, pick interests, and a skip shortcut.', screenCount: 4, build: buildOnboarding },
+  { id: 'signup', name: 'Sign-up', description: 'Welcome, sign-up form and success, with an “email taken” branch.', screenCount: 4, build: buildSignup },
+  { id: 'onboarding', name: 'Onboarding', description: 'Two intro slides, pick interests, and a Skip path.', screenCount: 4, build: buildOnboarding },
   { id: 'checkout', name: 'Checkout', description: 'Cart, shipping, payment and order confirmation.', screenCount: 4, build: buildCheckout },
-  { id: 'settings', name: 'Settings', description: 'Settings menu, account, notifications and log out.', screenCount: 4, build: buildSettings },
-  { id: 'search', name: 'Search', description: 'Search home, results, article and a filters panel.', screenCount: 4, build: buildSearch },
+  { id: 'settings', name: 'Settings', description: 'Settings list, account details, notifications and log out.', screenCount: 4, build: buildSettings },
+  { id: 'search', name: 'Search', description: 'Search, results, an article and a filters panel.', screenCount: 4, build: buildSearch },
 ];
 
 export function getTemplate(id: string | undefined): TemplateDef | undefined {

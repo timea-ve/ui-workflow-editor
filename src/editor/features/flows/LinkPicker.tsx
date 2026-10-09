@@ -112,7 +112,7 @@ export function LinkPicker({ elementId, onClose, keyHandlerRef }: {
         const id = node.dataset.id!;
         const frameId = frameIdOf(docRef.current, id);
         if (frameId) pickRef.current(frameId);
-        else toastRef.current('Pick a screen — diagram shapes can’t be link targets.');
+        else toastRef.current('Pick a screen. Links can only go to screens.');
         return;
       }
       if (t.closest('.fs-flow-canvas .react-flow__pane')) down = { x: e.clientX, y: e.clientY };

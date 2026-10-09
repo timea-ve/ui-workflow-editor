@@ -4,6 +4,7 @@ import { AlertCircle, Download, LoaderCircle } from 'lucide-react';
 import type { BoardDoc, ID } from '../model/types';
 import { Toasts, type ToastMessage } from '../chrome/Toast';
 import { ICON_STROKE } from '../chrome/shared';
+import { useReturnFocus } from '../chrome/returnFocus';
 import { downloadBlob, exportBoard, ExportError } from './exportBoard';
 import { exportFileName, scopeLabel, type ExportBackground, type ExportFormat, type ExportScope } from './scope';
 import './export.css';
@@ -95,7 +96,7 @@ export function ExportDialog({ open, onOpenChange, doc, title, selectionIds, cur
         ? e.message
         : `Export didn’t work this time. Try again${scope === 'board' ? ', or export a selection if the board is very large' : ''}.`;
       setStatus({ kind: 'error', message });
-      toast('Export failed');
+      toast('Export didn’t work');
     }
   };
 
@@ -106,13 +107,14 @@ export function ExportDialog({ open, onOpenChange, doc, title, selectionIds, cur
   };
 
   const working = status.kind === 'working';
+  const returnFocus = useReturnFocus(open);
 
   return (
     <>
       <Dialog.Root open={open} onOpenChange={(o) => (o ? onOpenChange(true) : cancel())}>
         <Dialog.Portal>
           <Dialog.Overlay className="fsc-overlay" />
-          <Dialog.Content className="fs-dialog fsc-float fsc-root" data-kit-style="clean" aria-busy={working || undefined}>
+          <Dialog.Content className="fs-dialog fsc-float fsc-root" data-kit-style="clean" aria-busy={working || undefined} onCloseAutoFocus={returnFocus}>
             <Dialog.Title className="fs-dialog__title">Export</Dialog.Title>
             <Dialog.Description className="fs-dialog__desc">Save a picture of your board to share or print.</Dialog.Description>
             <div className="fs-dialog__body">

@@ -10,7 +10,7 @@ export function CompareAction() {
   const group = targetGroup(doc, selection.nodes);
   const ok = !!group && group.options.length > 1;
   return (
-    <Tip label={ok ? `Compare options – ${group!.name}` : 'Compare needs 2 options. Duplicate a flow as an option (⇧D) first.'} shortcut={ok ? '⇧C' : undefined}>
+    <Tip label={ok ? `Compare options – ${group!.name}` : 'Nothing to compare yet. Add a second option with ⇧D.'} shortcut={ok ? '⇧C' : undefined}>
       <button
         type="button"
         className="fsc-btn"
@@ -28,7 +28,7 @@ export function CompareAction() {
 export function PlayAction() {
   const { runCommand } = useEditor();
   return (
-    <Tip label="Play the selected flow" shortcut="P">
+    <Tip label="Click through your flow" shortcut="P">
       <button type="button" className="fsc-btn fsc-btn--primary" onClick={() => runCommand('play')} aria-keyshortcuts="P" data-testid="play-button">
         <Play size={16} strokeWidth={ICON_STROKE} aria-hidden /> Play
       </button>

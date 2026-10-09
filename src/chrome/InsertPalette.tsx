@@ -3,6 +3,7 @@ import * as Dialog from '@radix-ui/react-dialog';
 import { Search } from 'lucide-react';
 import { filterInsertItems, type InsertItem } from './insertSearch';
 import { ICON_STROKE, Kbd } from './shared';
+import { useReturnFocus } from './returnFocus';
 
 export interface InsertPaletteProps {
   open: boolean;
@@ -35,6 +36,7 @@ export function InsertPalette({
   const listId = useId();
   const listRef = useRef<HTMLUListElement>(null);
   const results = useMemo(() => filterInsertItems(items, query), [items, query]);
+  const returnFocus = useReturnFocus(open);
 
   useEffect(() => { if (open) { setQuery(''); setActive(0); setDragging(false); } }, [open]);
   useEffect(() => { setActive(0); }, [query]);
@@ -76,7 +78,7 @@ export function InsertPalette({
       <Dialog.Portal>
         <Dialog.Overlay className="fsc-overlay" />
         <Dialog.Content className={`fsc-float fsc-palette fsc-root${dragging ? ' is-dragging' : ''}`} aria-describedby={undefined}
-          onCloseAutoFocus={onCloseAutoFocus}
+          onCloseAutoFocus={(e) => { onCloseAutoFocus?.(e); if (!e.defaultPrevented) returnFocus(e); }}
           onOpenAutoFocus={(e) => { e.preventDefault(); (e.currentTarget as HTMLElement).querySelector('input')?.focus(); }}>
           <Dialog.Title className="fsc-sr-only">Insert</Dialog.Title>
           <div className="fsc-palette__search">

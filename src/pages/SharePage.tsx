@@ -72,7 +72,7 @@ export function SharePage() {
           ? <ReactFlowProvider><ShareView title={load.title} doc={load.doc} formats={exportFormats(params)} /></ReactFlowProvider>
           : (
             <>
-              <ShareHeader title={load.kind === 'loading' ? 'Loading…' : 'Shared board'} />
+              <ShareHeader title={load.kind === 'loading' ? 'Loading board…' : 'Shared board'} />
               <main className="fs-sharepage__stage" aria-busy={load.kind === 'loading' || undefined}>
                 {load.kind === 'loading' && <Skeleton />}
                 {load.kind === 'gone' && (

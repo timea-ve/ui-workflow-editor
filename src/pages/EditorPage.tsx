@@ -5,6 +5,7 @@ import { ArrowLeft } from 'lucide-react';
 import { Tip } from '../chrome';
 import { EditorShell } from '../editor/EditorShell';
 import { PERF_BOARD_ID, buildPerfDoc } from '../editor/fixtures/perf60';
+import { STRESS_BOARD_ID, buildStressDoc } from '../editor/fixtures/stress';
 import { getBoard, renameBoard, subscribeBoards, touchBoard } from '../platform/boardIndex';
 import { createMemoryStore } from '../store/boardStore';
 import { useBoardSession, useSaveState } from '../store/useBoardSession';
@@ -23,6 +24,7 @@ function BackLink() {
 export function EditorPage() {
   const { boardId = '' } = useParams();
   const [params] = useSearchParams();
+  if (boardId === STRESS_BOARD_ID || params.get('fixture') === 'stress') return <StressEditor />;
   const isPerf = boardId === PERF_BOARD_ID || params.get('fixture') === 'perf60';
   return isPerf ? <PerfEditor /> : <BoardEditor key={boardId} boardId={boardId} />;
 }
@@ -32,6 +34,15 @@ function PerfEditor() {
   const store = useMemo(() => createMemoryStore(buildPerfDoc()), []);
   return (
     <EditorShell boardId={PERF_BOARD_ID} store={store} title="Perf fixture · 60 screens (not saved)"
+      saveStatus="saved" leading={<BackLink />} />
+  );
+}
+
+/** Ephemeral 60-screen board with 86 routed lines for connector-routing performance checks; nothing is saved. */
+function StressEditor() {
+  const store = useMemo(() => createMemoryStore(buildStressDoc()), []);
+  return (
+    <EditorShell boardId={STRESS_BOARD_ID} store={store} title="Stress fixture · 60 screens, 86 lines (not saved)"
       saveStatus="saved" leading={<BackLink />} />
   );
 }
@@ -61,8 +72,8 @@ function BoardEditor({ boardId }: { boardId: string }) {
       <main className="fse-state fsc-root">
         <div className="fse-state__box">
           <h1 className="fse-state__title">Board not found</h1>
-          <p className="fse-state__text">This board may have been deleted, or it lives in another browser.</p>
-          <Link to="/" className="fsc-btn fsc-btn--outline">Go to your boards</Link>
+          <p className="fse-state__text">It may have been deleted. Boards are saved in the browser where you made them, so it may be on another device or browser.</p>
+          <Link to="/" className="fsc-btn fsc-btn--outline">Back to your boards</Link>
         </div>
       </main>
     );

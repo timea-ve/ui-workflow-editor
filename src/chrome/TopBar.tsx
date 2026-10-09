@@ -105,7 +105,7 @@ const STATUS: Record<SaveStatus, { text: string; Icon: typeof Check; spin?: bool
   saved: { text: 'Saved on this device', Icon: HardDrive },
   saving: { text: 'Saving…', Icon: LoaderCircle, spin: true },
   offline: { text: 'Offline · saved on this device', Icon: CloudOff },
-  error: { text: 'Not saved – retrying', Icon: RefreshCw, spin: true },
+  error: { text: 'Not saved yet – retrying', Icon: RefreshCw, spin: true },
 };
 
 /** Autosave status. Never conveyed by colour alone: icon + words. */

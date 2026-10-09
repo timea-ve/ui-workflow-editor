@@ -18,6 +18,9 @@ export interface SharePopoverProps {
 type Busy = 'on' | 'update' | 'off' | null;
 
 function messageFor(e: unknown): string {
+  if (typeof navigator !== 'undefined' && navigator.onLine === false) {
+    return 'You’re offline. Connect to the internet to share — your board is still saved on this device.';
+  }
   if (e instanceof ShareError) return e.message;
   return 'Something went wrong. Try again in a moment.';
 }

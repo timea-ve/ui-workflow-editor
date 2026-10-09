@@ -60,7 +60,7 @@ export function FlowsRoot() {
       const o = f ? idx.optionByFrame.get(f) : undefined;
       if (group && o) option = Math.max(0, group.options.indexOf(o));
     }
-    if (!group) { toast('Add a screen first — Play walks through your screens.'); return; }
+    if (!group) { toast('Nothing to play yet. Add a screen with F, then press P.'); return; }
     setPicker(null);
     setCompare(null);
     startEdgeLabelEdit(null);
@@ -83,7 +83,7 @@ export function FlowsRoot() {
     const key = (payload as { groupKey?: ID } | undefined)?.groupKey;
     const group = key ? getFlowIndex(doc).groupByKey.get(key) : targetGroup(doc, selection.nodes);
     if (!group || group.options.length < 2) {
-      toast('This flow has one option. Duplicate it as an option (⇧D) to compare.');
+      toast('Nothing to compare yet. Press ⇧D to copy this flow as a second option.');
       return;
     }
     setPicker(null);
@@ -97,7 +97,7 @@ export function FlowsRoot() {
     const p = (payload ?? {}) as { groupKey?: ID; variantId?: ID };
     const idx = getFlowIndex(doc);
     const group = p.groupKey ? idx.groupByKey.get(p.groupKey) : targetGroup(doc, selection.nodes);
-    if (!group) { toast('Add a screen first, then duplicate its flow as an option.'); return; }
+    if (!group) { toast('Add a screen first, then press ⇧D to copy its flow as an option.'); return; }
     const f = selection.nodes.map((id) => frameIdOf(doc, id)).find(Boolean);
     const fromSel = f ? idx.optionByFrame.get(f) : undefined;
     const option = (p.variantId && group.options.find((o) => o.variantId === p.variantId))
@@ -186,7 +186,9 @@ export function FlowsRoot() {
         const sel = s.api.selection;
         const t = e.target as HTMLElement | null;
         const onCanvas = !t || t === document.body || (!!t.closest?.('.fs-flow-canvas') && !t.closest('button, input, a'));
-        if (onCanvas && sel.nodes.length === 0 && sel.edges.length === 1 && !s.api.readOnly) {
+        const focused = t?.closest?.<HTMLElement>('.react-flow__node[data-id], .react-flow__edge[data-id]');
+        const elsewhere = !!focused && focused.dataset.id !== sel.edges[0];
+        if (onCanvas && !elsewhere && sel.nodes.length === 0 && sel.edges.length === 1 && !s.api.readOnly) {
           e.preventDefault(); e.stopImmediatePropagation(); startEdgeLabelEdit(sel.edges[0]);
         }
       }
@@ -212,7 +214,19 @@ export function FlowsRoot() {
     };
   }, []);
 
-  const closePicker = useCallback(() => setPicker(null), []);
+  // Keyboard users keep their place: focus goes back to the canvas selection (the linked item, or a new screen).
+  const closePicker = useCallback(() => {
+    const from = state.current.picker;
+    setPicker(null);
+    requestAnimationFrame(() => {
+      const active = document.activeElement;
+      if (active && active !== document.body && active.isConnected) return;
+      const selected = document.querySelectorAll<HTMLElement>('.fse-editor .fs-flow-canvas .react-flow__node.selected[data-id]');
+      const target = selected.length === 1 ? selected[0]
+        : from ? document.querySelector<HTMLElement>(`.fse-editor .fs-flow-canvas .react-flow__node[data-id="${from}"]`) : null;
+      target?.focus({ preventScroll: true });
+    });
+  }, []);
   const closeCompare = useCallback(() => setCompare(null), []);
 
   return (

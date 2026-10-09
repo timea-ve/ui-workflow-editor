@@ -27,3 +27,4 @@ dist-ssr
 .data/
 test-results/
 playwright-report/
+.impeccable/

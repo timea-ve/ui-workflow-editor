@@ -1,4 +1,4 @@
-// All dashboard strings in one place for copy review. Drafts — the Copy agent polishes later.
+// All dashboard strings in one place (reviewed in docs/phase-4/copy-deck.md).
 
 export const copy = {
   appName: 'FlowSketch',
@@ -9,7 +9,7 @@ export const copy = {
   creating: 'Creating…',
 
   emptyTitle: 'Sketch your first flow',
-  emptyBody: 'Draw rough screens, link them together, and click through the flow. Start blank or from a ready-made flow.',
+  emptyBody: 'Sketch rough screens, link them into a flow, and click through it. Start blank or from a template.',
 
   templatesTitle: 'Start from a template',
   templatesHint: 'Linked screens you can click through right away.',
@@ -36,8 +36,8 @@ export const copy = {
   renameLabel: 'Board name',
 
   loading: 'Loading your boards…',
-  loadError: "Couldn't load your boards.",
-  retry: 'Retry',
+  loadError: "Couldn't read your boards. Your browser may be blocking storage, for example in a private window.",
+  retry: 'Try again',
 
   toast: {
     deleted: (title: string) => `“${title}” deleted`,
@@ -46,7 +46,7 @@ export const copy = {
     duplicated: (title: string) => `Created “${title}”`,
     linkCopied: 'Share link copied',
     linkCopyFailed: "Couldn't copy the link. Open the board to share it.",
-    createFailed: "Couldn't create the board. Nothing was saved — please try again.",
+    createFailed: "Couldn't create the board. Your browser's storage may be full — try again, or delete a board you don't need.",
     duplicateFailed: "Couldn't duplicate the board. Your original is safe.",
     deleteFailed: "Couldn't delete the board. Please try again.",
     undoTooLate: 'Too late to undo — the board was already removed.',

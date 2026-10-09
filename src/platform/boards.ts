@@ -11,9 +11,11 @@
 // cleaned up by `flushPendingDeletes()` on the next dashboard visit.
 import type { Board, BoardDoc, ID } from '../model/types';
 import { emptyDoc } from '../flow/ops';
-import { deleteBoardData, readBoardDoc, writeInitialDoc } from '../store/persistence';
 import { createBoardMeta, deleteBoardMeta, getBoard, restoreBoardMeta } from './boardIndex';
 import { getTemplate } from './templates';
+
+// Loaded on first use so the dashboard's initial bundle doesn't carry Yjs + IndexedDB (see docs/phase-4/performance.md).
+const persistence = () => import('../store/persistence');
 
 export const UNDO_WINDOW_MS = 8000;
 const PENDING_KEY = 'fs:pendingDeletes:v1';
@@ -31,11 +33,11 @@ export class BoardOpError extends Error {
 
 async function seed(meta: Board, doc: BoardDoc, kind: BoardOpKind): Promise<Board> {
   try {
-    await writeInitialDoc(meta.id, doc);
+    await (await persistence()).writeInitialDoc(meta.id, doc);
     return meta;
   } catch (cause) {
     deleteBoardMeta(meta.id);
-    deleteBoardData(meta.id).catch(() => {});
+    persistence().then((p) => p.deleteBoardData(meta.id)).catch(() => {});
     throw new BoardOpError(kind, `Couldn't save the new board's content`, { cause });
   }
 }
@@ -60,7 +62,7 @@ export async function duplicateBoard(id: ID): Promise<Board> {
   if (!source) throw new BoardOpError('not-found', `Board ${id} not found`);
   let doc: BoardDoc;
   try {
-    doc = await readBoardDoc(id);
+    doc = await (await persistence()).readBoardDoc(id);
   } catch (cause) {
     throw new BoardOpError('duplicate', `Couldn't read board ${id}`, { cause });
   }
@@ -125,7 +127,7 @@ export function deleteBoard(id: ID, opts: { undoWindowMs?: number | null } = {})
     commit() {
       if (state === 'undone') return Promise.resolve();
       clearTimeout(timer);
-      committing ??= deleteBoardData(id).then(
+      committing ??= persistence().then((p) => p.deleteBoardData(id)).then(
         () => { state = 'committed'; inFlight.delete(id); removePending(id); },
         (cause) => {
           committing = undefined;
@@ -156,7 +158,7 @@ export async function flushPendingDeletes(): Promise<void> {
     if (inFlight.has(id)) continue;
     if (getBoard(id)) { removePending(id); continue; }
     try {
-      await deleteBoardData(id);
+      await (await persistence()).deleteBoardData(id);
       removePending(id);
     } catch { /* keep queued; retry next visit */ }
   }
