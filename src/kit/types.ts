@@ -19,14 +19,25 @@ export interface KitRenderContext {
 export interface PropField {
   key: string;
   label: string;
-  kind: 'text' | 'multiline' | 'boolean' | 'select' | 'number';
+  /**
+   * - `items`: a comma-separated string edited as a list (add / rename / remove / reorder rows).
+   * - `icon`: a name from `KIT_ICON_NAMES` (src/kit/icons.tsx), picked from a searchable grid.
+   */
+  kind: 'text' | 'multiline' | 'boolean' | 'select' | 'number' | 'items' | 'icon';
   options?: string[];
+  /** Where the context bar shows it: right on the bar, or inside its "More" popover. Default decided by the bar. */
+  bar?: 'inline' | 'more';
 }
+
+/** Insert-palette section for wireframe components. */
+export type KitGroup = 'text' | 'actions' | 'inputs' | 'navigation' | 'content' | 'feedback';
 
 export interface KitItemDef<P extends Record<string, unknown> = Record<string, unknown>> {
   type: ElementType;
   label: string;
   category: 'wireframe' | 'diagram';
+  /** Palette section (wireframe components only). */
+  group?: KitGroup;
   /** Search keywords for the "/" insert palette. */
   keywords: string[];
   defaultSize: { w: number; h: number };

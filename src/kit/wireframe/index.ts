@@ -15,6 +15,8 @@ import { heading } from './heading';
 import { modal } from './modal';
 import { tabs } from './tabs';
 import { icon } from './icon';
+import { setA } from './setA';
+import { setB } from './setB';
 
 // Owner: Wireframe Kit agent. Register every wireframe component here.
 // Order = order in the insert palette and gallery (structure → inputs → content → overlays).
@@ -22,6 +24,7 @@ import { icon } from './icon';
 export const wireframeKit: KitItemDef<any>[] = [
   header, nav, tabs, heading, text, button, input, checkbox, toggle, dropdown,
   card, list, table, image, icon, modal,
+  ...setA, ...setB,
 ];
 
 export { DeviceFrame, deviceContentInset } from './DeviceFrame';

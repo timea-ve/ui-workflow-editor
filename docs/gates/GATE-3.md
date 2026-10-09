@@ -1,6 +1,14 @@
-# ⛳ Gate 3 — Working demo — ⏳ AWAITING DIRECTOR
+# ⛳ Gate 3 — Working demo — 🔁 CHANGES REQUESTED (Wave C in progress)
 
 _Date: 2026-10-08 · Detail: [canvas core](../phase-3/canvas-core.md) · [components](../phase-3/components.md) · [flows](../phase-3/flows.md) · [platform](../phase-3/platform.md) · [export & share](../phase-3/export-share.md)_
+
+> **Director feedback (2026-10-08):** expand the kit to the full component list (text, buttons and actions, form inputs, navigation, content and layout, feedback and overlays). Also:
+> - Components use a muted grey palette.
+> - A small **context bar** on selection replaces the big properties panel.
+> - Snap to a grid and to each other.
+> - Wireframes, flowchart shapes, connectors and icons all live on one canvas.
+>
+> Being built as Phase 3 Wave C; see [phase-3/WAVE-C.md](../phase-3/WAVE-C.md). The gate will be re-presented afterwards.
 
 ## 1. What was done
 - **The real app works end to end.** It has a dashboard with 5 templates and a full editor with autosave, undo, snapping and copy/paste. A board with 60 screens stays smooth.

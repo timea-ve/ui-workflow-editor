@@ -42,7 +42,12 @@ export interface Frame {
 
 export type WireframeType =
   | 'header' | 'nav' | 'button' | 'input' | 'checkbox' | 'toggle' | 'dropdown' | 'card'
-  | 'list' | 'table' | 'image' | 'text' | 'heading' | 'modal' | 'tabs' | 'icon';
+  | 'list' | 'table' | 'image' | 'text' | 'heading' | 'modal' | 'tabs' | 'icon'
+  // Wave C, set A (text, actions, inputs)
+  | 'caption' | 'link' | 'icon-button' | 'fab' | 'textarea' | 'search' | 'radio' | 'slider' | 'datepicker'
+  // Wave C, set B (navigation, content, feedback)
+  | 'sidebar' | 'menu' | 'breadcrumbs' | 'pagination' | 'video' | 'avatar' | 'calendar' | 'line-chart'
+  | 'stacked-chart' | 'divider' | 'tooltip' | 'toast' | 'badge' | 'progress' | 'spinner';
 
 export type DiagramType = 'rect' | 'diamond' | 'ellipse' | 'sticky' | 'label';
 
