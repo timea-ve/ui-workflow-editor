@@ -56,6 +56,11 @@ export async function createBoard(input: { title?: string; templateId?: string }
   return seed(meta, doc, 'create');
 }
 
+/** New board seeded with a ready-made doc (e.g. a flow built from a Copilot flow link). */
+export async function importBoard(input: { title: string; doc: BoardDoc }): Promise<Board> {
+  return seed(createBoardMeta({ title: input.title }), input.doc, 'create');
+}
+
 /** Copies a board's current content into a new board titled "Copy of …". */
 export async function duplicateBoard(id: ID): Promise<Board> {
   const source = getBoard(id);

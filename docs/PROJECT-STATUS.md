@@ -23,6 +23,8 @@ _Last updated: 2026-10-09_
 
 - Phase 4 ✅: keyboard + WCAG AA + 3-browser checks, 4× faster lines, dashboard code halved, copy pass, first-run tour. 947 unit + 66 end-to-end tests passing.
 
+- Ask Copilot for a flow ✅: describe a flow to Copilot (github.com or the Copilot app) and get a link that opens it as a new editable board — see [AGENT-FLOWS.md](AGENT-FLOWS.md). 997 unit + 67 end-to-end tests passing.
+
 ## In progress
 - ⛳ Gate 4 approved — see [gates/GATE-4.md](gates/GATE-4.md). Live: https://timea-ve.github.io/ui-workflow-editor/ · Code: https://github.com/timea-ve/ui-workflow-editor (CI green) — see [gates/GATE-3.md](gates/GATE-3.md)
 

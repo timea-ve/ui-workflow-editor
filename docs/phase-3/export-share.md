@@ -12,6 +12,10 @@ Owner: Export/Share agent. Scope per `CONTRACTS.md` (Export, Share, Read-only ca
 > forgets the link on this device — links already sent keep working. A 60-screen board (stress fixture)
 > makes a ~40k-character link. The app is hosted on GitHub Pages (#48); `server/` is kept but no longer
 > mounted in `vite.config.ts`. "How to try" steps 2–4 and the API, Deploy and Security sections below describe that legacy server.
+>
+> **Flow links (Decision Log #52–53):** `<base>new/v1#<data>` uses the same compression (`compressJson` in
+> `src/share/link.ts`) but carries a flow spec (`flows/*.json`), not a board. Opening it builds the board
+> (`src/platform/flowSpecBoard.ts`), saves it as a **new editable** board and opens the editor. See `docs/AGENT-FLOWS.md`.
 
 ## In plain words
 

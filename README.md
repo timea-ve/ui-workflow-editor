@@ -20,6 +20,11 @@ Your browser opens the app automatically (http://localhost:5173).
 |---|---|
 | `npm test` | Runs the automated tests |
 | `npm run build` | Builds the production version |
+| `npm run flow -- flows/<file>.json` | Turns a flow file into a link that opens it as a new board (`--local` for this computer) |
+
+## Ask Copilot for a flow
+
+Describe a flow in plain words to Copilot (on github.com or in the Copilot app) and get back a link that opens it as a new, editable board. No AI keys in the app. How to ask, with example prompts: [docs/AGENT-FLOWS.md](docs/AGENT-FLOWS.md).
 
 ## How it's published
 
@@ -30,6 +35,7 @@ Your browser opens the app automatically (http://localhost:5173).
 
 ## Docs
 
+- [Ask Copilot for a flow](docs/AGENT-FLOWS.md)
 - [Project status](docs/PROJECT-STATUS.md)
 - [Decision log](docs/DECISION-LOG.md)
 - [Product brief](docs/BRIEF.md)

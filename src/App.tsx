@@ -4,7 +4,7 @@ import { DashboardPage } from './pages/DashboardPage';
 import { NotFoundPage } from './pages/NotFoundPage';
 
 // Route-level code splitting: the dashboard ships in the entry chunk; the editor (React Flow, Yjs,
-// the canvas), the share page and the dev previews load on demand. See docs/phase-4/performance.md.
+// the canvas), the share page, the flow-link import page and the dev previews load on demand. See docs/phase-4/performance.md.
 
 /** A lazily loaded page that renders synchronously once its chunk is in (no Suspense fallback flash). */
 function lazyPage<M>(load: () => Promise<M>, pick: (m: M) => ComponentType) {
@@ -21,6 +21,7 @@ function lazyPage<M>(load: () => Promise<M>, pick: (m: M) => ComponentType) {
 
 const editor = lazyPage(() => import('./pages/EditorPage'), (m) => m.EditorPage);
 const share = lazyPage(() => import('./pages/SharePage'), (m) => m.SharePage);
+const newFlow = lazyPage(() => import('./pages/NewFlowPage'), (m) => m.NewFlowPage);
 const home = lazyPage(() => import('./pages/HomePage'), (m) => m.HomePage);
 const gallery = lazyPage(() => import('./pages/GalleryPage'), (m) => m.GalleryPage);
 const sandbox = lazyPage(() => import('./pages/FlowSandboxPage'), (m) => m.FlowSandboxPage);
@@ -34,7 +35,8 @@ const appPath = typeof location === 'undefined' ? undefined
   : location.pathname.startsWith(`${BASENAME}/`) ? location.pathname.slice(BASENAME.length) : undefined;
 const deepLink = appPath?.startsWith('/b/') ? editor.preload()
   : appPath?.startsWith('/s/') ? share.preload()
-    : undefined;
+    : appPath?.startsWith('/new/') ? newFlow.preload()
+      : undefined;
 deepLink?.catch(() => {});
 
 function useDeepLinkReady(): boolean {
@@ -69,6 +71,7 @@ export function App() {
         <Route path="/" element={<DashboardPage />} />
         <Route path="/b/:boardId" element={<editor.Page />} />
         <Route path="/s/:shareId" element={<share.Page />} />
+        <Route path="/new/:version" element={<newFlow.Page />} />
         {/* Dev previews */}
         <Route path="/dev" element={<home.Page />} />
         <Route path="/gallery" element={<gallery.Page />} />

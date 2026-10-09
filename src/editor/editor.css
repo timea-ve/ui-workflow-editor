@@ -98,6 +98,9 @@
 .fse-state__box { display: grid; gap: var(--fs-space-3); justify-items: center; text-align: center; max-width: 360px; }
 .fse-state__title { margin: 0; font-size: var(--fs-ui-text-lg); font-weight: 600; }
 .fse-state__text { margin: 0; color: var(--fs-muted); }
+.fse-state__details { max-width: 100%; color: var(--fs-muted); font-size: var(--fs-ui-text-sm); text-align: left; }
+.fse-state__details summary { cursor: pointer; text-align: center; }
+.fse-state__details ul { max-height: 200px; overflow: auto; margin: var(--fs-space-2) 0 0; padding-left: var(--fs-space-4); }
 
 .fse-back {
   display: inline-flex;

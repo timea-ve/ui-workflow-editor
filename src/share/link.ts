@@ -52,22 +52,31 @@ export function fromBase64Url(s: string): Uint8Array {
   return out;
 }
 
-/** Board → link data (the part after `#`). */
-export async function encodeShare(title: string, doc: BoardDoc): Promise<string> {
-  const json = new TextEncoder().encode(JSON.stringify({ title, doc }));
+/** Any JSON value → link data: JSON → deflate-raw → base64url. Also used by flow links (src/platform/flowLink.ts). */
+export async function compressJson(value: unknown): Promise<string> {
+  const json = new TextEncoder().encode(JSON.stringify(value));
   return toBase64Url(await transform(json, new CompressionStream('deflate-raw')));
+}
+
+/** Link data → parsed JSON. Throws ShareLinkError for anything incomplete, garbled or too large. */
+export async function decompressJson(data: string): Promise<unknown> {
+  if (!data) throw new ShareLinkError('empty');
+  try {
+    const bytes = await transform(fromBase64Url(data), new DecompressionStream('deflate-raw'), MAX_PAYLOAD_BYTES);
+    return JSON.parse(new TextDecoder('utf-8', { fatal: true }).decode(bytes));
+  } catch (e) {
+    throw e instanceof ShareLinkError ? e : new ShareLinkError('garbled');
+  }
+}
+
+/** Board → link data (the part after `#`). */
+export function encodeShare(title: string, doc: BoardDoc): Promise<string> {
+  return compressJson({ title, doc });
 }
 
 /** Link data → validated board. Throws ShareLinkError for anything incomplete or garbled. */
 export async function decodeShare(data: string): Promise<SharedBoard> {
-  if (!data) throw new ShareLinkError('empty');
-  let payload: unknown;
-  try {
-    const bytes = await transform(fromBase64Url(data), new DecompressionStream('deflate-raw'), MAX_PAYLOAD_BYTES);
-    payload = JSON.parse(new TextDecoder('utf-8', { fatal: true }).decode(bytes));
-  } catch (e) {
-    throw e instanceof ShareLinkError ? e : new ShareLinkError('garbled');
-  }
+  const payload = await decompressJson(data);
   if (typeof payload !== 'object' || payload === null) throw new ShareLinkError('not an object');
   const p = payload as { title?: unknown; doc?: unknown };
   const title = validateTitle(p.title);
