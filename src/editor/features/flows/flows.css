@@ -175,7 +175,7 @@ body.fs-linking .fs-flow-canvas .react-flow__node-screen:hover::after { border-s
   font-size: var(--fs-ui-text-xs);
   font-weight: 600;
 }
-.fs-flows__option[data-active] .fs-flows__letter { background: var(--fs-accent); color: var(--fs-on-accent); }
+.fs-flows__option[data-active] .fs-flows__letter { background: var(--fs-accent-fill); color: var(--fs-on-accent); }
 .fs-flows__row-actions { display: flex; opacity: 0.0; transition: opacity var(--fs-dur-fast) var(--fs-ease-out); }
 .fs-flows__option:hover .fs-flows__row-actions,
 .fs-flows__option:focus-within .fs-flows__row-actions,

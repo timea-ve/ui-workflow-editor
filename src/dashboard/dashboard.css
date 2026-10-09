@@ -27,7 +27,7 @@
   letter-spacing: -0.01em;
 }
 .fsd-new { height: 36px; }
-.fsd-page .fsc-btn--primary:disabled { background: var(--fs-accent); color: var(--fs-on-accent); opacity: 0.7; }
+.fsd-page .fsc-btn--primary:disabled { background: var(--fs-accent-fill); color: var(--fs-on-accent); opacity: 0.7; }
 
 .fsd-main {
   display: grid;

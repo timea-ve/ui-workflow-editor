@@ -62,7 +62,7 @@
 .fs-lane-play {
   font: 600 12px var(--fs-ui-font);
   color: var(--fs-on-accent);
-  background: var(--fs-accent);
+  background: var(--fs-accent-fill);
   border: 0;
   border-radius: var(--fs-radius-pill);
   padding: 4px 10px;

@@ -31,8 +31,8 @@
 .fsc-btn svg { flex: none; }
 .fsc-btn--outline { border-color: var(--fs-line); background: var(--fs-surface); }
 .fsc-btn--outline:hover { background: var(--fs-hover); }
-.fsc-btn--primary { background: var(--fs-accent); color: var(--fs-on-accent); }
-.fsc-btn--primary:hover { background: var(--fs-accent); box-shadow: inset 0 0 0 100px rgb(0 0 0 / 0.12); }
+.fsc-btn--primary { background: var(--fs-accent-fill); color: var(--fs-on-accent); }
+.fsc-btn--primary:hover { background: var(--fs-accent-fill); box-shadow: inset 0 0 0 100px rgb(0 0 0 / 0.08); }
 .fsc-btn--icon { width: 32px; padding: 0; justify-content: center; }
 
 .fsc-kbd {
@@ -264,7 +264,7 @@ button.fsc-chip:hover { background: var(--fs-hover); }
   color: var(--fs-surface);
   font-size: var(--fs-ui-text-xs);
 }
-.fsc-chip[data-active='true'] .fsc-chip__letter { background: var(--fs-accent); color: var(--fs-on-accent); }
+.fsc-chip[data-active='true'] .fsc-chip__letter { background: var(--fs-accent-fill); color: var(--fs-on-accent); }
 .fsc-chip__name { font-weight: 400; color: var(--fs-muted); }
 
 /* ── Menus (context menu / dropdown) ───────────────────────────── */

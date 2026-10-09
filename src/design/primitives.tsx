@@ -266,7 +266,7 @@ export function LinkMarker({ label, style: css }: { label?: string; style?: CSSP
         height: 'var(--fs-link-marker-size)',
         borderRadius: '50%',
         background: 'var(--fs-link-marker)',
-        boxShadow: '0 0 0 2px var(--fs-surface)',
+        boxShadow: 'inset 0 0 0 1.5px var(--fs-link-marker-ring), 0 0 0 2px var(--fs-surface)',
         display: 'grid',
         placeItems: 'center',
         pointerEvents: 'none',

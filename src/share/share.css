@@ -60,7 +60,7 @@
   color: var(--fs-muted);
   transition: transform var(--fs-dur-fast) var(--fs-ease-out);
 }
-.fs-switch[aria-checked='true'] { background: var(--fs-accent); border-color: var(--fs-accent); }
+.fs-switch[aria-checked='true'] { background: var(--fs-accent-fill); border-color: var(--fs-accent); }
 .fs-switch[aria-checked='true'] .fs-switch__thumb { transform: translateX(16px); color: var(--fs-accent); }
 .fs-switch:disabled { cursor: progress; }
 .fs-switch:focus-visible { outline: var(--fs-focus-width) solid var(--fs-focus-ring); outline-offset: var(--fs-focus-offset); }

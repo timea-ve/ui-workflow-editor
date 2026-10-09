@@ -9,7 +9,7 @@ _Last updated: 2026-10-09_
 
 ## Done
 - Phase 1 discovery; ⛳ Gate 1 approved
-- Phase 2 kits; ⛳ Gate 2 approved (Clean lo-fi, violet accent, all other recommendations)
+- Phase 2 kits; ⛳ Gate 2 approved (Clean lo-fi, violet accent, all other recommendations); accent later changed to bitter lemon #D0FF00 (decision #54)
 - Phase 3 build; ⛳ Gate 3 approved (round 3: Miro-style lines for all boards)
 - Phase 3 setup: build contracts ([phase-3/CONTRACTS.md](phase-3/CONTRACTS.md)), app routes (`/`, `/b/:id`, `/s/:id`), board list, test setup
 

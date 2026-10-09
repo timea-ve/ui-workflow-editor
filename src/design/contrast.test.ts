@@ -26,7 +26,8 @@ const PAIRS: [string, string, keyof typeof AA][] = [
   ['--fs-accent', '--fs-surface', 'text'],
   ['--fs-accent', '--fs-canvas', 'text'],
   ['--fs-accent', '--fs-accent-weak', 'text'],
-  ['--fs-on-accent', '--fs-accent', 'text'],
+  ['--fs-on-accent', '--fs-accent-fill', 'text'],
+  ['--fs-accent', '--fs-accent-fill', 'ui'],
   ['--fs-line', '--fs-surface', 'ui'],
   ['--fs-line', '--fs-canvas', 'ui'],
   ['--fs-focus-ring', '--fs-surface', 'ui'],
@@ -34,8 +35,9 @@ const PAIRS: [string, string, keyof typeof AA][] = [
   ['--fs-focus-ring', '--fs-hover', 'ui'],
   ['--fs-selection', '--fs-surface', 'ui'],
   ['--fs-selection', '--fs-canvas', 'ui'],
-  ['--fs-link-marker', '--fs-surface', 'ui'],
-  ['--fs-link-marker', '--fs-faint', 'ui'],
+  ['--fs-link-marker-ring', '--fs-surface', 'ui'],
+  ['--fs-link-marker-ring', '--fs-faint', 'ui'],
+  ['--fs-on-accent', '--fs-link-marker', 'ui'],
 ];
 
 describe('contrast helpers', () => {
@@ -105,12 +107,12 @@ describe.each(Object.entries(STYLES))('muted kit palette meets WCAG AA (%s)', (_
 });
 
 describe('palette discipline', () => {
-  it('has exactly one chromatic colour (the accent)', () => {
+  it('has exactly one chromatic colour (the accent: lime fill, olive shade, light tint)', () => {
     const hexes = Object.values(root).filter((v) => /^#[0-9a-f]{6}$/i.test(v));
     const chromatic = hexes.filter((h) => {
       const [r, g, b] = hexToRgb(h);
       return Math.max(r, g, b) - Math.min(r, g, b) > 12;
     });
-    expect(new Set(chromatic.map((h) => h.toLowerCase()))).toEqual(new Set(['#5b3fd1', '#eeeafb']));
+    expect(new Set(chromatic.map((h) => h.toLowerCase()))).toEqual(new Set(['#d0ff00', '#4d6600', '#f6ffd6']));
   });
 });
