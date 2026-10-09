@@ -7,7 +7,7 @@ _Date: 2026-10-08 · Detail: [canvas core](../phase-3/canvas-core.md) · [compon
 > - **Context bar:** select anything and a small bar appears above it with that item's own options (e.g. Button → style + state; Tabs → edit tab names, pick the active tab by name). Rarer options sit under ⋯. Keyboard: **⌘.** jumps into the bar, **Esc** returns. The right-hand panel is gone, so the canvas is full width.
 > - **Snapping:** items line up with neighbours first, then with equal gaps, then with an 8px grid. A faint dot grid shows the grid. Hold **Alt** to place freely.
 > - **Muted grey:** every component draws in soft greys; text still meets the WCAG AA contrast standard.
-> - **Checks:** 927 logic tests and 43 browser tests pass, including the robot run of your Gate 3 task.
+> - **Checks:** 926 logic tests and 43 browser tests pass, including the robot run of your Gate 3 task.
 >
 > | Context bar: Button state | Context bar: Tabs | All components (overview) |
 > |---|---|---|

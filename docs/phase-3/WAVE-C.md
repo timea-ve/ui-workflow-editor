@@ -17,7 +17,7 @@ Requested by the Director at Gate 3. Three agents work in parallel with no overl
 ## Result (integrated by the Orchestrator)
 - Reports: [kit-a.md](kit-a.md), [kit-b.md](kit-b.md), [context-bar.md](context-bar.md).
 - Integration added `PropField.itemsFrom`. A `number` prop that is an index into an `items` prop is shown on the bar as a menu of item names (Tabs, Mobile tab bar, Radio, Menu, Sidebar).
-- 927 unit tests, 43 e2e tests, tsc and lint all clean.
+- 926 unit tests, 43 e2e tests, tsc and lint all clean.
 
 ### Parking lot (from agents, for the Director)
 - An icon per item in the list editor; editable chart data; date ranges across months; an optional animated spinner (respecting reduced motion); tooltips and menus attached to another element.
