@@ -4,12 +4,13 @@ _Last updated: 2026-10-09_
 
 | | |
 |---|---|
-| **Current phase** | Phase 3 — Build ✅ complete (incl. Gate 3 changes), awaiting Gate 3 round 3 |
-| **Next gate** | ⛳ Gate 3 — hands-on demo (build a 5-screen sign-up flow with Option A/B) |
+| **Current phase** | Phase 4 — Quality (QA & accessibility · performance · copy & onboarding) 🔄 |
+| **Next gate** | ⛳ Gate 4 — quality checklist passed, ready to share |
 
 ## Done
 - Phase 1 discovery; ⛳ Gate 1 approved
 - Phase 2 kits; ⛳ Gate 2 approved (Clean lo-fi, violet accent, all other recommendations)
+- Phase 3 build; ⛳ Gate 3 approved (round 3: Miro-style lines for all boards)
 - Phase 3 setup: build contracts ([phase-3/CONTRACTS.md](phase-3/CONTRACTS.md)), app routes (`/`, `/b/:id`, `/s/:id`), board list, test setup
 
 - Wave A ✅: real editor (autosave, undo/redo, snapping, copy/paste, shortcuts; 60 screens smooth), dashboard + 5 templates, PNG/PDF export, share links + share page. 354 unit + 25 end-to-end tests passing.
@@ -21,10 +22,10 @@ _Last updated: 2026-10-09_
 - Gate 3 round 3 changes ✅: labels over lines, ⌘Y and undo/redo buttons, Miro-style line routing (Onboarding Skip fixed). 938 unit + 44 end-to-end tests passing.
 
 ## In progress
-- ⛳ Gate 3 round 3: line style approved; awaiting overall Gate 3 verdict — see [gates/GATE-3.md](gates/GATE-3.md)
+- Phase 4: QA & accessibility, performance, copy & onboarding (running in parallel) — see [gates/GATE-3.md](gates/GATE-3.md)
 
 ## Blocked
 - Nothing
 
 ## Up next
-- Phase 4 (QA & accessibility · performance · copy & onboarding) → ⛳ Gate 4
+- ⛳ Gate 4: quality checklist + deploy plan
