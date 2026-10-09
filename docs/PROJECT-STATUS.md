@@ -21,7 +21,7 @@ _Last updated: 2026-10-09_
 - Gate 3 round 3 changes ✅: labels over lines, ⌘Y and undo/redo buttons, Miro-style line routing (Onboarding Skip fixed). 938 unit + 44 end-to-end tests passing.
 
 ## In progress
-- ⛳ Gate 3 round 3: Director to approve the new line style — see [gates/GATE-3.md](gates/GATE-3.md)
+- ⛳ Gate 3 round 3: line style approved; awaiting overall Gate 3 verdict — see [gates/GATE-3.md](gates/GATE-3.md)
 
 ## Blocked
 - Nothing
