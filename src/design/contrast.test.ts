@@ -107,12 +107,12 @@ describe.each(Object.entries(STYLES))('muted kit palette meets WCAG AA (%s)', (_
 });
 
 describe('palette discipline', () => {
-  it('has exactly one chromatic colour (the accent: lime fill, olive shade, light tint)', () => {
+  it('has exactly one chromatic colour (the accent: lime fill and its light tint)', () => {
     const hexes = Object.values(root).filter((v) => /^#[0-9a-f]{6}$/i.test(v));
     const chromatic = hexes.filter((h) => {
       const [r, g, b] = hexToRgb(h);
       return Math.max(r, g, b) - Math.min(r, g, b) > 12;
     });
-    expect(new Set(chromatic.map((h) => h.toLowerCase()))).toEqual(new Set(['#b6f23a', '#3f6b00', '#f3fcdf']));
+    expect(new Set(chromatic.map((h) => h.toLowerCase()))).toEqual(new Set(['#b6f23a', '#f3fcdf']));
   });
 });
