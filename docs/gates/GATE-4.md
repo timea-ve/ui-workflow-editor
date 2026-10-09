@@ -1,4 +1,4 @@
-# ⛳ Gate 4 — Launch-ready (UI Workflow Editor) — ⏳ AWAITING DIRECTOR
+# ⛳ Gate 4 — Launch-ready (UI Workflow Editor) — ✅ APPROVED (2026-10-09)
 
 _Date: 2026-10-09 · Details: [QA & accessibility](../phase-4/qa-accessibility.md) · [Performance](../phase-4/performance.md) · [Copy deck](../phase-4/copy-deck.md) · [Onboarding](../phase-4/onboarding.md)_
 
