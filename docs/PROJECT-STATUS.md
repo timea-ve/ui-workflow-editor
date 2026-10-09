@@ -24,7 +24,7 @@ _Last updated: 2026-10-09_
 - Phase 4 ✅: keyboard + WCAG AA + 3-browser checks, 4× faster lines, dashboard code halved, copy pass, first-run tour. 947 unit + 66 end-to-end tests passing.
 
 ## In progress
-- ⛳ Gate 4: Director review — see [gates/GATE-4.md](gates/GATE-4.md) — see [gates/GATE-3.md](gates/GATE-3.md)
+- ⛳ Gate 4: Director review — see [gates/GATE-4.md](gates/GATE-4.md). Live: https://timea-ve.github.io/ui-workflow-editor/ · Code: https://github.com/timea-ve/ui-workflow-editor (CI green) — see [gates/GATE-3.md](gates/GATE-3.md)
 
 ## Blocked
 - Nothing
