@@ -27,6 +27,7 @@ const home = lazyPage(() => import('./pages/HomePage'), (m) => m.HomePage);
 const gallery = lazyPage(() => import('./pages/GalleryPage'), (m) => m.GalleryPage);
 const sandbox = lazyPage(() => import('./pages/FlowSandboxPage'), (m) => m.FlowSandboxPage);
 const chrome = lazyPage(() => import('./pages/ChromePage'), (m) => m.ChromePage);
+const trashPage = lazyPage(() => import('./pages/TrashPage'), (m) => m.TrashPage);
 const authCallback = lazyPage(() => import('./pages/AuthCallbackPage'), (m) => m.AuthCallbackPage);
 
 /** "Save to GitHub" background sync: its own chunk, loaded only when the feature is configured. */
@@ -80,6 +81,8 @@ export function App() {
       <Suspense fallback={<div className="fsc-root" aria-busy="true" />}>
       <Routes>
         <Route path="/" element={<DashboardPage />} />
+        <Route path="/folder/:folderId" element={<DashboardPage />} />
+        <Route path="/trash" element={<trashPage.Page />} />
         <Route path="/b/:boardId" element={<editor.Page />} />
         <Route path="/s/:shareId" element={<share.Page />} />
         <Route path="/new/:version" element={<newFlow.Page />} />

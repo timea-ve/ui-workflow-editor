@@ -2,6 +2,9 @@ import { act, cleanup, fireEvent, render, screen, within } from '@testing-librar
 import { MemoryRouter, Route, Routes } from 'react-router-dom';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { DashboardPage } from '../pages/DashboardPage';
+import { TrashPage } from '../pages/TrashPage';
+import { createFolder, moveBoardToFolder } from '../platform/folders';
+import { trashBoard } from '../platform/trash';
 import { createBoardMeta, getBoard, updateBoardMeta } from '../platform/boardIndex';
 import * as persistence from '../store/persistence';
 
@@ -11,11 +14,13 @@ vi.mock('../store/persistence', () => ({
   deleteBoardData: vi.fn(async () => {}),
 }));
 
-function renderDashboard() {
+function renderDashboard(at = '/') {
   return render(
-    <MemoryRouter initialEntries={['/']}>
+    <MemoryRouter initialEntries={[at]}>
       <Routes>
         <Route path="/" element={<DashboardPage />} />
+        <Route path="/folder/:folderId" element={<DashboardPage />} />
+        <Route path="/trash" element={<TrashPage />} />
         <Route path="/b/:boardId" element={<p>Editor page</p>} />
       </Routes>
     </MemoryRouter>,
@@ -112,9 +117,11 @@ describe('DashboardPage', () => {
     await openMenu('Doomed');
     await act(async () => { fireEvent.click(screen.getByRole('menuitem', { name: /Delete/ })); });
     expect(screen.queryByText('Doomed')).not.toBeInTheDocument();
-    expect(screen.getByText('“Doomed” deleted')).toBeInTheDocument();
+    expect(screen.getByText('“Doomed” moved to Trash')).toBeInTheDocument();
+    expect(getBoard(b.id)?.trashedAt).toBeDefined();
+    expect(screen.getByTestId('trash-link')).toHaveAccessibleName('Trash, 1 item');
     await act(async () => { fireEvent.click(screen.getByRole('button', { name: 'Undo' })); });
-    expect(getBoard(b.id)).toBeDefined();
+    expect(getBoard(b.id)?.trashedAt).toBeUndefined();
     expect(screen.getByRole('link', { name: /Doomed/ })).toBeInTheDocument();
     expect(persistence.deleteBoardData).not.toHaveBeenCalled();
   });
@@ -133,6 +140,99 @@ describe('DashboardPage', () => {
     await act(async () => { fireEvent.click(screen.getAllByRole('button', { name: /New board/ })[0]); });
     expect(await screen.findByText(/Couldn't create the board/)).toBeInTheDocument();
     expect(screen.getByRole('heading', { level: 1, name: 'Sketch your first flow' })).toBeInTheDocument();
+  });
+});
+
+describe('Folders and Trash', () => {
+  it('shows folders as tiles before loose boards, and opens a folder with its boards', async () => {
+    const f = createFolder('Research');
+    const inside = createBoardMeta({ title: 'Inside' });
+    moveBoardToFolder(inside.id, f.id);
+    createBoardMeta({ title: 'Loose' });
+    renderDashboard();
+    const grid = screen.getByRole('list', { name: /Your boards/ });
+    const items = within(grid).getAllByRole('listitem');
+    expect(items[0]).toHaveAttribute('data-testid', 'folder-card');
+    expect(within(items[0]).getByText('1 board')).toBeInTheDocument();
+    expect(screen.queryByText('Inside')).not.toBeInTheDocument();
+    await act(async () => { fireEvent.click(within(items[0]).getByRole('link', { name: /Research/ })); });
+    expect(screen.getByRole('heading', { level: 2, name: /Research/ })).toBeInTheDocument();
+    expect(screen.getByText('Inside')).toBeInTheDocument();
+    expect(screen.queryByText('Loose')).not.toBeInTheDocument();
+    expect(screen.getByTestId('folder-back')).toHaveAttribute('href', '/');
+  });
+
+  it('search at the top level finds boards inside folders', () => {
+    const f = createFolder('Research');
+    const inside = createBoardMeta({ title: 'Checkout deep dive' });
+    moveBoardToFolder(inside.id, f.id);
+    renderDashboard();
+    fireEvent.change(screen.getByRole('searchbox'), { target: { value: 'checkout' } });
+    expect(screen.getByText('Checkout deep dive')).toBeInTheDocument();
+    expect(screen.getByText(/in Research/)).toBeInTheDocument();
+  });
+
+  it('New folder adds a tile in rename mode', () => {
+    createBoardMeta({ title: 'A board' });
+    renderDashboard();
+    fireEvent.click(screen.getByTestId('new-folder'));
+    const input = screen.getByRole('textbox', { name: 'Folder name' });
+    expect(input).toHaveFocus();
+    fireEvent.change(input, { target: { value: 'Q3 ideas' } });
+    fireEvent.keyDown(input, { key: 'Enter' });
+    expect(screen.getByRole('link', { name: /Q3 ideas/ })).toBeInTheDocument();
+  });
+
+  it('moves a board into a folder by drag and drop', () => {
+    const f = createFolder('Research');
+    const b = createBoardMeta({ title: 'Dragged' });
+    renderDashboard();
+    const data = new Map<string, string>();
+    const dataTransfer = {
+      setData: (t: string, v: string) => data.set(t, v), getData: (t: string) => data.get(t) ?? '',
+      get types() { return [...data.keys()]; }, effectAllowed: 'all', dropEffect: 'none',
+    };
+    const card = screen.getAllByTestId('board-card')[0];
+    fireEvent.dragStart(card, { dataTransfer });
+    const tile = screen.getByTestId('folder-card');
+    fireEvent.dragEnter(tile, { dataTransfer });
+    expect(tile).toHaveAttribute('data-drop-over');
+    fireEvent.drop(tile, { dataTransfer });
+    expect(getBoard(b.id)?.folderId).toBe(f.id);
+    expect(screen.getByText('Moved “Dragged” to Research')).toBeInTheDocument();
+  });
+
+  it('deleting a folder asks first, then moves it and its boards to Trash', async () => {
+    const f = createFolder('Old work');
+    const b = createBoardMeta({ title: 'Inside' });
+    moveBoardToFolder(b.id, f.id);
+    renderDashboard();
+    await openMenu('folder Old work');
+    await act(async () => { fireEvent.click(screen.getByRole('menuitem', { name: /Delete folder/ })); });
+    const dialog = screen.getByRole('alertdialog', { name: 'Delete “Old work”?' });
+    expect(within(dialog).getByText(/its board move to Trash/)).toBeInTheDocument();
+    await act(async () => { fireEvent.click(within(dialog).getByRole('button', { name: 'Move to Trash' })); });
+    expect(screen.queryByTestId('folder-card')).not.toBeInTheDocument();
+    expect(getBoard(b.id)?.trashedAt).toBeDefined();
+    expect(persistence.deleteBoardData).not.toHaveBeenCalled();
+  });
+
+  it('Trash lists deleted items with days left; restore and delete forever (after confirming)', async () => {
+    const keep = createBoardMeta({ title: 'Keep me' });
+    const gone = createBoardMeta({ title: 'Gone' });
+    trashBoard(keep.id);
+    trashBoard(gone.id);
+    renderDashboard('/trash');
+    expect(screen.getAllByTestId('trash-row')).toHaveLength(2);
+    expect(screen.getAllByText(/deleted for good in 30 days/)).toHaveLength(2);
+    fireEvent.click(screen.getByRole('button', { name: 'Restore Keep me' }));
+    expect(getBoard(keep.id)?.trashedAt).toBeUndefined();
+    fireEvent.click(screen.getByRole('button', { name: 'Delete Gone forever' }));
+    const dialog = screen.getByRole('alertdialog', { name: 'Delete “Gone” forever?' });
+    await act(async () => { fireEvent.click(within(dialog).getByRole('button', { name: 'Delete forever' })); });
+    expect(getBoard(gone.id)).toBeUndefined();
+    expect(persistence.deleteBoardData).toHaveBeenCalledWith(gone.id);
+    expect(screen.getByText('Trash is empty.')).toBeInTheDocument();
   });
 });
 

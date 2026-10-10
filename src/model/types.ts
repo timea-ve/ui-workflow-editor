@@ -24,6 +24,19 @@ export interface Board {
   teamId?: ID;
   /** Set once the board has a public read-only link (see src/share). */
   shareId?: ID;
+  /** Dashboard folder (one level). `folderName` travels with the board so other devices can rebuild the folder. */
+  folderId?: ID;
+  folderName?: string;
+  /** In Trash since this time; permanently deleted 30 days later (src/platform/trash.ts). */
+  trashedAt?: number;
+}
+
+export interface Folder {
+  id: ID;
+  name: string;
+  createdAt: number;
+  updatedAt: number;
+  trashedAt?: number;
 }
 
 export interface Frame {

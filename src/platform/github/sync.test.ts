@@ -126,6 +126,12 @@ describe('board file', () => {
     expect(screenNames(file.doc)).toEqual(['Home']);
   });
 
+  it('carries the folder and Trash state', () => {
+    const board: Board = { id: 'abc', title: 't', schemaVersion: 1, createdAt: 1, updatedAt: 2, folderId: 'f1', folderName: 'Research', trashedAt: 5 };
+    const file = parseBoardFile(serializeBoardFile(board, emptyDoc()), 'abc')!;
+    expect(file.board).toEqual(board);
+  });
+
   it('rejects files that are not board files or are for another id', () => {
     const text = serializeBoardFile({ id: 'abc', title: 't', schemaVersion: 1, createdAt: 1, updatedAt: 2 }, emptyDoc());
     expect(parseBoardFile(text, 'other')).toBeNull();

@@ -1,18 +1,28 @@
 import { useEffect, useRef, useState, type KeyboardEvent } from 'react';
 import { Link } from 'react-router-dom';
 import * as Menu from '@radix-ui/react-dropdown-menu';
-import { Copy, ExternalLink, Link2, MoreHorizontal, Pencil, Trash2 } from 'lucide-react';
-import type { Board } from '../model/types';
+import { Check, ChevronRight, Copy, ExternalLink, FolderInput, FolderPlus, Link2, MoreHorizontal, Pencil, Trash2 } from 'lucide-react';
+import type { Board, Folder, ID } from '../model/types';
 import { ICON_STROKE } from '../chrome/shared';
 import { copy, formatRelative } from './copy';
 
 export type BoardAction = 'open' | 'duplicate' | 'copyLink' | 'delete';
+/** A folder id, `null` for "no folder", or 'new' to file it in a new folder. */
+export type MoveTarget = ID | null | 'new';
 
-export function BoardCard({ board, now, onAction, onRename }: {
+/** Drag-and-drop payload type for a board card (value: board id). */
+export const BOARD_DND_TYPE = 'application/x-uwe-board';
+
+export function BoardCard({ board, now, folders, showFolder, onAction, onRename, onMove }: {
   board: Board;
   now: number;
+  /** Live folders, for "Move to folder". */
+  folders: Folder[];
+  /** Mention the folder in the meta line (search results). */
+  showFolder?: boolean;
   onAction: (action: BoardAction, board: Board) => void;
   onRename: (board: Board, title: string) => void;
+  onMove: (board: Board, target: MoveTarget) => void;
 }) {
   const [renaming, setRenaming] = useState(false);
   const linkRef = useRef<HTMLAnchorElement>(null);
@@ -35,11 +45,19 @@ export function BoardCard({ board, now, onAction, onRename }: {
     if (e.key === 'F2') { e.preventDefault(); setRenaming(true); }
   };
 
-  const edited = copy.edited(formatRelative(board.updatedAt, now));
+  const folderName = showFolder && board.folderId ? folders.find((f) => f.id === board.folderId)?.name : undefined;
+  const edited = copy.edited(formatRelative(board.updatedAt, now)) + (folderName ? ` · ${copy.inFolder(folderName)}` : '');
   const titleId = `board-title-${board.id}`;
 
   return (
-    <li className="fsd-board" data-testid="board-card">
+    <li
+      className="fsd-board"
+      data-testid="board-card"
+      onDragStart={(e) => {
+        e.dataTransfer.setData(BOARD_DND_TYPE, board.id);
+        e.dataTransfer.effectAllowed = 'move';
+      }}
+    >
       {renaming ? (
         <div className="fsd-board__main">
           <BoardThumb />
@@ -57,12 +75,16 @@ export function BoardCard({ board, now, onAction, onRename }: {
           </span>
         </Link>
       )}
-      <BoardMenu board={board} onAction={onAction} onRename={() => setRenaming(true)} />
+      <BoardMenu board={board} folders={folders} onAction={onAction} onMove={onMove} onRename={() => setRenaming(true)} />
     </li>
   );
 }
 
-function RenameInput({ initial, onDone }: { initial: string; onDone: (title: string | undefined, viaKeyboard: boolean) => void }) {
+export function RenameInput({ initial, label = copy.renameLabel, onDone }: {
+  initial: string;
+  label?: string;
+  onDone: (title: string | undefined, viaKeyboard: boolean) => void;
+}) {
   const ref = useRef<HTMLInputElement>(null);
   const done = useRef(false);
   useEffect(() => {
@@ -78,7 +100,7 @@ function RenameInput({ initial, onDone }: { initial: string; onDone: (title: str
     <input
       ref={ref}
       className="fsc-title-input fsd-board__rename"
-      aria-label={copy.renameLabel}
+      aria-label={label}
       defaultValue={initial}
       maxLength={120}
       onKeyDown={(e) => {
@@ -90,11 +112,14 @@ function RenameInput({ initial, onDone }: { initial: string; onDone: (title: str
   );
 }
 
-function BoardMenu({ board, onAction, onRename }: {
+function BoardMenu({ board, folders, onAction, onMove, onRename }: {
   board: Board;
+  folders: Folder[];
   onAction: (action: BoardAction, board: Board) => void;
+  onMove: (board: Board, target: MoveTarget) => void;
   onRename: () => void;
 }) {
+  const current = board.folderId && folders.some((f) => f.id === board.folderId) ? board.folderId : null;
   const startRename = useRef(false);
   const canShare = Boolean(board.shareId);
   return (
@@ -139,6 +164,34 @@ function BoardMenu({ board, onAction, onRename }: {
               {!canShare && <span className="fsd-menu__hint" id={`share-hint-${board.id}`}>{copy.menu.copyLinkDisabledHint}</span>}
             </span>
           </Menu.Item>
+          <Menu.Sub>
+            <Menu.SubTrigger className="fsc-menu__item" data-testid="move-to-folder">
+              <FolderInput size={16} strokeWidth={ICON_STROKE} aria-hidden />
+              <span className="fsc-menu__label">{copy.menu.moveTo}</span>
+              <ChevronRight size={16} strokeWidth={ICON_STROKE} aria-hidden className="fsd-menu__chevron" />
+            </Menu.SubTrigger>
+            <Menu.Portal>
+              <Menu.SubContent className="fsc-float fsc-menu fsc-root fsd-menu--folders" sideOffset={4} alignOffset={-4}>
+                <Menu.RadioGroup value={current ?? ''} onValueChange={(v) => onMove(board, v || null)}>
+                  <Menu.RadioItem className="fsc-menu__item" value="">
+                    <span className="fsd-menu__check" aria-hidden><Menu.ItemIndicator><Check size={16} strokeWidth={ICON_STROKE} /></Menu.ItemIndicator></span>
+                    <span className="fsc-menu__label">{copy.menu.noFolder}</span>
+                  </Menu.RadioItem>
+                  {folders.map((f) => (
+                    <Menu.RadioItem key={f.id} className="fsc-menu__item" value={f.id}>
+                      <span className="fsd-menu__check" aria-hidden><Menu.ItemIndicator><Check size={16} strokeWidth={ICON_STROKE} /></Menu.ItemIndicator></span>
+                      <span className="fsc-menu__label">{f.name}</span>
+                    </Menu.RadioItem>
+                  ))}
+                </Menu.RadioGroup>
+                <Menu.Separator className="fsc-menu__sep" />
+                <Menu.Item className="fsc-menu__item" onSelect={() => onMove(board, 'new')}>
+                  <FolderPlus size={16} strokeWidth={ICON_STROKE} aria-hidden />
+                  <span className="fsc-menu__label">{copy.menu.newFolder}</span>
+                </Menu.Item>
+              </Menu.SubContent>
+            </Menu.Portal>
+          </Menu.Sub>
           <Menu.Separator className="fsc-menu__sep" />
           <Menu.Item className="fsc-menu__item" onSelect={() => onAction('delete', board)}>
             <Trash2 size={16} strokeWidth={ICON_STROKE} aria-hidden />
@@ -151,7 +204,7 @@ function BoardMenu({ board, onAction, onRename }: {
 }
 
 /** Neutral lo-fi placeholder (two linked screens) — real board thumbnails are parked. */
-function BoardThumb() {
+export function BoardThumb() {
   return (
     <span className="fsd-thumb fsd-thumb--board" aria-hidden>
       <svg width="120" height="72" viewBox="0 0 120 72" fill="none" strokeLinecap="round" strokeLinejoin="round">

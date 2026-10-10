@@ -87,12 +87,13 @@ test('rename a board inline from the menu (keyboard only)', async ({ page }) => 
   await expect(page.getByRole('link', { name: /Roadmap 2027/ })).toBeVisible();
 });
 
-test('delete a board, then undo', async ({ page }) => {
+test('delete a board to Trash, then undo', async ({ page }) => {
   await seedBoards(page, ['Keep me', 'Other']);
   await page.getByRole('button', { name: 'Options for Keep me' }).click();
   await page.getByRole('menuitem', { name: /Delete/ }).click();
   await expect(page.getByRole('link', { name: /Keep me/ })).toHaveCount(0);
-  await expect(page.getByText('“Keep me” deleted')).toBeVisible();
+  await expect(page.getByText('“Keep me” moved to Trash')).toBeVisible();
+  await expect(page.getByTestId('trash-link')).toContainText('1');
   await page.getByRole('button', { name: 'Undo' }).click();
   await expect(page.getByRole('link', { name: /Keep me/ })).toBeVisible();
   await page.reload();
@@ -132,5 +133,89 @@ test('no WCAG A/AA violations (empty and list states)', async ({ page }) => {
   const scan = () => new AxeBuilder({ page }).withTags(['wcag2a', 'wcag2aa']).analyze();
   expect((await scan()).violations).toEqual([]);
   await seedBoards(page, ['Alpha', 'Beta']);
+  expect((await scan()).violations).toEqual([]);
+});
+
+test('folders: create, move a board in by menu and by drag, open, go back', async ({ page }) => {
+  await seedBoards(page, ['Menu moved', 'Drag moved', 'Stays out']);
+  await page.getByTestId('new-folder').click();
+  const name = page.getByRole('textbox', { name: 'Folder name' });
+  await name.fill('Research');
+  await name.press('Enter');
+  const folder = page.getByTestId('folder-card');
+  await expect(folder).toContainText('Research');
+
+  await page.getByRole('button', { name: 'Options for Menu moved' }).click();
+  await page.getByTestId('move-to-folder').click();
+  await page.getByRole('menuitemradio', { name: 'Research' }).click();
+  await expect(page.getByRole('link', { name: /Menu moved/ })).toHaveCount(0);
+
+  await page.getByTestId('board-card').filter({ hasText: 'Drag moved' }).dragTo(folder);
+  await expect(page.getByRole('link', { name: /Drag moved/ })).toHaveCount(0);
+  await expect(folder).toContainText('2 boards');
+
+  await page.reload();
+  await page.getByRole('link', { name: /Research/ }).click();
+  await expect(page).toHaveURL(/\/folder\//);
+  await expect(page.getByRole('link', { name: /Menu moved/ })).toBeVisible();
+  await expect(page.getByRole('link', { name: /Drag moved/ })).toBeVisible();
+  await expect(page.getByRole('link', { name: /Stays out/ })).toHaveCount(0);
+  await page.getByTestId('folder-back').click();
+  await expect(page.getByRole('link', { name: /Stays out/ })).toBeVisible();
+});
+
+test('delete a folder (after confirming), restore it from Trash, then delete a board forever', async ({ page }) => {
+  await seedBoards(page, ['Inside', 'Loose']);
+  await page.getByTestId('new-folder').click();
+  await page.getByRole('textbox', { name: 'Folder name' }).fill('Old work');
+  await page.keyboard.press('Enter');
+  await page.getByRole('button', { name: 'Options for Inside' }).click();
+  await page.getByTestId('move-to-folder').click();
+  await page.getByRole('menuitemradio', { name: 'Old work' }).click();
+
+  await page.getByRole('button', { name: 'Options for folder Old work' }).click();
+  await page.getByRole('menuitem', { name: /Delete folder/ }).click();
+  await page.getByTestId('confirm-action').click();
+  await expect(page.getByTestId('folder-card')).toHaveCount(0);
+
+  await page.getByTestId('trash-link').click();
+  await expect(page).toHaveURL(/\/trash$/);
+  await expect(page.getByTestId('trash-row')).toHaveCount(1);
+  await page.getByRole('button', { name: 'Restore Old work' }).click();
+  await expect(page.getByText('Trash is empty.')).toBeVisible();
+  await page.goBack();
+  await expect(page.getByTestId('folder-card')).toContainText('1 board');
+
+  await page.getByRole('button', { name: 'Options for Loose' }).click();
+  await page.getByRole('menuitem', { name: /Delete/ }).click();
+  await page.getByTestId('trash-link').click();
+  await page.getByRole('button', { name: 'Delete Loose forever' }).click();
+  await page.getByTestId('confirm-action').click();
+  await expect(page.getByText('Trash is empty.')).toBeVisible();
+  const stored = await page.evaluate(() => Object.values(JSON.parse(localStorage.getItem('fs:boards:v1') ?? '{}')).map((b) => (b as { title: string }).title));
+  expect(stored).not.toContain('Loose');
+});
+
+test('no WCAG A/AA violations (folder view and Trash)', async ({ page }) => {
+  const { default: AxeBuilder } = await import('@axe-core/playwright');
+  const scan = () => new AxeBuilder({ page }).withTags(['wcag2a', 'wcag2aa']).analyze();
+  await seedBoards(page, ['Alpha', 'Beta']);
+  await page.getByTestId('new-folder').click();
+  await page.keyboard.press('Enter');
+  expect((await scan()).violations).toEqual([]);
+  await page.getByRole('button', { name: 'Options for Beta' }).click();
+  await page.getByTestId('move-to-folder').click();
+  await page.getByRole('menuitemradio', { name: 'Untitled folder' }).click();
+  await page.getByRole('link', { name: /Untitled folder/ }).click();
+  await expect(page.getByRole('link', { name: /Beta/ })).toBeVisible();
+  expect((await scan()).violations).toEqual([]);
+  await page.getByRole('button', { name: 'Options for Beta' }).click();
+  await page.getByRole('menuitem', { name: /Delete/ }).click();
+  await page.getByTestId('trash-link').click();
+  await expect(page.getByTestId('trash-row')).toHaveCount(1);
+  expect((await scan()).violations).toEqual([]);
+  await page.getByTestId('empty-trash').click();
+  await expect(page.getByRole('alertdialog')).toBeVisible();
+  await page.evaluate(() => Promise.allSettled(document.getAnimations().map((a) => a.finished)));
   expect((await scan()).violations).toEqual([]);
 });

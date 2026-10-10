@@ -13,6 +13,7 @@
 import type { Board, BoardDoc, ID } from '../model/types';
 import { emptyDoc } from '../flow/ops';
 import { createBoardMeta, deleteBoardMeta, getBoard, restoreBoardMeta } from './boardIndex';
+import { getFolder } from './folders';
 import { getTemplate } from './templates';
 import { recordLocalDelete } from './github/syncState';
 
@@ -44,8 +45,8 @@ async function seed(meta: Board, doc: BoardDoc, kind: BoardOpKind): Promise<Boar
   }
 }
 
-/** New blank board, or a board seeded from a template (titled after it unless `title` is given). */
-export async function createBoard(input: { title?: string; templateId?: string } = {}): Promise<Board> {
+/** New blank board, or a board seeded from a template (titled after it unless `title` is given), optionally inside a folder. */
+export async function createBoard(input: { title?: string; templateId?: string; folderId?: ID } = {}): Promise<Board> {
   const template = getTemplate(input.templateId);
   if (input.templateId && !template) throw new BoardOpError('create', `Unknown template "${input.templateId}"`);
   let doc: BoardDoc;
@@ -54,7 +55,11 @@ export async function createBoard(input: { title?: string; templateId?: string }
   } catch (cause) {
     throw new BoardOpError('create', `Couldn't build template "${input.templateId}"`, { cause });
   }
-  const meta = createBoardMeta({ title: input.title ?? template?.name, templateId: template?.id });
+  const folder = input.folderId ? getFolder(input.folderId) : undefined;
+  const meta = createBoardMeta({
+    title: input.title ?? template?.name, templateId: template?.id,
+    ...(folder && folder.trashedAt === undefined ? { folderId: folder.id, folderName: folder.name } : {}),
+  });
   return seed(meta, doc, 'create');
 }
 
@@ -73,7 +78,7 @@ export async function duplicateBoard(id: ID): Promise<Board> {
   } catch (cause) {
     throw new BoardOpError('duplicate', `Couldn't read board ${id}`, { cause });
   }
-  const meta = createBoardMeta({ title: `Copy of ${source.title}`, templateId: source.templateId });
+  const meta = createBoardMeta({ title: `Copy of ${source.title}`, templateId: source.templateId, folderId: source.folderId, folderName: source.folderName });
   return seed(meta, doc, 'duplicate');
 }
 

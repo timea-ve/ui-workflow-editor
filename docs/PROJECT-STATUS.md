@@ -27,6 +27,8 @@ _Last updated: 2026-10-10_
 
 - Save to GitHub ✅: "Sign in with GitHub" saves boards to a private repo (`ui-workflow-boards`) and syncs across devices — see [GITHUB-SAVE.md](GITHUB-SAVE.md). 1061 unit + 74 end-to-end tests passing.
 
+- Folders + Trash ✅: group boards in folders (menu or drag), deleted items wait 30 days in Trash. Boards above templates on the dashboard. 1078 unit + 78 end-to-end tests passing.
+
 ## In progress
 - ⛳ Gate 4 approved — see [gates/GATE-4.md](gates/GATE-4.md). Live: https://timea-ve.github.io/ui-workflow-editor/ · Code: https://github.com/timea-ve/ui-workflow-editor (CI green) — see [gates/GATE-3.md](gates/GATE-3.md)
 
@@ -34,4 +36,5 @@ _Last updated: 2026-10-10_
 - Nothing
 
 ## Up next
+- Director tries folders and Trash on the live site
 - Director tries Save to GitHub on the live site

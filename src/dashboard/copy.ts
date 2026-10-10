@@ -31,16 +31,68 @@ export const copy = {
     duplicate: 'Duplicate',
     copyLink: 'Copy share link',
     copyLinkDisabledHint: 'Share from inside the board',
+    moveTo: 'Move to folder',
+    noFolder: 'No folder',
+    newFolder: 'New folder…',
     delete: 'Delete',
   },
   renameLabel: 'Board name',
+  inFolder: (name: string) => `in ${name}`,
+
+  folders: {
+    newFolder: 'New folder',
+    count: (n: number) => (n === 0 ? 'Empty' : n === 1 ? '1 board' : `${n} boards`),
+    menuLabel: (name: string) => `Options for folder ${name}`,
+    open: 'Open',
+    rename: 'Rename',
+    delete: 'Delete folder',
+    renameLabel: 'Folder name',
+    back: 'Your boards',
+    backHint: 'Back to your boards',
+    empty: 'No boards here yet. Create one, or use “Move to folder” on any board.',
+    notFound: 'This folder doesn’t exist anymore.',
+    dropHint: (name: string) => `Drop to move into ${name}`,
+    confirmTitle: (name: string) => `Delete “${name}”?`,
+    confirmBody: (n: number) => (n === 0
+      ? 'The folder moves to Trash. You can restore it there for 30 days.'
+      : `The folder and its ${n === 1 ? 'board' : `${n} boards`} move to Trash. You can restore them there for 30 days.`),
+    confirmAction: 'Move to Trash',
+    cancel: 'Cancel',
+  },
+
+  trash: {
+    link: 'Trash',
+    linkCount: (n: number) => (n ? `Trash, ${n} item${n === 1 ? '' : 's'}` : 'Trash, empty'),
+    pageTitle: 'Trash · UI Workflow Editor',
+    title: 'Trash',
+    hint: 'Deleted boards and folders stay here for 30 days, then they’re deleted for good.',
+    empty: 'Trash is empty.',
+    meta: (rel: string, days: number) => `Deleted ${rel} · ${days <= 1 ? 'deleted for good tomorrow' : `deleted for good in ${days} days`}`,
+    folderTag: (n: number) => `Folder · ${n === 1 ? '1 board' : `${n} boards`}`,
+    restore: 'Restore',
+    restoreLabel: (name: string) => `Restore ${name}`,
+    deleteForever: 'Delete forever',
+    deleteForeverLabel: (name: string) => `Delete ${name} forever`,
+    emptyTrash: 'Empty Trash',
+    confirmForeverTitle: (name: string) => `Delete “${name}” forever?`,
+    confirmForeverBody: (boards: number) => (boards
+      ? `The folder and its ${boards === 1 ? 'board' : `${boards} boards`} will be deleted for good. This can’t be undone.`
+      : 'It will be deleted for good. This can’t be undone.'),
+    confirmEmptyTitle: 'Empty Trash?',
+    confirmEmptyBody: (n: number) => `${n === 1 ? 'The item' : `All ${n} items`} in Trash will be deleted for good. This can’t be undone.`,
+    restored: (name: string) => `“${name}” restored`,
+    deleted: (name: string) => `“${name}” deleted for good`,
+    emptied: 'Trash emptied',
+    failed: "Couldn't delete everything. Please try again.",
+  },
 
   loading: 'Loading your boards…',
   loadError: "Couldn't read your boards. Your browser may be blocking storage, for example in a private window.",
   retry: 'Try again',
 
   toast: {
-    deleted: (title: string) => `“${title}” deleted`,
+    deleted: (title: string) => `“${title}” moved to Trash`,
+    moved: (title: string, folder: string | null) => (folder ? `Moved “${title}” to ${folder}` : `Moved “${title}” out of its folder`),
     undo: 'Undo',
     restored: (title: string) => `“${title}” restored`,
     duplicated: (title: string) => `Created “${title}”`,
@@ -49,7 +101,6 @@ export const copy = {
     createFailed: "Couldn't create the board. Your browser's storage may be full — try again, or delete a board you don't need.",
     duplicateFailed: "Couldn't duplicate the board. Your original is safe.",
     deleteFailed: "Couldn't delete the board. Please try again.",
-    undoTooLate: 'Too late to undo — the board was already removed.',
   },
 } as const;
 

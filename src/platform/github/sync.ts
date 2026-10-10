@@ -65,6 +65,8 @@ export function portableBoard(b: Board): Board {
   return {
     id: b.id, title: b.title, schemaVersion: b.schemaVersion, createdAt: b.createdAt, updatedAt: b.updatedAt,
     ...(b.templateId ? { templateId: b.templateId } : {}),
+    ...(b.folderId ? { folderId: b.folderId, folderName: b.folderName ?? '' } : {}),
+    ...(b.trashedAt !== undefined ? { trashedAt: b.trashedAt } : {}),
   };
 }
 
@@ -89,6 +91,8 @@ export function parseBoardFile(text: string, id: ID): BoardFile | null {
     id, title: b.title.slice(0, 200) || 'Untitled board', schemaVersion: isNum(b.schemaVersion) ? b.schemaVersion : 1,
     createdAt: b.createdAt, updatedAt: b.updatedAt,
     ...(typeof b.templateId === 'string' ? { templateId: b.templateId } : {}),
+    ...(typeof b.folderId === 'string' && b.folderId ? { folderId: b.folderId, folderName: typeof b.folderName === 'string' ? b.folderName.slice(0, 200) : '' } : {}),
+    ...(isNum(b.trashedAt) ? { trashedAt: b.trashedAt } : {}),
   };
   return { format: BOARD_FORMAT, version: BOARD_FORMAT_VERSION, board, doc: doc.value };
 }

@@ -2,6 +2,7 @@
 // engine in the background (after edits, on focus, when coming back online, on the dashboard).
 // Loaded lazily (App.tsx) and only when the feature is configured.
 import type { Board, ID } from '../../model/types';
+import { ensureFolder } from '../folders';
 import { deleteBoardMeta, getBoard, listBoards, restoreBoardMeta, subscribeBoards } from '../boardIndex';
 import { importBoard, pendingDeleteIds } from '../boards';
 import { BOARDS_REPO } from './config';
@@ -48,6 +49,7 @@ const localBoards: LocalBoards = {
   readDoc: async (id) => (await persistence()).readBoardDoc(id),
   async write(board: Board, doc) {
     await (await persistence()).writeInitialDoc(board.id, doc);
+    ensureFolder(board);
     restoreBoardMeta(board);
   },
   createCopy: (title, doc) => importBoard({ title, doc }),

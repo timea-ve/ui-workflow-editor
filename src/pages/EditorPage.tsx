@@ -7,6 +7,7 @@ import { EditorShell } from '../editor/EditorShell';
 import { PERF_BOARD_ID, buildPerfDoc } from '../editor/fixtures/perf60';
 import { STRESS_BOARD_ID, buildStressDoc } from '../editor/fixtures/stress';
 import { getBoard, renameBoard, subscribeBoards, touchBoard } from '../platform/boardIndex';
+import { getFolder, subscribeFolders } from '../platform/folders';
 import { githubEnabled } from '../platform/github/config';
 import { createMemoryStore } from '../store/boardStore';
 import { useBoardSession, useSaveState } from '../store/useBoardSession';
@@ -14,10 +15,15 @@ import '../editor/editor.css';
 
 const CloudStatus = githubEnabled ? lazy(() => import('../platform/github/ui/CloudStatus').then((m) => ({ default: m.CloudStatus }))) : null;
 
-function BackLink() {
+function BackLink({ boardId }: { boardId?: string }) {
+  // Back to the board's folder when it's in one.
+  const folderId = useSyncExternalStore(subscribeBoards, () => (boardId ? getBoard(boardId)?.folderId ?? null : null));
+  const folderName = useSyncExternalStore(subscribeFolders, () => (folderId ? getFolder(folderId)?.name ?? null : null));
+  const to = folderId && folderName ? `/folder/${folderId}` : '/';
+  const label = folderName ? `Back to ${folderName}` : 'Back to all boards';
   return (
-    <Tip label="All boards">
-      <Link to="/" className="fse-back" aria-label="Back to all boards">
+    <Tip label={folderName ?? 'All boards'}>
+      <Link to={to} className="fse-back" aria-label={label}>
         <ArrowLeft size={18} strokeWidth={1.75} aria-hidden />
       </Link>
     </Tip>
@@ -96,7 +102,7 @@ function BoardEditor({ boardId }: { boardId: string }) {
       onTitleChange={(t) => renameBoard(boardId, t)}
       saveStatus={saveState}
       cloudStatus={CloudStatus && <Suspense fallback={null}><CloudStatus boardId={boardId} localSaving={saveState === 'saving'} /></Suspense>}
-      leading={<BackLink />}
+      leading={<BackLink boardId={boardId} />}
     />
   );
 }
