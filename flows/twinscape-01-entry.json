@@ -1,0 +1,252 @@
+{
+  "name": "TwinScape 01 · Enter and choose a device",
+  "device": "desktop",
+  "screens": [
+    {
+      "id": "sign-in",
+      "name": "Sign-in",
+      "components": [
+        {
+          "type": "image",
+          "alt": "TwinScape logo"
+        },
+        {
+          "type": "heading",
+          "text": "Sign in to TwinScape",
+          "level": "H2",
+          "align": "center"
+        },
+        {
+          "type": "button",
+          "text": "My Bruker",
+          "goTo": "labs"
+        },
+        {
+          "type": "button",
+          "text": "Bruker employees"
+        },
+        {
+          "type": "button",
+          "text": "Demo"
+        }
+      ]
+    },
+    {
+      "id": "labs",
+      "name": "Your Labs",
+      "components": [
+        {
+          "type": "header",
+          "title": "TwinScape",
+          "links": "Home, Notifications",
+          "search": false,
+          "right": "avatar"
+        },
+        {
+          "type": "heading",
+          "text": "Your Labs",
+          "level": "H2"
+        },
+        {
+          "type": "caption",
+          "text": "Current list of lab memberships"
+        },
+        {
+          "type": "list",
+          "items": [
+            "Unnamed lab",
+            "Fällanden",
+            "Unnamed lab",
+            "MyDemoLab"
+          ],
+          "showAvatar": false
+        },
+        {
+          "type": "link",
+          "text": "Open MyDemoLab",
+          "goTo": "lab-view",
+          "linkLabel": "Open a lab"
+        }
+      ]
+    },
+    {
+      "id": "lab-view",
+      "name": "Lab view · MyDemoLab",
+      "components": [
+        {
+          "type": "header",
+          "title": "TwinScape",
+          "links": "Home, Notifications",
+          "search": false,
+          "right": "avatar"
+        },
+        {
+          "type": "sidebar",
+          "title": "MyDemoLab",
+          "items": [
+            "Instruments",
+            "Proteomics QC",
+            "Settings",
+            "Experiments (deprecated)"
+          ],
+          "active": 0
+        },
+        {
+          "type": "heading",
+          "text": "MyDemoLab",
+          "level": "H2"
+        },
+        {
+          "type": "text",
+          "text": "Mass spectrometers",
+          "size": "md"
+        },
+        {
+          "type": "table",
+          "columns": [
+            "Name",
+            "Serial",
+            "Location"
+          ],
+          "rows": 3
+        },
+        {
+          "type": "text",
+          "text": "LCs",
+          "size": "md"
+        },
+        {
+          "type": "table",
+          "columns": [
+            "Name",
+            "Serial",
+            "Location"
+          ],
+          "rows": 1
+        },
+        {
+          "type": "link",
+          "text": "Open a device",
+          "goTo": "device-type"
+        }
+      ]
+    },
+    {
+      "id": "ms-overview",
+      "name": "MS overview · GG-TOF_Pro_2",
+      "components": [
+        {
+          "type": "header",
+          "title": "TwinScape",
+          "links": "Home, Notifications",
+          "search": false,
+          "right": "avatar"
+        },
+        {
+          "type": "sidebar",
+          "title": "GG-TOF_Pro_2",
+          "items": [
+            "Overview",
+            "Hardware Diagnostics",
+            "Readback Values",
+            "Software",
+            "Settings",
+            "Thresholds",
+            "Notifications"
+          ],
+          "active": 0
+        },
+        {
+          "type": "heading",
+          "text": "GG-TOF_Pro_2",
+          "level": "H2"
+        },
+        {
+          "type": "caption",
+          "text": "#1893751.10757 · in Fällanden › MyDemoLab"
+        },
+        {
+          "type": "list",
+          "items": [
+            "Readback · No data",
+            "Calibration · No data",
+            "Hardware Diagnostics · No data",
+            "TwinScape · 2 years ago"
+          ],
+          "showAvatar": false
+        },
+        {
+          "type": "line-chart",
+          "title": "Mass calibration",
+          "shape": "rising",
+          "legend": "Last update 1 minute ago"
+        }
+      ]
+    },
+    {
+      "id": "lc-overview",
+      "name": "LC overview · nano LC SN0004",
+      "components": [
+        {
+          "type": "header",
+          "title": "TwinScape",
+          "links": "Home, Notifications",
+          "search": false,
+          "right": "avatar"
+        },
+        {
+          "type": "sidebar",
+          "title": "nano LC SN0004",
+          "items": [
+            "Overview",
+            "Procedures",
+            "Telemetry",
+            "Settings"
+          ],
+          "active": 0
+        },
+        {
+          "type": "heading",
+          "text": "nano LC SN0004",
+          "level": "H2"
+        },
+        {
+          "type": "caption",
+          "text": "nanoElute#NRLP04 · Fällanden › MyDemoLab"
+        },
+        {
+          "type": "list",
+          "items": [
+            "Leak test · No data",
+            "Self check · No data",
+            "Flow restriction test · No data",
+            "Preparation · No data"
+          ],
+          "showAvatar": false
+        },
+        {
+          "type": "line-chart",
+          "title": "Leak test",
+          "shape": "flat",
+          "legend": "2026-09-27 – 2026-10-01"
+        }
+      ]
+    }
+  ],
+  "decisions": [
+    {
+      "id": "device-type",
+      "text": "Device type?",
+      "yes": "ms-overview",
+      "no": "lc-overview",
+      "yesLabel": "MS",
+      "noLabel": "LC"
+    }
+  ],
+  "notes": [
+    {
+      "text": "Observed navigation from sign-in to the MS or LC overview. Evidence: sign-in · Your Labs · MyDemoLab · device overviews (v1.9.26)",
+      "near": "sign-in"
+    }
+  ]
+}

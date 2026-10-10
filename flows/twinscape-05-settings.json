@@ -1,0 +1,134 @@
+{
+  "name": "TwinScape 05 · Account and lab settings",
+  "device": "desktop",
+  "screens": [
+    {
+      "id": "interface",
+      "name": "User settings · Interface",
+      "components": [
+        {
+          "type": "header",
+          "title": "TwinScape",
+          "links": "Home, Notifications",
+          "search": false,
+          "right": "avatar"
+        },
+        {
+          "type": "heading",
+          "text": "Interface settings",
+          "level": "H2"
+        },
+        {
+          "type": "text",
+          "text": "Your timezone is set to: Browser default",
+          "tone": "muted"
+        },
+        {
+          "type": "checkbox",
+          "label": "Set timezone manually"
+        },
+        {
+          "type": "dropdown",
+          "label": "Timezone",
+          "items": [
+            "Browser default"
+          ]
+        },
+        {
+          "type": "button",
+          "text": "Save changes"
+        },
+        {
+          "type": "link",
+          "text": "Your lab memberships",
+          "goTo": "memberships",
+          "linkLabel": "Access"
+        },
+        {
+          "type": "link",
+          "text": "API keys",
+          "goTo": "api-keys",
+          "linkLabel": "Credentials"
+        }
+      ]
+    },
+    {
+      "id": "memberships",
+      "name": "User settings · Lab memberships",
+      "components": [
+        {
+          "type": "header",
+          "title": "TwinScape",
+          "links": "Home, Notifications",
+          "search": false,
+          "right": "avatar"
+        },
+        {
+          "type": "heading",
+          "text": "Your lab memberships",
+          "level": "H2"
+        },
+        {
+          "type": "list",
+          "items": [
+            "Unnamed lab",
+            "Fällanden",
+            "Unnamed lab",
+            "MyDemoLab"
+          ],
+          "showAvatar": false
+        },
+        {
+          "type": "input",
+          "label": "Create a new lab",
+          "placeholder": "Lab name"
+        },
+        {
+          "type": "button",
+          "text": "Create"
+        }
+      ]
+    },
+    {
+      "id": "api-keys",
+      "name": "User settings · API keys",
+      "components": [
+        {
+          "type": "header",
+          "title": "TwinScape",
+          "links": "Home, Notifications",
+          "search": false,
+          "right": "avatar"
+        },
+        {
+          "type": "heading",
+          "text": "API keys",
+          "level": "H2"
+        },
+        {
+          "type": "table",
+          "columns": [
+            "Key ID"
+          ],
+          "rows": 1
+        },
+        {
+          "type": "input",
+          "label": "Key ID",
+          "placeholder": "Generate new key",
+          "helper": "Key IDs must be unique and at least 3 characters."
+        },
+        {
+          "type": "button",
+          "text": "Generate"
+        }
+      ]
+    }
+  ],
+  "notes": [
+    {
+      "text": "One account-level page with three sections. Save changes, Create and Generate are available — not exercised.",
+      "near": "interface"
+    }
+  ]
+}

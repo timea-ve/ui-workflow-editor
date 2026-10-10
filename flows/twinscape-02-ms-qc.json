@@ -1,0 +1,302 @@
+{
+  "name": "TwinScape 02 · Review MS status and QC",
+  "device": "desktop",
+  "screens": [
+    {
+      "id": "lab-view",
+      "name": "Lab view · MyDemoLab",
+      "components": [
+        {
+          "type": "header",
+          "title": "TwinScape",
+          "links": "Home, Notifications",
+          "search": false,
+          "right": "avatar"
+        },
+        {
+          "type": "sidebar",
+          "title": "MyDemoLab",
+          "items": [
+            "Instruments",
+            "Proteomics QC",
+            "Settings",
+            "Experiments (deprecated)"
+          ],
+          "active": 0
+        },
+        {
+          "type": "heading",
+          "text": "MyDemoLab",
+          "level": "H2"
+        },
+        {
+          "type": "text",
+          "text": "Mass spectrometers",
+          "size": "md"
+        },
+        {
+          "type": "table",
+          "columns": [
+            "Name",
+            "Serial",
+            "Location"
+          ],
+          "rows": 3
+        },
+        {
+          "type": "text",
+          "text": "LCs",
+          "size": "md"
+        },
+        {
+          "type": "table",
+          "columns": [
+            "Name",
+            "Serial",
+            "Location"
+          ],
+          "rows": 1
+        },
+        {
+          "type": "link",
+          "text": "Choose review scope",
+          "goTo": "scope"
+        }
+      ]
+    },
+    {
+      "id": "qc-runs",
+      "name": "Proteomics QC runs",
+      "components": [
+        {
+          "type": "header",
+          "title": "TwinScape",
+          "links": "Home, Notifications",
+          "search": false,
+          "right": "avatar"
+        },
+        {
+          "type": "sidebar",
+          "title": "MyDemoLab",
+          "items": [
+            "Instruments",
+            "Proteomics QC",
+            "Settings",
+            "Experiments (deprecated)"
+          ],
+          "active": 1
+        },
+        {
+          "type": "heading",
+          "text": "Proteomics QC runs",
+          "level": "H2"
+        },
+        {
+          "type": "dropdown",
+          "label": "Range",
+          "items": [
+            "Last 4 weeks",
+            "Last 6 months",
+            "All data"
+          ]
+        },
+        {
+          "type": "line-chart",
+          "title": "QC runs",
+          "shape": "flat",
+          "legend": "Last 4 weeks"
+        },
+        {
+          "type": "link",
+          "text": "See result",
+          "goTo": "no-runs",
+          "linkLabel": "Current captured state"
+        }
+      ]
+    },
+    {
+      "id": "no-runs",
+      "name": "No runs in selected range",
+      "components": [
+        {
+          "type": "header",
+          "title": "TwinScape",
+          "links": "Home, Notifications",
+          "search": false,
+          "right": "avatar"
+        },
+        {
+          "type": "sidebar",
+          "title": "MyDemoLab",
+          "items": [
+            "Instruments",
+            "Proteomics QC",
+            "Settings",
+            "Experiments (deprecated)"
+          ],
+          "active": 1
+        },
+        {
+          "type": "heading",
+          "text": "Proteomics QC runs",
+          "level": "H2"
+        },
+        {
+          "type": "dropdown",
+          "label": "Range",
+          "items": [
+            "Last 4 weeks",
+            "Last 6 months",
+            "All data"
+          ]
+        },
+        {
+          "type": "toast",
+          "title": "No runs in selected range",
+          "kind": "info"
+        },
+        {
+          "type": "button",
+          "text": "Load more data",
+          "variant": "secondary"
+        }
+      ]
+    },
+    {
+      "id": "ms-overview",
+      "name": "MS overview · GG-TOF_Pro_2",
+      "components": [
+        {
+          "type": "header",
+          "title": "TwinScape",
+          "links": "Home, Notifications",
+          "search": false,
+          "right": "avatar"
+        },
+        {
+          "type": "sidebar",
+          "title": "GG-TOF_Pro_2",
+          "items": [
+            "Overview",
+            "Hardware Diagnostics",
+            "Readback Values",
+            "Software",
+            "Settings",
+            "Thresholds",
+            "Notifications"
+          ],
+          "active": 0
+        },
+        {
+          "type": "heading",
+          "text": "GG-TOF_Pro_2",
+          "level": "H2"
+        },
+        {
+          "type": "caption",
+          "text": "#1893751.10757 · in Fällanden › MyDemoLab"
+        },
+        {
+          "type": "list",
+          "items": [
+            "Readback · No data",
+            "Calibration · No data",
+            "Hardware Diagnostics · No data",
+            "TwinScape · 2 years ago"
+          ],
+          "showAvatar": false
+        },
+        {
+          "type": "line-chart",
+          "title": "Mass calibration",
+          "shape": "rising",
+          "legend": "Last update 1 minute ago"
+        },
+        {
+          "type": "link",
+          "text": "Thresholds",
+          "goTo": "thresholds"
+        }
+      ]
+    },
+    {
+      "id": "thresholds",
+      "name": "Thresholds",
+      "components": [
+        {
+          "type": "header",
+          "title": "TwinScape",
+          "links": "Home, Notifications",
+          "search": false,
+          "right": "avatar"
+        },
+        {
+          "type": "sidebar",
+          "title": "GG-TOF_Pro_2",
+          "items": [
+            "Overview",
+            "Hardware Diagnostics",
+            "Readback Values",
+            "Software",
+            "Settings",
+            "Thresholds",
+            "Notifications"
+          ],
+          "active": 5
+        },
+        {
+          "type": "heading",
+          "text": "GG-TOF_Pro_2",
+          "level": "H2"
+        },
+        {
+          "type": "caption",
+          "text": "#1893751.10757 · in Fällanden › MyDemoLab"
+        },
+        {
+          "type": "tabs",
+          "items": [
+            "Metabolomics QC"
+          ]
+        },
+        {
+          "type": "table",
+          "columns": [
+            "Field",
+            "Lower",
+            "Upper"
+          ],
+          "rows": 3
+        },
+        {
+          "type": "caption",
+          "text": "Error ppm · Retention time · CCS error"
+        }
+      ]
+    }
+  ],
+  "decisions": [
+    {
+      "id": "scope",
+      "text": "Review scope?",
+      "yes": "qc-runs",
+      "no": "ms-overview",
+      "yesLabel": "Lab QC",
+      "noLabel": "Device"
+    }
+  ],
+  "notes": [
+    {
+      "text": "Lab-level QC and device-level thresholds are separate branches.",
+      "near": "lab-view"
+    },
+    {
+      "text": "Load more data (last 6 months · all data) is available — not exercised.",
+      "near": "no-runs"
+    },
+    {
+      "text": "Review three fields: Error ppm · Retention time · CCS error. Labels verified.",
+      "near": "thresholds"
+    }
+  ]
+}

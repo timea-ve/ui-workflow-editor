@@ -1,0 +1,116 @@
+{
+  "name": "TwinScape 04 · Notifications and invitations",
+  "device": "desktop",
+  "screens": [
+    {
+      "id": "notifications",
+      "name": "Notifications",
+      "components": [
+        {
+          "type": "header",
+          "title": "TwinScape",
+          "links": "Home, Notifications",
+          "search": false,
+          "right": "avatar"
+        },
+        {
+          "type": "heading",
+          "text": "Notifications",
+          "level": "H2"
+        },
+        {
+          "type": "list",
+          "items": [
+            "Invitation to access the lab 'Fällanden'",
+            "New invitation",
+            "New invitation",
+            "Invitation to access the lab 'MyDemoLab'"
+          ],
+          "showAvatar": false
+        },
+        {
+          "type": "link",
+          "text": "Open an invitation",
+          "goTo": "invite-state"
+        }
+      ]
+    },
+    {
+      "id": "invite-active",
+      "name": "Invitation · active",
+      "components": [
+        {
+          "type": "header",
+          "title": "TwinScape",
+          "links": "Home, Notifications",
+          "search": false,
+          "right": "avatar"
+        },
+        {
+          "type": "heading",
+          "text": "Review additional access",
+          "level": "H2"
+        },
+        {
+          "type": "card",
+          "title": "LC nano LC SN183793470646",
+          "body": "New role: Editor",
+          "hasImage": false
+        },
+        {
+          "type": "button",
+          "text": "Accept"
+        },
+        {
+          "type": "link",
+          "text": "Back to notifications",
+          "goTo": "notifications"
+        }
+      ]
+    },
+    {
+      "id": "invite-expired",
+      "name": "Invitation · unknown or expired",
+      "components": [
+        {
+          "type": "header",
+          "title": "TwinScape",
+          "links": "Home, Notifications",
+          "search": false,
+          "right": "avatar"
+        },
+        {
+          "type": "heading",
+          "text": "Invitation",
+          "level": "H2"
+        },
+        {
+          "type": "toast",
+          "title": "This invite is unknown or expired",
+          "kind": "error"
+        },
+        {
+          "type": "link",
+          "text": "Back to notifications",
+          "goTo": "notifications"
+        }
+      ]
+    }
+  ],
+  "decisions": [
+    {
+      "id": "invite-state",
+      "text": "Invitation state?",
+      "yes": "invite-active",
+      "no": "invite-expired",
+      "yesLabel": "Active",
+      "noLabel": "Expired"
+    }
+  ],
+  "notes": [
+    {
+      "text": "Accept is available — intentionally not selected; outcome not claimed.",
+      "near": "invite-active"
+    }
+  ]
+}

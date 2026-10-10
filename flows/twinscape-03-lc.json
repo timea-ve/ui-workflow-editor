@@ -1,0 +1,241 @@
+{
+  "name": "TwinScape 03 · Review an LC and its detail",
+  "device": "desktop",
+  "screens": [
+    {
+      "id": "lc-overview",
+      "name": "LC overview · nano LC SN0004",
+      "components": [
+        {
+          "type": "header",
+          "title": "TwinScape",
+          "links": "Home, Notifications",
+          "search": false,
+          "right": "avatar"
+        },
+        {
+          "type": "sidebar",
+          "title": "nano LC SN0004",
+          "items": [
+            "Overview",
+            "Procedures",
+            "Telemetry",
+            "Settings"
+          ],
+          "active": 0
+        },
+        {
+          "type": "heading",
+          "text": "nano LC SN0004",
+          "level": "H2"
+        },
+        {
+          "type": "caption",
+          "text": "nanoElute#NRLP04 · Fällanden › MyDemoLab"
+        },
+        {
+          "type": "list",
+          "items": [
+            "Leak test · No data",
+            "Self check · No data",
+            "Flow restriction test · No data",
+            "Preparation · No data"
+          ],
+          "showAvatar": false
+        },
+        {
+          "type": "line-chart",
+          "title": "Leak test",
+          "shape": "flat",
+          "legend": "2026-09-27 – 2026-10-01"
+        },
+        {
+          "type": "link",
+          "text": "Procedures",
+          "goTo": "procedures",
+          "linkLabel": "Tests"
+        },
+        {
+          "type": "link",
+          "text": "Telemetry",
+          "goTo": "telemetry",
+          "linkLabel": "Signals"
+        },
+        {
+          "type": "link",
+          "text": "Settings",
+          "goTo": "lc-settings",
+          "linkLabel": "Access"
+        }
+      ]
+    },
+    {
+      "id": "procedures",
+      "name": "Procedures",
+      "components": [
+        {
+          "type": "header",
+          "title": "TwinScape",
+          "links": "Home, Notifications",
+          "search": false,
+          "right": "avatar"
+        },
+        {
+          "type": "sidebar",
+          "title": "nano LC SN0004",
+          "items": [
+            "Overview",
+            "Procedures",
+            "Telemetry",
+            "Settings"
+          ],
+          "active": 1
+        },
+        {
+          "type": "heading",
+          "text": "nano LC SN0004",
+          "level": "H2"
+        },
+        {
+          "type": "caption",
+          "text": "nanoElute#NRLP04 · Fällanden › MyDemoLab"
+        },
+        {
+          "type": "tabs",
+          "items": [
+            "FR route 1",
+            "Route 2",
+            "Route 3"
+          ]
+        },
+        {
+          "type": "line-chart",
+          "title": "Leak test",
+          "shape": "flat"
+        },
+        {
+          "type": "table",
+          "columns": [
+            "Metric",
+            "Value",
+            "Date"
+          ],
+          "rows": 3
+        }
+      ]
+    },
+    {
+      "id": "telemetry",
+      "name": "Telemetry",
+      "components": [
+        {
+          "type": "header",
+          "title": "TwinScape",
+          "links": "Home, Notifications",
+          "search": false,
+          "right": "avatar"
+        },
+        {
+          "type": "sidebar",
+          "title": "nano LC SN0004",
+          "items": [
+            "Overview",
+            "Procedures",
+            "Telemetry",
+            "Settings"
+          ],
+          "active": 2
+        },
+        {
+          "type": "heading",
+          "text": "nano LC SN0004",
+          "level": "H2"
+        },
+        {
+          "type": "caption",
+          "text": "nanoElute#NRLP04 · Fällanden › MyDemoLab"
+        },
+        {
+          "type": "line-chart",
+          "title": "Valve shifts",
+          "shape": "wave"
+        },
+        {
+          "type": "line-chart",
+          "title": "Preparation",
+          "shape": "flat"
+        },
+        {
+          "type": "table",
+          "columns": [
+            "Flow factor",
+            "Test value"
+          ],
+          "rows": 2
+        }
+      ]
+    },
+    {
+      "id": "lc-settings",
+      "name": "LC settings",
+      "components": [
+        {
+          "type": "header",
+          "title": "TwinScape",
+          "links": "Home, Notifications",
+          "search": false,
+          "right": "avatar"
+        },
+        {
+          "type": "sidebar",
+          "title": "nano LC SN0004",
+          "items": [
+            "Overview",
+            "Procedures",
+            "Telemetry",
+            "Settings"
+          ],
+          "active": 3
+        },
+        {
+          "type": "heading",
+          "text": "nano LC SN0004",
+          "level": "H2"
+        },
+        {
+          "type": "caption",
+          "text": "nanoElute#NRLP04 · Fällanden › MyDemoLab"
+        },
+        {
+          "type": "tabs",
+          "items": [
+            "General",
+            "Access rights"
+          ]
+        },
+        {
+          "type": "input",
+          "label": "Name",
+          "state": "disabled"
+        },
+        {
+          "type": "input",
+          "label": "Location",
+          "state": "disabled"
+        },
+        {
+          "type": "toast",
+          "title": "Observer role",
+          "message": "Values cannot be changed.",
+          "kind": "warning"
+        }
+      ]
+    }
+  ],
+  "notes": [
+    {
+      "text": "Observer role and no-data state verified.",
+      "near": "lc-overview"
+    }
+  ]
+}

@@ -177,6 +177,21 @@ describe('flow spec → board: details', () => {
     expect(notFound.y).toBeGreaterThan(sent.y);
   });
 
+  it('pins a desktop sidebar to the left under the header and stacks content beside it', () => {
+    const doc = build({ name: 'App', device: 'desktop', screens: [{ id: 'a', components: [
+      { type: 'header', title: 'App' }, { type: 'sidebar', items: ['One', 'Two'] }, { type: 'heading', text: 'Page' }, { type: 'table' },
+    ] }] });
+    const kids = Object.values(doc.elements).filter((e) => e.parentId);
+    const by = (t: string) => kids.find((e) => e.type === t)!;
+    const frame = Object.values(doc.frames)[0];
+    const [header, sidebar, heading, table] = [by('header'), by('sidebar'), by('heading'), by('table')];
+    expect(sidebar.x).toBe(0);
+    expect(sidebar.y).toBe(header.y + header.h);
+    expect(sidebar.y + sidebar.h).toBe(frame.h);
+    for (const c of [heading, table]) expect(c.x).toBeGreaterThanOrEqual(sidebar.w);
+    expect(table.w).toBeGreaterThan(560);
+  });
+
   it('maps text, items and known props; drops invalid select values', () => {
     const doc = build({
       name: 'Props', screens: [{ id: 'a', components: [

@@ -1,0 +1,244 @@
+{
+  "name": "TwinScape 06 · Inspect service and diagnostics",
+  "device": "desktop",
+  "screens": [
+    {
+      "id": "ms-overview",
+      "name": "MS overview · GG-TOF_Pro_2",
+      "components": [
+        {
+          "type": "header",
+          "title": "TwinScape",
+          "links": "Home, Notifications",
+          "search": false,
+          "right": "avatar"
+        },
+        {
+          "type": "sidebar",
+          "title": "GG-TOF_Pro_2",
+          "items": [
+            "Overview",
+            "Hardware Diagnostics",
+            "Readback Values",
+            "Software",
+            "Settings",
+            "Thresholds",
+            "Notifications"
+          ],
+          "active": 0
+        },
+        {
+          "type": "heading",
+          "text": "GG-TOF_Pro_2",
+          "level": "H2"
+        },
+        {
+          "type": "caption",
+          "text": "#1893751.10757 · in Fällanden › MyDemoLab"
+        },
+        {
+          "type": "list",
+          "items": [
+            "Readback · No data",
+            "Calibration · No data",
+            "Hardware Diagnostics · No data",
+            "TwinScape · 2 years ago"
+          ],
+          "showAvatar": false
+        },
+        {
+          "type": "line-chart",
+          "title": "Mass calibration",
+          "shape": "rising",
+          "legend": "Last update 1 minute ago"
+        },
+        {
+          "type": "link",
+          "text": "Readback Values",
+          "goTo": "readbacks",
+          "linkLabel": "Readbacks"
+        },
+        {
+          "type": "link",
+          "text": "Hardware Diagnostics",
+          "goTo": "diagnostics",
+          "linkLabel": "Scores"
+        },
+        {
+          "type": "link",
+          "text": "Software",
+          "goTo": "software",
+          "linkLabel": "Versions"
+        }
+      ]
+    },
+    {
+      "id": "readbacks",
+      "name": "Readback values",
+      "components": [
+        {
+          "type": "header",
+          "title": "TwinScape",
+          "links": "Home, Notifications",
+          "search": false,
+          "right": "avatar"
+        },
+        {
+          "type": "sidebar",
+          "title": "GG-TOF_Pro_2",
+          "items": [
+            "Overview",
+            "Hardware Diagnostics",
+            "Readback Values",
+            "Software",
+            "Settings",
+            "Thresholds",
+            "Notifications"
+          ],
+          "active": 2
+        },
+        {
+          "type": "heading",
+          "text": "GG-TOF_Pro_2",
+          "level": "H2"
+        },
+        {
+          "type": "caption",
+          "text": "#1893751.10757 · in Fällanden › MyDemoLab"
+        },
+        {
+          "type": "line-chart",
+          "title": "Device temperatures (°C)",
+          "shape": "flat",
+          "legend": "Last 15 minutes"
+        },
+        {
+          "type": "line-chart",
+          "title": "TIMS In (mBar)",
+          "shape": "falling",
+          "legend": "Last 15 minutes"
+        },
+        {
+          "type": "caption",
+          "text": "Also: Vacuum · TIMS Out · TOF · Collision gas · Turbo pumps · Power · Speed"
+        }
+      ]
+    },
+    {
+      "id": "diagnostics",
+      "name": "Hardware diagnostics",
+      "components": [
+        {
+          "type": "header",
+          "title": "TwinScape",
+          "links": "Home, Notifications",
+          "search": false,
+          "right": "avatar"
+        },
+        {
+          "type": "sidebar",
+          "title": "GG-TOF_Pro_2",
+          "items": [
+            "Overview",
+            "Hardware Diagnostics",
+            "Readback Values",
+            "Software",
+            "Settings",
+            "Thresholds",
+            "Notifications"
+          ],
+          "active": 1
+        },
+        {
+          "type": "heading",
+          "text": "GG-TOF_Pro_2",
+          "level": "H2"
+        },
+        {
+          "type": "caption",
+          "text": "#1893751.10757 · in Fällanden › MyDemoLab"
+        },
+        {
+          "type": "line-chart",
+          "title": "Funnel 2 performance",
+          "shape": "wave"
+        },
+        {
+          "type": "list",
+          "items": [
+            "Collision cell",
+            "Quadrupole",
+            "QIE",
+            "Content index"
+          ],
+          "showAvatar": false
+        },
+        {
+          "type": "badge",
+          "label": "Funnel validation within specification",
+          "variant": "soft"
+        }
+      ]
+    },
+    {
+      "id": "software",
+      "name": "Installed software",
+      "components": [
+        {
+          "type": "header",
+          "title": "TwinScape",
+          "links": "Home, Notifications",
+          "search": false,
+          "right": "avatar"
+        },
+        {
+          "type": "sidebar",
+          "title": "GG-TOF_Pro_2",
+          "items": [
+            "Overview",
+            "Hardware Diagnostics",
+            "Readback Values",
+            "Software",
+            "Settings",
+            "Thresholds",
+            "Notifications"
+          ],
+          "active": 3
+        },
+        {
+          "type": "heading",
+          "text": "GG-TOF_Pro_2",
+          "level": "H2"
+        },
+        {
+          "type": "caption",
+          "text": "#1893751.10757 · in Fällanden › MyDemoLab"
+        },
+        {
+          "type": "table",
+          "columns": [
+            "Component",
+            "Version"
+          ],
+          "rows": 3
+        },
+        {
+          "type": "text",
+          "text": "timsControl setup 5.1.8 · TwinScape service 1.4.5 · otofControl 6.2.9.1",
+          "size": "sm",
+          "tone": "muted"
+        },
+        {
+          "type": "caption",
+          "text": "Last update shown: 2024-09-08 17:06"
+        }
+      ]
+    }
+  ],
+  "notes": [
+    {
+      "text": "Inspection only in the captured role — no repair, update or destructive action was exercised.",
+      "near": "ms-overview"
+    }
+  ]
+}

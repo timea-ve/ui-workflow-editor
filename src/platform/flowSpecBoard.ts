@@ -4,7 +4,8 @@
 // Layout: screens run left→right in flow order (breadth-first from the first screen); branches go on
 // new rows. Decisions sit in the gap under the screen they follow; notes sit above their screen.
 // Components stack top→bottom inside each screen (headers pinned to the top, tab bars to the bottom,
-// and on phones/tablets the closing buttons/links to the bottom, like the templates).
+// and on phones/tablets the closing buttons/links to the bottom, like the templates). On desktop a
+// `sidebar` pins to the left under the header and the rest stacks in a wider column beside it.
 import { nanoid } from 'nanoid';
 import { DEVICE_SIZES, type BoardDoc, type Device, type ElementType, type ID } from '../model/types';
 import { LANE_GAP, SCREEN_GAP, addConnector, addElement, boundsOf, createScreen, emptyDoc, linkElementToScreen, zAfter } from '../flow/ops';
@@ -18,6 +19,9 @@ const LAYOUT: Record<Device, { top: number; bottom: number; margin: number; maxW
   desktop: { top: 44, bottom: 0, margin: 64, maxW: 560 },
 };
 const GAP = 16;
+const SIDEBAR_W = 240;
+const SIDEBAR_GUTTER = 48;
+const SIDEBAR_CONTENT_MAX_W = 880;
 const TIGHT_GAP = 8;
 const EDGE = 24;
 const DIAMOND = { w: 160, h: 110, gap: 20, top: 40 };
@@ -272,8 +276,13 @@ interface Placed { type: ElementType; x: number; y: number; w: number; h: number
 function placeComponents(screen: NormScreen, device: Device, at: string, warnings: string[]): Placed[] {
   const frame = DEVICE_SIZES[device];
   const L = LAYOUT[device];
-  const cw = Math.min(frame.w - 2 * L.margin, L.maxW);
-  const cx = Math.round((frame.w - cw) / 2);
+  // Desktop app layout: a sidebar pins to the left under the header; content fills a wider column on the right.
+  const hasSidebar = device === 'desktop' && screen.components.some((c) => c.type === 'sidebar');
+  const contentLeft = hasSidebar ? SIDEBAR_W + SIDEBAR_GUTTER : 0;
+  const cw = hasSidebar
+    ? Math.min(frame.w - contentLeft - SIDEBAR_GUTTER, SIDEBAR_CONTENT_MAX_W)
+    : Math.min(frame.w - 2 * L.margin, L.maxW);
+  const cx = hasSidebar ? contentLeft : Math.round((frame.w - cw) / 2);
 
   let primaryUsed = false;
   const items = screen.components.map((c) => {
@@ -302,7 +311,14 @@ function placeComponents(screen: NormScreen, device: Device, at: string, warning
     bodyBottom = n.y - EDGE;
   }
 
-  const flow = items.filter((_, i) => i !== headerIdx && i !== navIdx);
+  const sidebarIdx = hasSidebar ? items.findIndex((i) => i.c.type === 'sidebar') : -1;
+  if (sidebarIdx >= 0) {
+    const sb = items[sidebarIdx];
+    const top = headerIdx >= 0 ? bodyTop - EDGE : L.top;
+    Object.assign(sb, { x: 0, y: top, w: SIDEBAR_W, h: frame.h - L.bottom - top });
+  }
+
+  const flow = items.filter((_, i) => i !== headerIdx && i !== navIdx && i !== sidebarIdx);
   // Closing actions (a trailing run of buttons/links) go to the bottom on phones and tablets.
   let footer: typeof flow = [];
   if (device !== 'desktop') {
@@ -333,7 +349,7 @@ function placeComponents(screen: NormScreen, device: Device, at: string, warning
   let y = bodyTop;
   for (const i of stack) {
     i.y = Math.min(y, frame.h - L.bottom - i.h);
-    i.x = i.centered ? Math.round((frame.w - i.w) / 2) : cx;
+    i.x = i.centered ? cx + Math.round((cw - i.w) / 2) : cx;
     y += i.h + gap;
   }
   let fy = bodyBottom - height(footer, TIGHT_GAP + 4);

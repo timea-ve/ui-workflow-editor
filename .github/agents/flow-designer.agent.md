@@ -139,7 +139,7 @@ Not clickable in Play (a `goTo` on them is ignored with a warning): heading, cap
 
 **Icon names**: alert, arrow-left, arrow-right, bell, bookmark, calendar, camera, cart, check, chevron-down, chevron-left, chevron-right, chevron-up, circle, clock, close, cloud, copy, credit-card, download, edit, eye, file, filter, flag, folder, gift, globe, grid, heart, help, home, image, info, link, list, lock, log-out, mail, map, map-pin, menu, message, mic, minus, more, more-vertical, music, phone, play, plus, search, send, settings, share, shopping-bag, sliders, square, star, sun, tag, thumbs-up, trash, upload, user, users, video, wifi, zap.
 
-Layout is automatic: screens go left to right in the order Play reaches them, branches on new rows, decisions below the screen they follow. A `header` sticks to the top, a `nav` to the bottom, and on mobile the last buttons/links of a screen sit at the bottom like a real app.
+Layout is automatic: screens go left to right in the order Play reaches them, branches on new rows, decisions below the screen they follow. A `header` sticks to the top, a `nav` to the bottom, on desktop a `sidebar` pins to the left under the header (content stacks in a wider column beside it), and on mobile the last buttons/links of a screen sit at the bottom like a real app.
 
 ## Complete example
 
