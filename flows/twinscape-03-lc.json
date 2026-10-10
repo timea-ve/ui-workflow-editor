@@ -232,7 +232,7 @@
   ],
   "notes": [
     {
-      "text": "LC device pages render blank on v2.7.34 (2 LCs tried). Screens kept from v1.9.26; only header and names updated. Re-check when LC pages load.",
+      "text": "LC device pages render blank on v2.7.34 (2 LCs tried). Screens kept from v1.9.26; only header and names updated. Re-check when LC pages load.      ",
       "near": "lc-overview"
     }
   ]
