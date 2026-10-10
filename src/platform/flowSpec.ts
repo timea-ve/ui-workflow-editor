@@ -20,9 +20,20 @@ export interface FlowSpecComponent {
   goTo?: string;
   /** Optional label on the arrow drawn for `goTo`. */
   linkLabel?: string;
+  /**
+   * Which part of the component `goTo` is on: an item label or 1-based number ("Settings", 2), or
+   * { "row": 1 } / { "column": "Status" } / both for a table. Without it the whole component is highlighted.
+   */
+  tap?: FlowSpecTap;
+  /** Several tappable parts of one component, each with its own target, e.g. three sidebar items. */
+  taps?: (Exclude<FlowSpecTap, string | number> & { goTo: string; linkLabel?: string })[];
+  /** "right": on desktop, sits in a column on the right of the content (e.g. an in-page "Contents" list). */
+  side?: 'right';
   /** Any other kit prop (e.g. "placeholder", "variant", "level"). Unknown props are ignored. */
   [prop: string]: unknown;
 }
+
+export type FlowSpecTap = string | number | { item?: string | number; row?: string | number; column?: string | number };
 
 export interface FlowSpecScreen {
   id: string;
@@ -81,8 +92,26 @@ export interface NormComponent {
   fields: Record<string, unknown>;
   goTo?: string;
   linkLabel?: string;
+  /** Part of the component that `goTo` is on (absent: the whole component). */
+  tap?: TapTarget;
+  /** Extra tappable parts, each with its own target. */
+  taps?: NormTap[];
+  /** Placed in a right-hand column on desktop. */
+  side?: 'right';
   /** The type as written, when it wasn't recognised (rendered as a text placeholder). */
   unknownType?: string;
+}
+
+/** A part of a component: item label/number, or table row number and/or column name/number. */
+export interface TapTarget { item?: string; row?: string; column?: string }
+export interface NormTap { goTo: string; linkLabel?: string; tap?: TapTarget }
+
+/** Every link that starts on a component: its `goTo` (with `tap`) plus each of its `taps`. */
+export function linksOf(c: NormComponent): NormTap[] {
+  return [
+    ...(c.goTo ? [{ goTo: c.goTo, ...(c.linkLabel ? { linkLabel: c.linkLabel } : {}), ...(c.tap ? { tap: c.tap } : {}) }] : []),
+    ...(c.taps ?? []),
+  ];
 }
 
 export interface NormScreen { id: string; name: string; components: NormComponent[]; next?: string; nextLabel?: string }
@@ -102,7 +131,7 @@ export const KIT_TYPES = [
   'header', 'nav', 'button', 'input', 'checkbox', 'toggle', 'dropdown', 'card', 'list', 'table', 'image', 'text',
   'heading', 'modal', 'tabs', 'icon', 'caption', 'link', 'icon-button', 'fab', 'textarea', 'search', 'radio', 'slider',
   'datepicker', 'sidebar', 'menu', 'breadcrumbs', 'pagination', 'video', 'avatar', 'calendar', 'line-chart',
-  'stacked-chart', 'divider', 'tooltip', 'toast', 'badge', 'progress', 'spinner',
+  'stacked-chart', 'divider', 'tooltip', 'toast', 'badge', 'progress', 'spinner', 'hotspot',
   'rect', 'diamond', 'ellipse', 'sticky', 'label',
 ] as const satisfies readonly ElementType[];
 
@@ -165,12 +194,26 @@ export const LIMITS = { screens: 40, components: 30, decisions: 40, notes: 40, o
 const DEVICES: Device[] = ['mobile', 'tablet', 'desktop'];
 const LETTERS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
 /** Keys that steer layout/links rather than becoming kit props. */
-const STRUCTURAL = new Set(['type', 'goTo', 'goto', 'linkLabel']);
+const STRUCTURAL = new Set(['type', 'goTo', 'goto', 'linkLabel', 'tap', 'taps', 'side']);
 
 const isObj = (v: unknown): v is Record<string, unknown> => typeof v === 'object' && v !== null && !Array.isArray(v);
 const str = (v: unknown): string | undefined =>
   typeof v === 'string' ? v.trim() || undefined : typeof v === 'number' ? String(v) : undefined;
 const quote = (s: string) => `"${s}"`;
+
+/** `tap` value → target, or undefined (with a warning) when it can't be read. */
+function tapTarget(v: unknown, where: string, warn: (m: string) => void): TapTarget | undefined {
+  if (v === undefined) return undefined;
+  const item = str(v);
+  if (item) return { item };
+  if (isObj(v)) {
+    const t: TapTarget = {};
+    for (const k of ['item', 'row', 'column'] as const) { const x = str(v[k]); if (x) t[k] = x; }
+    if (t.item || t.row || t.column) return t;
+  }
+  warn(`${where}: "tap" must be an item label or number, or { "row": …, "column": … }; highlighting the whole component.`);
+  return undefined;
+}
 
 function slug(s: string): string {
   return s.toLowerCase().normalize('NFKD').replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '');
@@ -321,20 +364,46 @@ function lane(src: Record<string, unknown>, at: string, errors: string[], warnin
       }
       if (written && resolveType(written) === 'button' && /secondary/i.test(written) && fields.variant === undefined) fields.variant = 'secondary';
       const comp: NormComponent = { type, fields, ...(unknownType ? { unknownType } : {}) };
+      if (cRaw.side !== undefined) {
+        if (cRaw.side === 'right') comp.side = 'right';
+        else warnings.push(`${at}${cDesc}: "side" can only be "right"; ignored.`);
+      }
       const goToRaw = str(cRaw.goTo) ?? str(cRaw.goto);
+      const warn = (m: string) => warnings.push(`${at}${m}`);
+      const tap = tapTarget(cRaw.tap, cDesc, warn);
+      const target = (raw: string, field: string): string | undefined => {
+        const t = resolve(raw, cDesc, field, ['screen', 'decision']);
+        if (t === norm.id) { warn(`${cDesc}: ${field} points at its own screen; ignored.`); return undefined; }
+        return t;
+      };
       if (goToRaw) {
-        if (NOT_LINKABLE.has(type)) {
-          warnings.push(`${at}${cDesc}: a ${type} can't be tapped to go somewhere, so its "goTo" is ignored. Use a button or link.`);
+        if (NOT_LINKABLE.has(type) && !tap) {
+          warn(`${cDesc}: a ${type} can't be tapped to go somewhere, so its "goTo" is ignored. Use a button or link, or say which part is tapped with "tap".`);
         } else {
-          const target = resolve(goToRaw, cDesc, '"goTo"', ['screen', 'decision']);
-          if (target) {
-            if (target === norm.id) warnings.push(`${at}${cDesc}: "goTo" points at its own screen; ignored.`);
-            else {
-              comp.goTo = target;
-              const ll = str(cRaw.linkLabel);
-              if (ll) comp.linkLabel = ll;
-            }
+          const t = target(goToRaw, '"goTo"');
+          if (t) {
+            comp.goTo = t;
+            const ll = str(cRaw.linkLabel);
+            if (ll) comp.linkLabel = ll;
+            if (tap) comp.tap = tap;
           }
+        }
+      } else if (tap) warn(`${cDesc}: "tap" needs a "goTo" saying where it leads; ignored.`);
+      if (cRaw.taps !== undefined) {
+        if (!Array.isArray(cRaw.taps)) errors.push(`${at}${cDesc}: "taps" must be a list like [{ "item": "Settings", "goTo": "settings" }].`);
+        else {
+          const taps: NormTap[] = [];
+          cRaw.taps.forEach((t, j) => {
+            const tWhere = `${cDesc}, taps[${j}]`;
+            const g = isObj(t) ? str(t.goTo) ?? str(t.goto) : undefined;
+            if (!isObj(t) || !g) { errors.push(`${at}${tWhere} needs a "goTo", e.g. { "item": "Settings", "goTo": "settings" }.`); return; }
+            const id = target(g, `taps[${j}] "goTo"`);
+            if (!id) return;
+            const where = tapTarget({ item: t.item, row: t.row, column: t.column }, tWhere, () => {});
+            const ll = str(t.linkLabel);
+            taps.push({ goTo: id, ...(ll ? { linkLabel: ll } : {}), ...(where ? { tap: where } : {}) });
+          });
+          if (taps.length) comp.taps = taps;
         }
       }
       norm.components.push(comp);
@@ -352,7 +421,7 @@ function lane(src: Record<string, unknown>, at: string, errors: string[], warnin
     } else {
       const from = new Set<string>();
       for (const s of screens) {
-        if (s.next === d.id || s.components.some((c) => c.goTo === d.id)) from.add(s.id);
+        if (s.next === d.id || s.components.some((c) => linksOf(c).some((l) => l.goTo === d.id))) from.add(s.id);
       }
       d.after = [...from];
       if (!d.after.length && errors.length === errorsBefore) {

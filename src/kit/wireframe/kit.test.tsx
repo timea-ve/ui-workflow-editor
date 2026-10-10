@@ -14,7 +14,7 @@ const ALL: WireframeType[] = [
   'list', 'table', 'image', 'text', 'heading', 'modal', 'tabs', 'icon',
   'caption', 'link', 'icon-button', 'fab', 'textarea', 'search', 'radio', 'slider', 'datepicker',
   'sidebar', 'menu', 'breadcrumbs', 'pagination', 'video', 'avatar', 'calendar', 'line-chart',
-  'stacked-chart', 'divider', 'tooltip', 'toast', 'badge', 'progress', 'spinner',
+  'stacked-chart', 'divider', 'tooltip', 'toast', 'badge', 'progress', 'spinner', 'hotspot',
 ];
 const STYLES: VisualStyle[] = ['sketchy', 'clean'];
 
@@ -23,7 +23,7 @@ const TEXT_ONLY = ['text', 'heading', 'caption', 'link'];
 afterEach(cleanup);
 
 describe('wireframe kit', () => {
-  it('registers all 40 wireframe types', () => {
+  it('registers all 41 wireframe types', () => {
     expect(wireframeKit.map((d) => d.type).sort()).toEqual([...ALL].sort());
     for (const t of ALL) expect(kitRegistry.get(t)?.category).toBe('wireframe');
   });
@@ -64,6 +64,18 @@ describe('wireframe kit', () => {
           });
         }
       }
+
+      it('keeps tappable parts inside the component', () => {
+        for (const size of [def.defaultSize, { w: 600, h: 400 }]) {
+          for (const r of def.itemRects?.(def.defaultProps, size) ?? []) {
+            expect(r.label, def.type).toMatch(/\S/);
+            expect(r.x).toBeGreaterThanOrEqual(-8);
+            expect(r.y).toBeGreaterThanOrEqual(-8);
+            expect(r.x + r.w).toBeLessThanOrEqual(size.w + 8);
+            expect(r.y + r.h).toBeLessThanOrEqual(size.h + 8);
+          }
+        }
+      });
 
       it('tolerates junk props', () => {
         const junk = Object.fromEntries(Object.keys(def.defaultProps).map((k) => [k, undefined]));

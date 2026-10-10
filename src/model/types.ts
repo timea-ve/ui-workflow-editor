@@ -60,7 +60,9 @@ export type WireframeType =
   | 'caption' | 'link' | 'icon-button' | 'fab' | 'textarea' | 'search' | 'radio' | 'slider' | 'datepicker'
   // Wave C, set B (navigation, content, feedback)
   | 'sidebar' | 'menu' | 'breadcrumbs' | 'pagination' | 'video' | 'avatar' | 'calendar' | 'line-chart'
-  | 'stacked-chart' | 'divider' | 'tooltip' | 'toast' | 'badge' | 'progress' | 'spinner';
+  | 'stacked-chart' | 'divider' | 'tooltip' | 'toast' | 'badge' | 'progress' | 'spinner'
+  // Flow annotations
+  | 'hotspot';
 
 export type DiagramType = 'rect' | 'diamond' | 'ellipse' | 'sticky' | 'label';
 

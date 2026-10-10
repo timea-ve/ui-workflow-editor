@@ -2,8 +2,12 @@
 // Checks a flow spec and prints a link that opens it as a new editable board.
 // Default: the live app on GitHub Pages; --local: the dev server (npm run dev).
 import { readFileSync } from 'node:fs';
-import { parseFlowSpec } from '../src/platform/flowSpec.ts';
+import { parseFlowSpec, type NormFlowSpec } from '../src/platform/flowSpec.ts';
 import { LIVE_APP_URL, LOCAL_APP_URL, encodeFlowSpec, flowLinkUrl } from '../src/platform/flowLink.ts';
+
+/** The board builder pulls in the React kit, so it is loaded at run time (tsx) rather than type-checked with the scripts. */
+const BOARD_MODULE = '../src/platform/flowSpecBoard.ts';
+type BuildFlowBoard = (spec: NormFlowSpec) => { warnings: string[] };
 
 const USAGE = 'Usage: npm run flow -- flows/<file>.json [--local]';
 /** Links longer than this may get cut off by some chat apps and mail clients. */
@@ -34,6 +38,9 @@ async function main(argv: string[]): Promise<number> {
   }
 
   const { spec } = result;
+  // Layout problems (crowded screens, a "tap" on a part that isn't shown) only show up when the board is built.
+  const { buildFlowBoard } = (await import(BOARD_MODULE)) as { buildFlowBoard: BuildFlowBoard };
+  for (const w of buildFlowBoard(spec).warnings) console.error(`  ! ${w}`);
   const screens = spec.lanes.reduce((n, l) => n + l.screens.length, 0);
   const decisions = spec.lanes.reduce((n, l) => n + l.decisions.length, 0);
   const options = spec.lanes.length > 1 ? `, ${spec.lanes.length} options` : '';

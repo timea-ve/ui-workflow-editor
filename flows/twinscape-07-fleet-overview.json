@@ -42,32 +42,29 @@
             "…",
             "Tune"
           ],
-          "rows": 5
+          "rows": 5,
+          "taps": [
+            {
+              "row": 1,
+              "column": "Instrument",
+              "goTo": "ms-overview",
+              "linkLabel": "Open instrument"
+            },
+            {
+              "column": "CapacityScan",
+              "goTo": "browse-test",
+              "linkLabel": "Browse this test"
+            }
+          ]
         },
         {
           "type": "pagination",
           "current": 1,
           "total": 54
-        },
-        {
-          "type": "link",
-          "text": "Instrument serial (row)",
-          "goTo": "ms-overview",
-          "linkLabel": "Open instrument"
-        },
-        {
-          "type": "link",
-          "text": "Test name (column header)",
-          "goTo": "browse-test",
-          "linkLabel": "Browse this test"
-        },
-        {
-          "type": "link",
-          "text": "Scroll down",
-          "goTo": "overview-summary",
-          "linkLabel": "Summary"
         }
-      ]
+      ],
+      "next": "overview-summary",
+      "nextLabel": "Scroll down"
     },
     {
       "id": "overview-summary",

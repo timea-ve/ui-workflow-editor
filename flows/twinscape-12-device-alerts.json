@@ -35,7 +35,13 @@
             "Thresholds",
             "Notifications"
           ],
-          "active": 14
+          "active": 14,
+          "taps": [
+            {
+              "item": "Thresholds",
+              "goTo": "thresholds"
+            }
+          ]
         },
         {
           "type": "heading",
@@ -73,11 +79,6 @@
             "Role"
           ],
           "rows": 3
-        },
-        {
-          "type": "link",
-          "text": "Thresholds",
-          "goTo": "thresholds"
         }
       ]
     },
@@ -186,7 +187,13 @@
             "Thresholds",
             "Notifications"
           ],
-          "active": 15
+          "active": 15,
+          "taps": [
+            {
+              "item": "Notifications",
+              "goTo": "notifications"
+            }
+          ]
         },
         {
           "type": "heading",
@@ -213,11 +220,6 @@
         {
           "type": "caption",
           "text": "Default: Outside of: -3 - 3 ppm"
-        },
-        {
-          "type": "link",
-          "text": "Notifications",
-          "goTo": "notifications"
         }
       ]
     },
@@ -281,19 +283,13 @@
           "type": "card",
           "title": "Software Versions",
           "body": "Software Version Change",
-          "hasImage": false
-        },
-        {
-          "type": "card",
-          "title": "Other",
-          "body": "TwinScape Service Update · TwinScape Connection",
-          "hasImage": false
-        },
-        {
-          "type": "link",
-          "text": "Software Version Change",
+          "hasImage": false,
           "goTo": "notification-row",
-          "linkLabel": "Expand row"
+          "linkLabel": "? on Software Version Change"
+        },
+        {
+          "type": "caption",
+          "text": "Below: Other · TwinScape Service Update · TwinScape Connection"
         }
       ]
     },
@@ -360,11 +356,6 @@
           "type": "text",
           "text": "Get notified if software version(s) change on the acquisition PC.",
           "tone": "muted"
-        },
-        {
-          "type": "link",
-          "text": "Back to Notifications",
-          "goTo": "notifications"
         }
       ]
     }

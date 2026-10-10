@@ -1,5 +1,4 @@
-import type { ReactNode } from 'react';
-import type { KitItemDef } from '../types';
+import type { KitItemDef, KitItemRect } from '../types';
 import { KitText, SketchEllipse, SketchRect } from '../../design/primitives';
 import { At, IconAt, IconGlyph, TextRow, splitList, toBool } from './_helpers';
 
@@ -43,33 +42,28 @@ function renderApp(p: HeaderProps, w: number, h: number, style: 'sketchy' | 'cle
 const LINK_W = 84;
 const SEARCH_W = 160;
 
-function renderWeb(p: HeaderProps, w: number, h: number, style: 'sketchy' | 'clean', seed: number) {
+interface WebLayout {
+  pad: number; logo: number; ctrlH: number; cy: number; brandW: number; linksX: number;
+  links: string[]; avatar?: number; cta?: { x: number; w: number }; search?: { x: number; w: number };
+}
+
+/** Where everything in the web header sits; shared by render and itemRects. */
+function webLayout(p: HeaderProps, w: number, h: number): WebLayout {
   const pad = 16;
   const logo = Math.min(24, h - 16);
   const ctrlH = Math.min(32, h - 12);
   const cy = (h - ctrlH) / 2;
+  const out: Omit<WebLayout, 'brandW' | 'linksX' | 'links'> = { pad, logo, ctrlH, cy };
   // Right side: CTA button / avatar, then search to its left.
   let right = w - pad;
-  const rightParts: ReactNode[] = [];
   if (p.right === 'avatar' && w >= 160) {
     right -= ctrlH;
-    rightParts.push(
-      <At key="av" x={right} y={cy} w={ctrlH} h={ctrlH}>
-        <SketchEllipse w={ctrlH} h={ctrlH} style={style} seed={seed + 7} stroke="muted" fill="faint" />
-      </At>,
-    );
+    out.avatar = right;
     right -= 12;
   } else if (p.right === 'button' && p.cta && w >= 220) {
     const bw = Math.min(112, Math.max(72, p.cta.length * 8 + 24));
     right -= bw;
-    rightParts.push(
-      <At key="cta" x={right} y={cy} w={bw} h={ctrlH}>
-        <SketchRect w={bw} h={ctrlH} radius={6} style={style} seed={seed + 7} fill="faint" />
-        <div style={{ position: 'absolute', inset: 0, display: 'grid', placeItems: 'center', padding: '0 8px' }}>
-          <KitText size="sm" align="center" weight={700}>{p.cta}</KitText>
-        </div>
-      </At>,
-    );
+    out.cta = { x: right, w: bw };
     right -= 12;
   }
   const brandW = Math.min(160, Math.max(48, String(p.title ?? '').length * 10 + logo + 20));
@@ -77,17 +71,15 @@ function renderWeb(p: HeaderProps, w: number, h: number, style: 'sketchy' | 'cle
   const sw = Math.min(SEARCH_W, right - linksX - LINK_W);
   if (toBool(p.search) && sw >= 96) {
     right -= sw;
-    rightParts.push(
-      <At key="search" x={right} y={cy} w={sw} h={ctrlH}>
-        <SketchRect w={sw} h={ctrlH} radius={ctrlH / 2} style={style} seed={seed + 9} stroke="muted" />
-        <IconAt name="search" x={10} y={(ctrlH - 14) / 2} size={14} tone="muted" />
-        <TextRow x={30} w={sw - 40} h={ctrlH} size="sm" tone="muted">Search</TextRow>
-      </At>,
-    );
+    out.search = { x: right, w: sw };
     right -= 16;
   }
-  const allLinks = splitList(p.links);
-  const links = allLinks.slice(0, Math.max(0, Math.floor((right - linksX) / LINK_W)));
+  const links = splitList(p.links).slice(0, Math.max(0, Math.floor((right - linksX) / LINK_W)));
+  return { ...out, brandW, linksX, links };
+}
+
+function renderWeb(p: HeaderProps, w: number, h: number, style: 'sketchy' | 'clean', seed: number) {
+  const { pad, logo, ctrlH, cy, brandW, linksX, links, avatar, cta, search } = webLayout(p, w, h);
   const brandFits = w >= pad * 2 + logo + 24;
   return (
     <>
@@ -99,9 +91,51 @@ function renderWeb(p: HeaderProps, w: number, h: number, style: 'sketchy' | 'cle
       {links.map((l, i) => (
         <TextRow key={i} x={linksX + i * LINK_W} w={LINK_W - 12} h={h} size="sm" tone={i === 0 ? 'ink' : 'muted'} weight={i === 0 ? 600 : 400}>{l}</TextRow>
       ))}
-      {rightParts}
+      {avatar !== undefined && (
+        <At x={avatar} y={cy} w={ctrlH} h={ctrlH}>
+          <SketchEllipse w={ctrlH} h={ctrlH} style={style} seed={seed + 7} stroke="muted" fill="faint" />
+        </At>
+      )}
+      {cta && (
+        <At x={cta.x} y={cy} w={cta.w} h={ctrlH}>
+          <SketchRect w={cta.w} h={ctrlH} radius={6} style={style} seed={seed + 7} fill="faint" />
+          <div style={{ position: 'absolute', inset: 0, display: 'grid', placeItems: 'center', padding: '0 8px' }}>
+            <KitText size="sm" align="center" weight={700}>{p.cta}</KitText>
+          </div>
+        </At>
+      )}
+      {search && (
+        <At x={search.x} y={cy} w={search.w} h={ctrlH}>
+          <SketchRect w={search.w} h={ctrlH} radius={ctrlH / 2} style={style} seed={seed + 9} stroke="muted" />
+          <IconAt name="search" x={10} y={(ctrlH - 14) / 2} size={14} tone="muted" />
+          <TextRow x={30} w={search.w - 40} h={ctrlH} size="sm" tone="muted">Search</TextRow>
+        </At>
+      )}
     </>
   );
+}
+
+function headerItems(p: HeaderProps, w: number, h: number): KitItemRect[] {
+  if (p.variant !== 'web') {
+    const size = Math.min(ICON, h - 12);
+    const iy = (h - size) / 2;
+    const out: KitItemRect[] = [];
+    const t = 8;
+    if (p.leading === 'back' || p.leading === 'menu') out.push({ label: p.leading === 'back' ? 'Back' : 'Menu', x: PAD - t, y: iy - t, w: size + 2 * t, h: size + 2 * t });
+    if (p.action === 'search' || p.action === 'user' || p.action === 'more') {
+      out.push({ label: p.action[0].toUpperCase() + p.action.slice(1), x: w - PAD - size - t, y: iy - t, w: size + 2 * t, h: size + 2 * t });
+    }
+    return out;
+  }
+  const L = webLayout(p, w, h);
+  const out: KitItemRect[] = [
+    { label: String(p.title ?? '') || 'Logo', x: L.pad - 4, y: L.cy, w: Math.min(L.brandW, w - L.pad * 2) + 8, h: L.ctrlH },
+    ...L.links.map((label, i) => ({ label, x: L.linksX + i * LINK_W - 6, y: L.cy, w: LINK_W, h: L.ctrlH })),
+  ];
+  if (L.search) out.push({ label: 'Search', x: L.search.x, y: L.cy, w: L.search.w, h: L.ctrlH });
+  if (L.cta) out.push({ label: p.cta, x: L.cta.x, y: L.cy, w: L.cta.w, h: L.ctrlH });
+  if (L.avatar !== undefined) out.push({ label: 'Avatar', x: L.avatar - 4, y: L.cy - 4, w: L.ctrlH + 8, h: L.ctrlH + 8 });
+  return out;
 }
 
 export const header: KitItemDef<HeaderProps> = {
@@ -129,6 +163,7 @@ export const header: KitItemDef<HeaderProps> = {
     { key: 'cta', label: 'Button label (web)', kind: 'text', bar: 'more' },
   ],
   linkable: true,
+  itemRects: (p, { w, h }) => headerItems(p, w, h),
   render: (p, { w, h, style, seed }) => (p.variant === 'web' ? renderWeb(p, w, h, style, seed) : renderApp(p, w, h, style, seed)),
   describe: (p) => {
     if (p.variant === 'web') {

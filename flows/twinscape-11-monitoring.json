@@ -35,7 +35,13 @@
             "Thresholds",
             "Notifications"
           ],
-          "active": 11
+          "active": 11,
+          "taps": [
+            {
+              "item": "Logs",
+              "goTo": "logs"
+            }
+          ]
         },
         {
           "type": "heading",
@@ -83,11 +89,6 @@
         {
           "type": "link",
           "text": "load the last 6 months"
-        },
-        {
-          "type": "link",
-          "text": "Logs",
-          "goTo": "logs"
         }
       ]
     },
@@ -124,7 +125,13 @@
             "Thresholds",
             "Notifications"
           ],
-          "active": 12
+          "active": 12,
+          "taps": [
+            {
+              "item": "SFDC Thresholds",
+              "goTo": "sfdc"
+            }
+          ]
         },
         {
           "type": "heading",
@@ -165,11 +172,6 @@
         {
           "type": "button",
           "text": "Request logs"
-        },
-        {
-          "type": "link",
-          "text": "SFDC Thresholds",
-          "goTo": "sfdc"
         }
       ]
     },

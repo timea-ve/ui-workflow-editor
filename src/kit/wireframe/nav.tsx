@@ -25,6 +25,11 @@ export const nav: KitItemDef<NavProps> = {
     { key: 'showIcons', label: 'Icons', kind: 'boolean' },
   ],
   linkable: true,
+  itemRects: (p, { w, h }) => {
+    const items = splitList(p.items).slice(0, Math.max(1, Math.floor(w / MIN_ITEM_W)));
+    const iw = w / Math.max(1, items.length);
+    return items.map((label, i) => ({ label, x: i * iw, y: 0, w: iw, h }));
+  },
   render: (p, { w, h, style, seed }) => {
     const all = splitList(p.items);
     const items = all.slice(0, Math.max(1, Math.floor(w / MIN_ITEM_W)));

@@ -35,7 +35,23 @@
             "Thresholds",
             "Notifications"
           ],
-          "active": 0
+          "active": 0,
+          "taps": [
+            {
+              "item": "Readback Values",
+              "goTo": "readbacks",
+              "linkLabel": "Readbacks"
+            },
+            {
+              "item": "Hardware Diagnostics",
+              "goTo": "diagnostics",
+              "linkLabel": "Scores"
+            },
+            {
+              "item": "Atlas Commands",
+              "goTo": "atlas"
+            }
+          ]
         },
         {
           "type": "heading",
@@ -60,23 +76,6 @@
           "title": "Installed Software",
           "body": "Last update on 2024-09-08 17:06",
           "hasImage": false
-        },
-        {
-          "type": "link",
-          "text": "Readback Values",
-          "goTo": "readbacks",
-          "linkLabel": "Readbacks"
-        },
-        {
-          "type": "link",
-          "text": "Hardware Diagnostics",
-          "goTo": "diagnostics",
-          "linkLabel": "Scores"
-        },
-        {
-          "type": "link",
-          "text": "Atlas Commands",
-          "goTo": "atlas"
         }
       ]
     },

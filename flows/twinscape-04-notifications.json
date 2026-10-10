@@ -25,12 +25,14 @@
             "New invitation",
             "New invitation",
             "Invitation to access the lab 'Lab B'"
+          ],
+          "taps": [
+            {
+              "item": 1,
+              "goTo": "invite-state",
+              "linkLabel": "Open an invitation"
+            }
           ]
-        },
-        {
-          "type": "link",
-          "text": "Open an invitation",
-          "goTo": "invite-state"
         }
       ]
     },
@@ -59,11 +61,6 @@
         {
           "type": "button",
           "text": "Accept"
-        },
-        {
-          "type": "link",
-          "text": "Back to notifications",
-          "goTo": "notifications"
         }
       ]
     },
@@ -87,11 +84,6 @@
           "type": "toast",
           "title": "This invite is unknown or expired",
           "kind": "error"
-        },
-        {
-          "type": "link",
-          "text": "Back to notifications",
-          "goTo": "notifications"
         }
       ]
     }

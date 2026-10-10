@@ -34,6 +34,9 @@ export interface PropField {
 /** Insert-palette section for wireframe components. */
 export type KitGroup = 'text' | 'actions' | 'inputs' | 'navigation' | 'content' | 'feedback';
 
+/** A tappable part of a component (row, tab, link…) in the component's own coordinates. */
+export interface KitItemRect { label: string; x: number; y: number; w: number; h: number }
+
 export interface KitItemDef<P extends Record<string, unknown> = Record<string, unknown>> {
   type: ElementType;
   label: string;
@@ -53,6 +56,8 @@ export interface KitItemDef<P extends Record<string, unknown> = Record<string, u
   /** Can this item be the source of a prototype link (element → screen)? */
   linkable: boolean;
   render: (props: P, ctx: KitRenderContext) => ReactNode;
+  /** Where each visible tappable part sits (rows, tabs, links…), matching `render`. Flows use it to highlight what is tapped. */
+  itemRects?: (props: P, size: { w: number; h: number }) => KitItemRect[];
   /** Screen-reader description, e.g. "Button 'Sign up'". */
   describe: (props: P) => string;
 }

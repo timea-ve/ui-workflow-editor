@@ -25,7 +25,13 @@
             "Environment",
             "Settings"
           ],
-          "active": 0
+          "active": 0,
+          "taps": [
+            {
+              "item": "Environment",
+              "goTo": "environment"
+            }
+          ]
         },
         {
           "type": "text",
@@ -54,11 +60,6 @@
             "Location"
           ],
           "rows": 1
-        },
-        {
-          "type": "link",
-          "text": "Environment",
-          "goTo": "environment"
         }
       ]
     },
@@ -85,7 +86,13 @@
             "Environment",
             "Settings"
           ],
-          "active": 1
+          "active": 1,
+          "taps": [
+            {
+              "item": "Settings",
+              "goTo": "general"
+            }
+          ]
         },
         {
           "type": "heading",
@@ -106,11 +113,6 @@
           "type": "line-chart",
           "title": "Pressure",
           "shape": "flat"
-        },
-        {
-          "type": "link",
-          "text": "Settings",
-          "goTo": "general"
         }
       ]
     },
@@ -156,10 +158,27 @@
           "text": "Save changes"
         },
         {
-          "type": "link",
-          "text": "Tags",
-          "goTo": "tags",
-          "linkLabel": "CONTENTS"
+          "type": "caption",
+          "text": "CONTENTS",
+          "side": "right"
+        },
+        {
+          "type": "list",
+          "items": [
+            "General",
+            "Tags",
+            "Instruments",
+            "Members"
+          ],
+          "showAvatar": false,
+          "showChevron": false,
+          "side": "right",
+          "taps": [
+            {
+              "item": "Tags",
+              "goTo": "tags"
+            }
+          ]
         }
       ]
     },
@@ -208,10 +227,27 @@
           "text": "+ Add"
         },
         {
-          "type": "link",
-          "text": "Instruments",
-          "goTo": "lab-devices",
-          "linkLabel": "CONTENTS"
+          "type": "caption",
+          "text": "CONTENTS",
+          "side": "right"
+        },
+        {
+          "type": "list",
+          "items": [
+            "General",
+            "Tags",
+            "Instruments",
+            "Members"
+          ],
+          "showAvatar": false,
+          "showChevron": false,
+          "side": "right",
+          "taps": [
+            {
+              "item": "Instruments",
+              "goTo": "lab-devices"
+            }
+          ]
         }
       ]
     },
@@ -270,10 +306,27 @@
           "text": "LCs: same table · Add an LC · Add LC"
         },
         {
-          "type": "link",
-          "text": "Members",
-          "goTo": "role",
-          "linkLabel": "CONTENTS"
+          "type": "caption",
+          "text": "CONTENTS",
+          "side": "right"
+        },
+        {
+          "type": "list",
+          "items": [
+            "General",
+            "Tags",
+            "Instruments",
+            "Members"
+          ],
+          "showAvatar": false,
+          "showChevron": false,
+          "side": "right",
+          "taps": [
+            {
+              "item": "Members",
+              "goTo": "role"
+            }
+          ]
         }
       ]
     },
@@ -328,13 +381,13 @@
           "value": "Observer"
         },
         {
-          "type": "button",
-          "text": "Invite"
-        },
-        {
           "type": "link",
           "text": "Show open invitations",
           "goTo": "open-invites"
+        },
+        {
+          "type": "button",
+          "text": "Invite"
         },
         {
           "type": "button",
@@ -345,6 +398,23 @@
           "type": "button",
           "text": "Delete this lab",
           "variant": "secondary"
+        },
+        {
+          "type": "caption",
+          "text": "CONTENTS",
+          "side": "right"
+        },
+        {
+          "type": "list",
+          "items": [
+            "General",
+            "Tags",
+            "Instruments",
+            "Members"
+          ],
+          "showAvatar": false,
+          "showChevron": false,
+          "side": "right"
         }
       ]
     },
@@ -374,9 +444,26 @@
           "active": 2
         },
         {
-          "type": "heading",
+          "type": "dropdown",
+          "label": "User",
+          "value": "Select...",
+          "helper": "Enter an email address to invite a user that is not visible here"
+        },
+        {
+          "type": "dropdown",
+          "label": "Role",
+          "items": [
+            "Observer",
+            "Editor",
+            "Manager"
+          ],
+          "value": "Observer"
+        },
+        {
+          "type": "link",
           "text": "Show open invitations",
-          "level": "H3"
+          "goTo": "members-manager",
+          "linkLabel": "Hide"
         },
         {
           "type": "table",
@@ -389,9 +476,25 @@
           "rows": 2
         },
         {
-          "type": "link",
-          "text": "Back to members",
-          "goTo": "members-manager"
+          "type": "button",
+          "text": "Invite"
+        },
+        {
+          "type": "caption",
+          "text": "CONTENTS",
+          "side": "right"
+        },
+        {
+          "type": "list",
+          "items": [
+            "General",
+            "Tags",
+            "Instruments",
+            "Members"
+          ],
+          "showAvatar": false,
+          "showChevron": false,
+          "side": "right"
         }
       ]
     },
@@ -431,6 +534,23 @@
           "type": "button",
           "text": "Leave this lab",
           "variant": "secondary"
+        },
+        {
+          "type": "caption",
+          "text": "CONTENTS",
+          "side": "right"
+        },
+        {
+          "type": "list",
+          "items": [
+            "General",
+            "Tags",
+            "Instruments",
+            "Members"
+          ],
+          "showAvatar": false,
+          "showChevron": false,
+          "side": "right"
         }
       ]
     }

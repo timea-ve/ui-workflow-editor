@@ -268,6 +268,117 @@ describe('flow spec → board: details', () => {
   });
 });
 
+describe('flow spec → board: tap highlights', () => {
+  const sidebarItems = 'Overview, Timeline, Settings';
+  const sourcesOf = (doc: BoardDoc) => Object.values(doc.links).map((l) => doc.elements[l.sourceElementId]);
+
+  it('starts every link from a tap highlight laid over the whole component', () => {
+    const doc = build({ name: 'F', screens: [{ id: 'a', components: [{ type: 'button', text: 'Next', goTo: 'b' }] }, { id: 'b' }] });
+    const [src] = sourcesOf(doc);
+    const btn = Object.values(doc.elements).find((e) => e.type === 'button')!;
+    expect(src.type).toBe('hotspot');
+    expect(src.parentId).toBe(btn.parentId);
+    expect(src.z > btn.z).toBe(true);
+    expect(src.x).toBeLessThan(btn.x);
+    expect(src.x + src.w).toBeGreaterThan(btn.x + btn.w);
+  });
+
+  it('puts `side: "right"` components in a right-hand column on desktop, and fits a 17-item sidebar', () => {
+    const items = Array.from({ length: 17 }, (_, i) => `Item ${i + 1}`);
+    const r = buildFlowBoard(ok({
+      name: 'F', device: 'desktop',
+      screens: [
+        { id: 'a', components: [
+          { type: 'header', title: 'App' },
+          { type: 'sidebar', title: 'Device', items, taps: [{ item: 'Item 17', goTo: 'b' }] },
+          { type: 'heading', text: 'Settings' },
+          { type: 'list', items: 'General, Tags', side: 'right', taps: [{ item: 'Tags', goTo: 'b' }] },
+        ] },
+        { id: 'b' },
+      ],
+    }));
+    expect(r.warnings).toEqual([]);
+    const el = (t: string) => Object.values(r.doc.elements).find((e) => e.type === t)!;
+    expect(el('list').x).toBeGreaterThan(el('heading').x + el('heading').w);
+    expect(el('list').y).toBe(el('heading').y);
+    const bad = validateFlowSpec({ name: 'F', screens: [{ id: 'a', components: [{ type: 'text', text: 'x', side: 'left' }] }] });
+    expect(bad.warnings.join(' ')).toMatch(/"side" can only be "right"/);
+  });
+
+  it('highlights just the tapped item, and `taps` gives one component several targets', () => {
+    const r = buildFlowBoard(ok({
+      name: 'F', device: 'desktop',
+      screens: [
+        { id: 'a', components: [{ type: 'sidebar', title: 'Device', items: sidebarItems, taps: [{ item: 'Timeline', goTo: 'b' }, { item: 3, goTo: 'c', linkLabel: 'Edit' }] }] },
+        { id: 'b' }, { id: 'c' },
+      ],
+    }));
+    expect(r.warnings).toEqual([]);
+    const side = Object.values(r.doc.elements).find((e) => e.type === 'sidebar')!;
+    const hs = sourcesOf(r.doc).sort((x, y) => x.y - y.y);
+    expect(hs.map((h) => h.props.label)).toEqual(['Timeline', 'Settings']);
+    for (const h of hs) {
+      expect(h.h).toBeLessThan(side.h / 3);
+      expect(h.x).toBeGreaterThanOrEqual(side.x);
+      expect(h.x + h.w).toBeLessThanOrEqual(side.x + side.w);
+    }
+    expect(Object.values(r.doc.connectors).some((c) => c.label === 'Edit')).toBe(true);
+  });
+
+  it('can tap a table row, column header or cell (tables need a `tap`)', () => {
+    const table = { type: 'table', columns: 'Name, Status', rows: 3 };
+    const at = (tap: unknown) => {
+      const doc = build({ name: 'F', device: 'desktop', screens: [{ id: 'a', components: [{ ...table, goTo: 'b', tap }] }, { id: 'b' }] });
+      return { t: Object.values(doc.elements).find((e) => e.type === 'table')!, h: sourcesOf(doc)[0] };
+    };
+    const row = at({ row: 2 });
+    expect(row.h.w).toBe(row.t.w);
+    expect(row.h.y).toBeGreaterThan(row.t.y + row.h.h);
+    const col = at({ column: 'Status' });
+    expect(col.h.y).toBe(col.t.y);
+    expect(col.h.x).toBeGreaterThan(col.t.x);
+    const cell = at({ row: 1, column: 'Status' });
+    expect([cell.h.x, cell.h.w]).toEqual([col.h.x, col.h.w]);
+    expect(cell.h.y).toBeGreaterThan(cell.t.y);
+    const r = validateFlowSpec({ name: 'F', screens: [{ id: 'a', components: [{ ...table, goTo: 'b' }] }, { id: 'b' }] });
+    expect(r.warnings.join()).toMatch(/can't be tapped/);
+  });
+
+  it('highlights web header links, and warns (whole component) for unknown or unsupported parts', () => {
+    const header = { type: 'header', title: 'Shop', links: 'Home, Deals', right: 'avatar' };
+    const r = buildFlowBoard(ok({
+      name: 'F', device: 'desktop',
+      screens: [
+        { id: 'a', components: [
+          { ...header, taps: [{ item: 'Deals', goTo: 'b' }, { item: 'Avatar', goTo: 'b' }] },
+          { type: 'list', items: 'One, Two', goTo: 'b', tap: 'Three' },
+          { type: 'card', title: 'Plan', goTo: 'b', tap: 'Plan' },
+        ] },
+        { id: 'b' },
+      ],
+    }));
+    expect(r.warnings).toHaveLength(2);
+    expect(r.warnings[0]).toMatch(/"Three" isn't one of the visible parts of the list \("One", "Two"\)/);
+    expect(r.warnings[1]).toMatch(/card has no separate parts/);
+    const labels = sourcesOf(r.doc).map((h) => h.props.label);
+    expect(labels).toEqual(expect.arrayContaining(['Deals', 'Avatar']));
+  });
+
+  it('warns about a `tap` without `goTo` and rejects `taps` entries without one', () => {
+    const w = validateFlowSpec({ name: 'F', screens: [{ id: 'a', components: [{ type: 'list', tap: 'One' }] }] });
+    expect(w.warnings.join()).toMatch(/"tap" needs a "goTo"/);
+    expect(errorsOf({ name: 'F', screens: [{ id: 'a', components: [{ type: 'list', taps: [{ item: 'One' }] }] }] }).join()).toMatch(/taps\[0\] needs a "goTo"/);
+  });
+
+  it('lets decisions follow a screen through `taps`', () => {
+    const doc = build({
+      name: 'F', screens: [{ id: 'a', components: [{ type: 'list', items: 'One, Two', taps: [{ item: 'Two', goTo: 'd' }] }] }, { id: 'y' }, { id: 'n' }],
+      decisions: [{ id: 'd', text: 'OK?', yes: 'y', no: 'n' }],
+    });
+    expect(Object.values(doc.elements).filter((e) => e.type === 'diamond')).toHaveLength(1);
+  });
+});
+
 describe('flow spec: readable errors', () => {
   it('rejects non-objects and missing screens', () => {
     expect(errorsOf(null)[0]).toMatch(/JSON object/);

@@ -36,16 +36,24 @@
           "hasImage": false
         },
         {
-          "type": "card",
-          "title": "Filter by test type",
-          "body": "Choose one to see the test results in the data hierarchy.",
-          "hasImage": false
+          "type": "text",
+          "text": "Filter by test type",
+          "size": "md"
         },
         {
-          "type": "link",
-          "text": "CapacityScan 809",
+          "type": "caption",
+          "text": "Choose one to see the test results in the data hierarchy."
+        },
+        {
+          "type": "badge",
+          "label": "CapacityScan 809",
+          "variant": "outline",
           "goTo": "browse-test",
           "linkLabel": "Pick a test type"
+        },
+        {
+          "type": "caption",
+          "text": "FragmentationYield 1219 · FunnelIntensityDrop 1163 · HardwareDiagnostics 951 · …"
         }
       ]
     },
@@ -70,6 +78,13 @@
           "text": "Enter a filter in the form of <field>:<operator>:<value>. Operators: eq, eqs, before, after, greater, less, range, in, oid, regex, regexi, first-by, last-by."
         },
         {
+          "type": "button",
+          "text": "Filter",
+          "variant": "secondary",
+          "goTo": "browse",
+          "linkLabel": "Close"
+        },
+        {
           "type": "menu",
           "items": [
             "Type",
@@ -81,11 +96,6 @@
             "This Month",
             "This Year"
           ]
-        },
-        {
-          "type": "link",
-          "text": "Close",
-          "goTo": "browse"
         }
       ]
     },
@@ -137,13 +147,9 @@
             "Serial No",
             "Acquisition Date",
             "Software Version"
-          ]
-        },
-        {
-          "type": "link",
-          "text": "x: Serial No · y: results › condition",
+          ],
           "goTo": "plot",
-          "linkLabel": "Pick axes"
+          "linkLabel": "y: results › condition, x: Serial No"
         }
       ]
     },

@@ -38,7 +38,13 @@
             "Serial",
             "Location"
           ],
-          "rows": 3
+          "rows": 3,
+          "goTo": "ms-overview",
+          "tap": {
+            "row": 1,
+            "column": "Name"
+          },
+          "linkLabel": "Open device"
         },
         {
           "type": "text",
@@ -53,12 +59,6 @@
             "Location"
           ],
           "rows": 1
-        },
-        {
-          "type": "link",
-          "text": "timsTOF #1",
-          "goTo": "ms-overview",
-          "linkLabel": "Open device"
         }
       ]
     },
@@ -95,7 +95,17 @@
             "Thresholds",
             "Notifications"
           ],
-          "active": 0
+          "active": 0,
+          "taps": [
+            {
+              "item": "Proteomics QC",
+              "goTo": "qc-found"
+            },
+            {
+              "item": "Metabolomics QC",
+              "goTo": "metabolomics"
+            }
+          ]
         },
         {
           "type": "heading",
@@ -118,16 +128,6 @@
             "Hardware Diagnostics · No data",
             "TwinScape · 2 years ago"
           ]
-        },
-        {
-          "type": "link",
-          "text": "Proteomics QC",
-          "goTo": "qc-found"
-        },
-        {
-          "type": "link",
-          "text": "Metabolomics QC",
-          "goTo": "metabolomics"
         }
       ]
     },
@@ -233,7 +233,13 @@
             "Thresholds",
             "Notifications"
           ],
-          "active": 8
+          "active": 8,
+          "taps": [
+            {
+              "item": "Metabolomics QC",
+              "goTo": "metabolomics"
+            }
+          ]
         },
         {
           "type": "heading",
@@ -248,11 +254,6 @@
           "type": "text",
           "text": "No Proteomics QC runs found",
           "tone": "muted"
-        },
-        {
-          "type": "link",
-          "text": "Metabolomics QC",
-          "goTo": "metabolomics"
         }
       ]
     },
@@ -289,7 +290,13 @@
             "Thresholds",
             "Notifications"
           ],
-          "active": 9
+          "active": 9,
+          "taps": [
+            {
+              "item": "Thresholds",
+              "goTo": "thresholds"
+            }
+          ]
         },
         {
           "type": "heading",
@@ -304,11 +311,6 @@
           "type": "text",
           "text": "No Metabolomics QC runs found",
           "tone": "muted"
-        },
-        {
-          "type": "link",
-          "text": "Thresholds",
-          "goTo": "thresholds"
         }
       ]
     },

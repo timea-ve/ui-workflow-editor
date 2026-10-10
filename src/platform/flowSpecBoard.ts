@@ -11,7 +11,7 @@ import { DEVICE_SIZES, type BoardDoc, type Device, type ElementType, type ID } f
 import { LANE_GAP, SCREEN_GAP, addConnector, addElement, boundsOf, createScreen, emptyDoc, linkElementToScreen, zAfter } from '../flow/ops';
 import { kitRegistry } from '../kit/registry';
 import type { KitItemDef } from '../kit/types';
-import type { NormComponent, NormDecision, NormFlowSpec, NormLane, NormScreen } from './flowSpec';
+import { linksOf, type NormComponent, type NormDecision, type NormFlowSpec, type NormLane, type NormScreen, type NormTap, type TapTarget } from './flowSpec';
 
 const LAYOUT: Record<Device, { top: number; bottom: number; margin: number; maxW: number }> = {
   mobile: { top: 44, bottom: 24, margin: 24, maxW: 327 },
@@ -22,6 +22,7 @@ const GAP = 16;
 const SIDEBAR_W = 240;
 const SIDEBAR_GUTTER = 48;
 const SIDEBAR_CONTENT_MAX_W = 880;
+const ASIDE_W = 220;
 const TIGHT_GAP = 8;
 const EDGE = 24;
 const DIAMOND = { w: 160, h: 110, gap: 20, top: 40 };
@@ -101,7 +102,7 @@ function gridFor(lane: NormLane): Map<string, Cell> {
   const out = new Map<string, string[]>();
   for (const s of lane.screens) {
     const targets = [
-      ...s.components.flatMap((c) => viaRef(c.goTo)),
+      ...s.components.flatMap((c) => linksOf(c).flatMap((l) => viaRef(l.goTo))),
       ...viaRef(s.next),
       ...lane.decisions.filter((d) => d.after.includes(s.id)).flatMap((d) => [d.yes, d.no]),
     ];
@@ -162,15 +163,22 @@ function buildLane(
     frameOf.set(s.id, r.id);
   });
 
-  // Components.
+  // Components, then a tap highlight over whatever each link starts from (on top, so arrows leave from it).
   const pending: { el: ID; goTo: string; label?: string }[] = [];
   for (const s of lane.screens) {
     const frame = frameOf.get(s.id)!;
     const placed = placeComponents(s, device, at, warnings);
+    for (const p of placed) doc = addElement(doc, { type: p.type, parentId: frame, x: p.x, y: p.y, w: p.w, h: p.h, props: p.props }).doc;
     for (const p of placed) {
-      const r = addElement(doc, { type: p.type, parentId: frame, x: p.x, y: p.y, w: p.w, h: p.h, props: p.props });
-      doc = r.doc;
-      if (p.goTo) pending.push({ el: r.id, goTo: p.goTo, label: p.linkLabel });
+      for (const l of p.links) {
+        const { label, ...r } = tapRect(p, l.tap, `${at}Screen "${s.name}"`, warnings);
+        const x = Math.max(0, r.x);
+        const y = Math.max(0, r.y);
+        const box = { x, y, w: Math.min(r.x + r.w, size.w) - x, h: Math.min(r.y + r.h, size.h) - y };
+        const hs = addElement(doc, { type: 'hotspot', parentId: frame, ...box, props: { label } });
+        doc = hs.doc;
+        pending.push({ el: hs.id, goTo: l.goTo, label: l.linkLabel });
+      }
     }
   }
 
@@ -205,7 +213,7 @@ function buildLane(
     intoDecision.set(d, m);
   };
   for (const s of lane.screens) {
-    for (const c of s.components) if (c.goTo && decisions.has(c.goTo)) noteInto(c.goTo, s.id, c.linkLabel);
+    for (const c of s.components) for (const l of linksOf(c)) if (decisions.has(l.goTo)) noteInto(l.goTo, s.id, l.linkLabel);
     if (s.next && decisions.has(s.next)) noteInto(s.next, s.id, s.nextLabel);
   }
   for (const d of lane.decisions) for (const a of d.after) noteInto(d.id, a);
@@ -271,18 +279,62 @@ function buildLane(
 
 // ---------- components inside a screen ----------
 
-interface Placed { type: ElementType; x: number; y: number; w: number; h: number; props: Record<string, unknown>; goTo?: string; linkLabel?: string }
+interface Placed { type: ElementType; x: number; y: number; w: number; h: number; props: Record<string, unknown>; links: NormTap[] }
+
+/** Margin around a whole-component highlight, so its outline frames the control instead of sitting on its edge. */
+const HALO = 4;
+
+/** Frame-local box for a tap highlight: the named part of the component, or the whole component. */
+function tapRect(p: Placed, tap: TapTarget | undefined, at: string, warnings: string[]): { x: number; y: number; w: number; h: number; label: string } {
+  const def = defOf(p.type);
+  const props = { ...def.defaultProps, ...p.props };
+  const whole = { x: p.x - HALO, y: p.y - HALO, w: p.w + 2 * HALO, h: p.h + 2 * HALO, label: def.describe(props) };
+  if (!tap) return whole;
+  const what = [tap.item && `"${tap.item}"`, tap.row && `row ${tap.row}`, tap.column && `column "${tap.column}"`].filter(Boolean).join(', ');
+  const parts = def.itemRects?.(props, { w: p.w, h: p.h });
+  if (!parts?.length) {
+    warnings.push(`${at}: a ${def.label.toLowerCase()} has no separate parts to tap, so ${what} highlights the whole ${def.label.toLowerCase()}.`);
+    return whole;
+  }
+  const find = (ref: string, pool = parts) => {
+    const k = ref.toLowerCase();
+    return pool.find((r) => r.label.toLowerCase() === k)
+      ?? (/^\d+$/.test(ref) ? pool[Number(ref) - 1] : undefined)
+      ?? pool.find((r) => r.label.toLowerCase().startsWith(k));
+  };
+  const rows = parts.filter((r) => /^Row \d+$/.test(r.label));
+  const cols = parts.filter((r) => !rows.includes(r));
+  let r = tap.item ? find(tap.item) : undefined;
+  if (!tap.item) {
+    const row = tap.row ? find(/^\d+$/.test(tap.row) ? `Row ${tap.row}` : tap.row, rows) : undefined;
+    const col = tap.column ? find(tap.column, cols) : undefined;
+    if ((tap.row && !row) || (tap.column && !col)) r = undefined;
+    else if (row && col) r = { label: `${col.label}, ${row.label}`, x: col.x, y: row.y, w: col.w, h: row.h };
+    else r = row ?? col;
+  }
+  if (!r) {
+    const shown = parts.map((x) => `"${x.label}"`).join(', ');
+    warnings.push(`${at}: ${what} isn't one of the visible parts of the ${def.label.toLowerCase()} (${shown}); highlighting the whole ${def.label.toLowerCase()}.`);
+    return whole;
+  }
+  return { x: p.x + r.x, y: p.y + r.y, w: r.w, h: r.h, label: r.label };
+}
 
 function placeComponents(screen: NormScreen, device: Device, at: string, warnings: string[]): Placed[] {
   const frame = DEVICE_SIZES[device];
   const L = LAYOUT[device];
   // Desktop app layout: a sidebar pins to the left under the header; content fills a wider column on the right.
   const hasSidebar = device === 'desktop' && screen.components.some((c) => c.type === 'sidebar');
+  // …and components marked `side: "right"` stack in a column on the right (like an in-page contents list).
+  const hasAside = device === 'desktop' && screen.components.some((c) => c.side === 'right' && c.type !== 'header' && c.type !== 'sidebar');
   const contentLeft = hasSidebar ? SIDEBAR_W + SIDEBAR_GUTTER : 0;
-  const cw = hasSidebar
-    ? Math.min(frame.w - contentLeft - SIDEBAR_GUTTER, SIDEBAR_CONTENT_MAX_W)
-    : Math.min(frame.w - 2 * L.margin, L.maxW);
-  const cx = hasSidebar ? contentLeft : Math.round((frame.w - cw) / 2);
+  const asideX = frame.w - (hasSidebar ? SIDEBAR_GUTTER : L.margin) - ASIDE_W;
+  const cw = hasAside
+    ? Math.min(asideX - SIDEBAR_GUTTER - (hasSidebar ? contentLeft : L.margin), SIDEBAR_CONTENT_MAX_W)
+    : hasSidebar
+      ? Math.min(frame.w - contentLeft - SIDEBAR_GUTTER, SIDEBAR_CONTENT_MAX_W)
+      : Math.min(frame.w - 2 * L.margin, L.maxW);
+  const cx = hasSidebar ? contentLeft : hasAside ? L.margin : Math.round((frame.w - cw) / 2);
 
   let primaryUsed = false;
   const items = screen.components.map((c) => {
@@ -292,7 +344,7 @@ function placeComponents(screen: NormScreen, device: Device, at: string, warning
       props.variant = primaryUsed ? 'secondary' : 'primary';
       primaryUsed = true;
     }
-    const s = sizeFor(c.type, def, props, cw, frame.w);
+    const s = sizeFor(c.type, def, props, hasAside && c.side === 'right' ? ASIDE_W : cw, frame.w);
     return { c, def, props, ...s, x: 0, y: 0 };
   });
 
@@ -318,7 +370,15 @@ function placeComponents(screen: NormScreen, device: Device, at: string, warning
     Object.assign(sb, { x: 0, y: top, w: SIDEBAR_W, h: frame.h - L.bottom - top });
   }
 
-  const flow = items.filter((_, i) => i !== headerIdx && i !== navIdx && i !== sidebarIdx);
+  const isAside = (i: (typeof items)[number], k: number) => hasAside && i.c.side === 'right' && k !== headerIdx && k !== navIdx && k !== sidebarIdx;
+  let ay = bodyTop;
+  items.forEach((i, k) => {
+    if (!isAside(i, k)) return;
+    Object.assign(i, { x: asideX, y: ay, w: ASIDE_W });
+    ay += i.h + TIGHT_GAP;
+  });
+  if (ay - TIGHT_GAP > bodyBottom) warnings.push(`${at}Screen "${screen.name}" has more in its right-hand column than fits; some overlap.`);
+  const flow = items.filter((i, k) => k !== headerIdx && k !== navIdx && k !== sidebarIdx && !isAside(i, k));
   // Closing actions (a trailing run of buttons/links) go to the bottom on phones and tablets.
   let footer: typeof flow = [];
   if (device !== 'desktop') {
@@ -361,7 +421,7 @@ function placeComponents(screen: NormScreen, device: Device, at: string, warning
 
   return items.map((i) => ({
     type: i.c.type, x: Math.max(0, i.x), y: Math.max(0, i.y), w: i.w, h: i.h, props: i.props,
-    ...(i.c.goTo ? { goTo: i.c.goTo } : {}), ...(i.c.linkLabel ? { linkLabel: i.c.linkLabel } : {}),
+    links: linksOf(i.c),
   }));
 }
 
@@ -390,7 +450,7 @@ function sizeFor(type: ElementType, def: Def, props: Record<string, unknown>, cw
     case 'input': h = typeof props.helper === 'string' && props.helper.trim() ? 88 : d.h; break;
     case 'list': h = Math.max(56, Math.min(448, (countItems(props.items) || Number(props.count) || 4) * 56)); break;
     case 'radio': h = Math.max(28, (countItems(props.items) || 3) * 28); break;
-    case 'menu': h = Math.max(48, (countItems(props.items) || 4) * 40 + 5); break;
+    case 'menu': { const n = countItems(props.items) || 4; h = Math.max(48, n * 40 + 5, n * 36 + 21); break; }
     default: break;
   }
   const centered = ['icon', 'spinner', 'fab', 'icon-button', 'diamond', 'ellipse'].includes(type) || (w < cw && type === 'image');

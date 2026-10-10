@@ -21,7 +21,7 @@
             "Superlimator"
           ],
           "goTo": "picker",
-          "linkLabel": "Superlimator"
+          "tap": "Superlimator"
         }
       ]
     },
@@ -56,7 +56,8 @@
         {
           "type": "link",
           "text": "Fleet Statistics",
-          "goTo": "fleet"
+          "goTo": "fleet",
+          "align": "center"
         }
       ]
     },
@@ -114,14 +115,10 @@
             "Operating Seconds"
           ],
           "rows": 4
-        },
-        {
-          "type": "link",
-          "text": "Test Summary",
-          "goTo": "final-test-2",
-          "linkLabel": "Scroll down"
         }
-      ]
+      ],
+      "next": "final-test-2",
+      "nextLabel": "Scroll down"
     },
     {
       "id": "final-test-2",

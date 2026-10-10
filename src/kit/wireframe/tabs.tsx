@@ -22,6 +22,12 @@ export const tabs: KitItemDef<TabsProps> = {
     { key: 'active', label: 'Active tab', kind: 'number', itemsFrom: 'tabs', bar: 'inline' },
   ],
   linkable: true,
+  itemRects: (p, { w, h }) => {
+    const all = splitList(p.tabs);
+    const items = (all.length ? all : ['Tab']).slice(0, Math.max(1, Math.floor(w / MIN_TAB_W)));
+    const tw = w / items.length;
+    return items.map((label, i) => ({ label, x: i * tw, y: 0, w: tw, h }));
+  },
   render: (p, { w, h, style, seed }) => {
     const all = splitList(p.tabs);
     const items = (all.length ? all : ['Tab']).slice(0, Math.max(1, Math.floor(w / MIN_TAB_W)));

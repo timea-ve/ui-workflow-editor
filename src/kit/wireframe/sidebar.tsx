@@ -27,12 +27,20 @@ export const sidebar: KitItemDef<SidebarProps> = {
     { key: 'showIcons', label: 'Icons', kind: 'boolean', bar: 'more' },
   ],
   linkable: true,
+  itemRects: (p, { w, h }) => {
+    const collapsed = toBool(p.collapsed) || w < 96;
+    const all = splitList(p.items);
+    const headH = p.title || collapsed ? Math.min(HEAD_H, h / 4) : 8;
+    const rowH = Math.min(ROW_H, Math.max(28, (h - headH - 8) / Math.max(1, all.length)));
+    return all.slice(0, Math.max(0, Math.floor((h - headH - 8) / rowH)))
+      .map((label, i) => ({ label, x: 8, y: headH + 8 + i * rowH, w: w - 16, h: rowH }));
+  },
   render: (p, { w, h, style, seed }) => {
     const collapsed = toBool(p.collapsed) || w < 96;
     const icons = collapsed || toBool(p.showIcons);
     const all = splitList(p.items);
     const headH = p.title || collapsed ? Math.min(HEAD_H, h / 4) : 8;
-    const rowH = Math.min(ROW_H, Math.max(28, (h - headH) / Math.max(1, all.length)));
+    const rowH = Math.min(ROW_H, Math.max(28, (h - headH - 8) / Math.max(1, all.length)));
     const items = all.slice(0, Math.max(0, Math.floor((h - headH - 8) / rowH)));
     const active = toInt(p.active, 0, -1, Math.max(0, all.length - 1));
     const pad = 8;

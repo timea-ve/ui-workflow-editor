@@ -35,7 +35,7 @@ The link holds the whole flow, compressed, after a `#` — nothing is uploaded. 
 ```
 
 - `device`: `mobile` (default), `tablet` or `desktop`.
-- The first screen is where Play starts. `goTo` on a button, link, card, list row… makes it clickable in Play; `next` on a screen draws a plain arrow.
+- The first screen is where Play starts. `goTo` on a button, link, card, list… makes it clickable in Play; `next` on a screen draws a plain arrow. Add `"tap": "<item>"` (or `taps` for several targets, `{ "row": 2 }` for a table row) to say which part is tapped; the board marks it with a lime tap highlight and the arrow starts there. On desktop, `"side": "right"` puts a component in a right-hand column (e.g. an in-page Contents list).
 - Component `type` is any kit component (`header`, `nav`, `button`, `link`, `input`, `textarea`, `search`, `dropdown`, `checkbox`, `toggle`, `radio`, `slider`, `datepicker`, `heading`, `text`, `caption`, `image`, `icon`, `icon-button`, `fab`, `avatar`, `badge`, `card`, `list`, `table`, `tabs`, `menu`, `sidebar`, `breadcrumbs`, `pagination`, `modal`, `toast`, `tooltip`, `progress`, `spinner`, `calendar`, `line-chart`, `stacked-chart`, `video`, `divider`) or a friendly alias (`title`, `paragraph`, `email`, `cta`, `select`, `switch`, `photo`, `dialog`…). Unknown types become a placeholder, never an error.
 - `options`: other versions of the same flow (Option B…) shown in their own lanes, ready for Compare.
 

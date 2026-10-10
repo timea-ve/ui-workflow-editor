@@ -31,6 +31,10 @@ export const list: KitItemDef<ListProps> = {
     { key: 'showChevron', label: 'Chevron', kind: 'boolean' },
   ],
   linkable: true,
+  itemRects: (p, { w, h }) => {
+    const rowH = Math.min(ROW_H, h);
+    return labels(p).slice(0, Math.max(1, Math.floor(h / rowH))).map((label, i) => ({ label, x: 0, y: i * rowH, w, h: rowH }));
+  },
   render: (p, { w, h, style, seed }) => {
     const all = labels(p);
     const rowH = Math.min(ROW_H, h);

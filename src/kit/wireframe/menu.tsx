@@ -9,6 +9,24 @@ const PAD = 6;
 const DIV_H = 9;
 const ICON = 16;
 
+/** Rows that fit; the divider only shows if the last item fits too. */
+function menuRows(all: string[], withDivider: boolean, h: number): { label: string; i: number; y: number }[] {
+  let room = h - PAD * 2;
+  const rows: { label: string; i: number; y: number }[] = [];
+  let y = PAD;
+  for (let i = 0; i < all.length && room >= ROW_H; i++) {
+    if (withDivider && i === all.length - 1) {
+      if (room < ROW_H + DIV_H) break;
+      y += DIV_H;
+      room -= DIV_H;
+    }
+    rows.push({ label: all[i], i, y });
+    y += ROW_H;
+    room -= ROW_H;
+  }
+  return rows;
+}
+
 export const menu: KitItemDef<MenuProps> = {
   type: 'menu',
   label: 'Menu',
@@ -27,25 +45,16 @@ export const menu: KitItemDef<MenuProps> = {
     { key: 'divider', label: 'Divider before last', kind: 'boolean', bar: 'more' },
   ],
   linkable: true,
+  itemRects: (p, { w, h }) => {
+    const all = splitList(p.items);
+    return menuRows(all, toBool(p.divider) && all.length > 1, h).map(({ label, y }) => ({ label, x: PAD, y, w: w - PAD * 2, h: ROW_H }));
+  },
   render: (p, { w, h, style, seed }) => {
     const all = splitList(p.items);
     const withDivider = toBool(p.divider) && all.length > 1;
     const icons = toBool(p.showIcons) && w >= 100;
     const hi = toInt(p.highlight, 0, -1, Math.max(0, all.length - 1));
-    // Rows that fit; the divider only shows if the last item fits too.
-    let room = h - PAD * 2;
-    const rows: { label: string; i: number; y: number }[] = [];
-    let y = PAD;
-    for (let i = 0; i < all.length && room >= ROW_H; i++) {
-      if (withDivider && i === all.length - 1) {
-        if (room < ROW_H + DIV_H) break;
-        y += DIV_H;
-        room -= DIV_H;
-      }
-      rows.push({ label: all[i], i, y });
-      y += ROW_H;
-      room -= ROW_H;
-    }
+    const rows = menuRows(all, withDivider, h);
     const showDiv = withDivider && rows.length === all.length;
     const divY = showDiv ? rows[rows.length - 1].y - DIV_H / 2 - 0.5 : 0;
     return (

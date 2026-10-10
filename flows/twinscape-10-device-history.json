@@ -35,7 +35,13 @@
             "Thresholds",
             "Notifications"
           ],
-          "active": 0
+          "active": 0,
+          "taps": [
+            {
+              "item": "Timeline",
+              "goTo": "timeline"
+            }
+          ]
         },
         {
           "type": "heading",
@@ -58,11 +64,6 @@
             "Hardware Diagnostics · No data",
             "TwinScape · 2 years ago"
           ]
-        },
-        {
-          "type": "link",
-          "text": "Timeline",
-          "goTo": "timeline"
         }
       ]
     },
@@ -99,7 +100,13 @@
             "Thresholds",
             "Notifications"
           ],
-          "active": 1
+          "active": 1,
+          "taps": [
+            {
+              "item": "Final Test",
+              "goTo": "final-test"
+            }
+          ]
         },
         {
           "type": "heading",
@@ -134,11 +141,6 @@
           "type": "card",
           "title": "Device Events",
           "hasImage": false
-        },
-        {
-          "type": "link",
-          "text": "Final Test",
-          "goTo": "final-test"
         }
       ]
     },
@@ -175,7 +177,13 @@
             "Thresholds",
             "Notifications"
           ],
-          "active": 2
+          "active": 2,
+          "taps": [
+            {
+              "item": "Instrument Parameters",
+              "goTo": "parameters"
+            }
+          ]
         },
         {
           "type": "heading",
@@ -199,11 +207,6 @@
         {
           "type": "caption",
           "text": "One card per test: FragmentationYield · FunnelIntensityDrop · HardwareDiagnostics · IsotopicRatio · MSAccuracy · … · Tune"
-        },
-        {
-          "type": "link",
-          "text": "Instrument Parameters",
-          "goTo": "parameters"
         }
       ]
     },
@@ -240,7 +243,13 @@
             "Thresholds",
             "Notifications"
           ],
-          "active": 3
+          "active": 3,
+          "taps": [
+            {
+              "item": "Differences",
+              "goTo": "differences"
+            }
+          ]
         },
         {
           "type": "heading",
@@ -267,11 +276,6 @@
           "type": "heading",
           "text": "Sample data",
           "level": "H3"
-        },
-        {
-          "type": "link",
-          "text": "Differences",
-          "goTo": "differences"
         }
       ]
     },

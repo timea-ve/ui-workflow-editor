@@ -24,6 +24,20 @@ export const table: KitItemDef<TableProps> = {
     { key: 'showHeader', label: 'Header row', kind: 'boolean' },
   ],
   linkable: false,
+  itemRects: (p, { w, h }) => {
+    const allCols = splitList(p.columns);
+    const cols = (allCols.length ? allCols : ['Column']).slice(0, Math.max(1, Math.floor(w / MIN_COL_W)));
+    const header = toBool(p.showHeader);
+    const fit = Math.max(1, Math.floor(h / ROW_H));
+    const bodyRows = Math.max(0, Math.min(toInt(p.rows, 4, 0, 100), fit - (header ? 1 : 0)));
+    const total = (header ? 1 : 0) + bodyRows || 1;
+    const rowH = Math.min(h, total * ROW_H) / total;
+    const cw = w / cols.length;
+    return [
+      ...(header ? cols.map((label, i) => ({ label, x: i * cw, y: 0, w: cw, h: rowH })) : []),
+      ...Array.from({ length: bodyRows }, (_, r) => ({ label: `Row ${r + 1}`, x: 0, y: ((header ? 1 : 0) + r) * rowH, w, h: rowH })),
+    ];
+  },
   render: (p, { w, h, style, seed }) => {
     const allCols = splitList(p.columns);
     const cols = (allCols.length ? allCols : ['Column']).slice(0, Math.max(1, Math.floor(w / MIN_COL_W)));

@@ -54,13 +54,14 @@
             "Lab A",
             "Lab B",
             "Lab C"
+          ],
+          "taps": [
+            {
+              "item": "Lab B",
+              "goTo": "lab-view",
+              "linkLabel": "Open a lab"
+            }
           ]
-        },
-        {
-          "type": "link",
-          "text": "Lab B",
-          "goTo": "lab-view",
-          "linkLabel": "Open a lab"
         },
         {
           "type": "heading",
@@ -113,7 +114,13 @@
             "Serial",
             "Location"
           ],
-          "rows": 3
+          "rows": 3,
+          "goTo": "device-type",
+          "tap": {
+            "row": 1,
+            "column": "Name"
+          },
+          "linkLabel": "Open a device"
         },
         {
           "type": "text",
@@ -128,12 +135,6 @@
             "Location"
           ],
           "rows": 1
-        },
-        {
-          "type": "link",
-          "text": "timsTOF #1 (or an LC)",
-          "goTo": "device-type",
-          "linkLabel": "Open a device"
         }
       ]
     },
@@ -201,10 +202,8 @@
           "hasImage": false
         },
         {
-          "type": "card",
-          "title": "Installed Software",
-          "body": "Last update on 2024-09-08 17:06",
-          "hasImage": false
+          "type": "caption",
+          "text": "Below: Installed Software · last update on 2024-09-08 17:06"
         }
       ]
     },

@@ -22,7 +22,24 @@
             "Telemetry",
             "Settings"
           ],
-          "active": 0
+          "active": 0,
+          "taps": [
+            {
+              "item": "Procedures",
+              "goTo": "procedures",
+              "linkLabel": "Tests"
+            },
+            {
+              "item": "Telemetry",
+              "goTo": "telemetry",
+              "linkLabel": "Signals"
+            },
+            {
+              "item": "Settings",
+              "goTo": "lc-settings",
+              "linkLabel": "Access"
+            }
+          ]
         },
         {
           "type": "heading",
@@ -46,24 +63,6 @@
           "type": "line-chart",
           "title": "Leak test",
           "shape": "flat"
-        },
-        {
-          "type": "link",
-          "text": "Procedures",
-          "goTo": "procedures",
-          "linkLabel": "Tests"
-        },
-        {
-          "type": "link",
-          "text": "Telemetry",
-          "goTo": "telemetry",
-          "linkLabel": "Signals"
-        },
-        {
-          "type": "link",
-          "text": "Settings",
-          "goTo": "lc-settings",
-          "linkLabel": "Access"
         }
       ]
     },

@@ -24,6 +24,7 @@ Never paste the JSON into your reply unless asked. Don't change app code to make
 - **Few components per screen**: about 3–7. A screen shows one idea. Leave out decoration.
 - **Realistic, short labels**: "Send reset link", not "Button" or "Click here to proceed". Use sentence case.
 - **Every button or link that moves the user on has a `goTo`**. A tap with no `goTo` does nothing in Play. Back links and "Try again" need one too.
+- **Show taps where they happen.** Put the `goTo` on the real control (the sidebar item, tab, list row, table row) with `tap`/`taps`; don't add a separate link to stand for it. The board lays a lime **tap highlight** over the tapped part and draws the arrow from it.
 - **Branches use decisions**: "Email found?" → yes / no. Keep the happy path first.
 - **Start at the first screen.** List screens in the order a user meets them.
 - Use a `header` at the top of mobile screens (the title of the screen) and a `nav` at the bottom only on top-level app screens.
@@ -64,12 +65,20 @@ Never paste the JSON into your reply unless asked. Don't change app code to make
   "text": "Log in",                  // main text: "text", "label", "title" or "name" all work
   "goTo": "home",                    // optional: tapping it in Play goes to this screen or decision
   "linkLabel": "Valid details",      // optional label on the link arrow
+  "tap": "Settings",                 // optional: which part is tapped — an item label or 1-based number (sidebar, list, tabs, menu, nav, header links/"Avatar"/"Search"), or { "row": 2 } / { "column": "Status" } / both for a table
+  "side": "right",                   // optional, desktop: put it in a column right of the content (e.g. an in-page "Contents" list)
+  "taps": [                          // optional: several tappable parts of one component, each with its own target
+    { "item": "Timeline", "goTo": "timeline" },
+    { "item": "Logs", "goTo": "logs", "linkLabel": "Debug" }
+  ],
   "items": ["Home", "Search"],       // for lists, tabs, nav, menus, radios, dropdowns, tables (columns), stacked charts (series)
   "variant": "secondary"             // any other kit option by name (tables below)
 }
 ```
 
 A component can also be a plain string — `"Some words"` becomes a paragraph.
+
+Every `goTo` gets a **tap highlight**: a see-through lime box with a dark outline over what is tapped (the whole component, or just the `tap` part), and the arrow starts from it. A `tap` that doesn't match a visible part falls back to the whole component with a warning; `npm run flow` lists it.
 
 **Decision** (a diamond with a Yes and a No arrow)
 
@@ -133,13 +142,13 @@ References (`goTo`, `next`, `after`, `yes`, `no`, `near`) use ids; a screen's ex
 | `video` | title | |
 | `divider` | label | |
 
-Not clickable in Play (a `goTo` on them is ignored with a warning): heading, caption, checkbox, toggle, radio, slider, divider, progress, spinner, table, toast, tooltip, calendar, charts.
+Not clickable in Play (a `goTo` on them is ignored with a warning): heading, caption, checkbox, toggle, radio, slider, divider, progress, spinner, table, toast, tooltip, calendar, charts. A table becomes clickable when you say which row, column header or cell is tapped with `tap`.
 
 **Friendly aliases** also work, e.g. `title`/`h1` → heading, `paragraph`/`body` → text, `email`/`password`/`field` → input, `cta` → button, `secondary-button` → secondary button, `select` → dropdown, `switch` → toggle, `appbar`/`navbar` → header, `tabbar`/`bottom-nav` → nav, `photo`/`illustration`/`map` → image, `dialog`/`sheet` → modal, `alert`/`snackbar`/`banner` → toast, `chip`/`tag` → badge, `chart` → line-chart, `drawer` → sidebar. Unknown types become a small placeholder text (with a warning) — prefer real types.
 
 **Icon names**: alert, arrow-left, arrow-right, bell, bookmark, calendar, camera, cart, check, chevron-down, chevron-left, chevron-right, chevron-up, circle, clock, close, cloud, copy, credit-card, download, edit, eye, file, filter, flag, folder, gift, globe, grid, heart, help, home, image, info, link, list, lock, log-out, mail, map, map-pin, menu, message, mic, minus, more, more-vertical, music, phone, play, plus, search, send, settings, share, shopping-bag, sliders, square, star, sun, tag, thumbs-up, trash, upload, user, users, video, wifi, zap.
 
-Layout is automatic: screens go left to right in the order Play reaches them, branches on new rows, decisions below the screen they follow. A `header` sticks to the top, a `nav` to the bottom, on desktop a `sidebar` pins to the left under the header (content stacks in a wider column beside it), and on mobile the last buttons/links of a screen sit at the bottom like a real app.
+Layout is automatic: screens go left to right in the order Play reaches them, branches on new rows, decisions below the screen they follow. A `header` sticks to the top, a `nav` to the bottom, on desktop a `sidebar` pins to the left under the header (content stacks in a wider column beside it) and components with `"side": "right"` stack in a column on the right, and on mobile the last buttons/links of a screen sit at the bottom like a real app.
 
 ## Complete example
 

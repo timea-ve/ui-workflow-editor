@@ -19,7 +19,7 @@ Create **new, accurate** lo-fi desktop flows of the live **TwinScape** app (http
 3. **Build** each flow as `flows/twinscape-NN-<slug>.json` (continue numbering from 07), following `.github/agents/flow-designer.agent.md`:
    - `device: "desktop"`; shared header `{ "type": "header", "title": "TwinScape", "links": "Home, Notifications", "search": false, "right": "avatar" }` (adjust only if the live header differs).
    - Page title band, left `sidebar` with the real items and `active` set, then content using the closest components (table with real column headers, list, tabs, chart, card, toggle, input, button, modal, toast…).
-   - Link the actual clicked element with `goTo` and a short `linkLabel`; use yes/no decisions for real branches; sticky notes for remarks, unverified or not-exercised paths.
+   - Link the actual clicked element with `goTo` and a short `linkLabel`, on the real control in its real place: use `tap`/`taps` for a sidebar item, tab, list row, menu item, header link or table row/column — never a separate stand-in `link` component; use yes/no decisions for real branches; sticky notes for remarks, unverified or not-exercised paths.
 4. **Double-check (mandatory)**: for every screen, go back to the live page and compare it side by side with your JSON — nav items, tab names, column headers, button labels, order of sections, where each link goes. Fix mismatches. Then run `npm run flow -- flows/<file>.json` for each file: zero errors, zero warnings. Open each `--local` or live link and screenshot the board to confirm the layout reads correctly.
 5. **Verify** `npm test` passes, commit (with the Co-authored-by trailer) and push to `main`.
 
