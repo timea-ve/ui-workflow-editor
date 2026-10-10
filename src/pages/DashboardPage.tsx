@@ -176,18 +176,6 @@ export function DashboardPage() {
             <h1 className="fsc-sr-only">{copy.appName}</h1>
           )}
 
-          <section className="fsd-section" aria-labelledby="fsd-templates-title">
-            <div className="fsd-section__head">
-              <h2 id="fsd-templates-title" className="fsd-section__title">{copy.templatesTitle}</h2>
-              <p className="fsd-section__hint">{copy.templatesHint}</p>
-            </div>
-            <ul className="fsd-templates" data-empty={isEmpty || undefined}>
-              {TEMPLATES.map((t) => (
-                <TemplateCard key={t.id} template={t} busy={creating === t.id} disabled={busy} onUse={(id) => void create(id)} />
-              ))}
-            </ul>
-          </section>
-
           {status === 'error' && (
             <div className="fsd-error" role="alert">
               <span>{copy.loadError}</span>
@@ -229,6 +217,17 @@ export function DashboardPage() {
               )}
             </section>
           )}
+          <section className="fsd-section" aria-labelledby="fsd-templates-title">
+            <div className="fsd-section__head">
+              <h2 id="fsd-templates-title" className="fsd-section__title">{copy.templatesTitle}</h2>
+              <p className="fsd-section__hint">{copy.templatesHint}</p>
+            </div>
+            <ul className="fsd-templates" data-empty={isEmpty || undefined}>
+              {TEMPLATES.map((t) => (
+                <TemplateCard key={t.id} template={t} busy={creating === t.id} disabled={busy} onUse={(id) => void create(id)} />
+              ))}
+            </ul>
+          </section>
         </main>
 
         <Toasts toasts={toasts} onDismiss={dismissToast} duration={UNDO_WINDOW_MS} />
