@@ -1,6 +1,6 @@
 # UI Workflow Editor (formerly FlowSketch) — Project Status
 
-_Last updated: 2026-10-09_
+_Last updated: 2026-10-10_
 
 | | |
 |---|---|
@@ -25,6 +25,8 @@ _Last updated: 2026-10-09_
 
 - Ask Copilot for a flow ✅: describe a flow to Copilot (github.com or the Copilot app) and get a link that opens it as a new editable board — see [AGENT-FLOWS.md](AGENT-FLOWS.md). 997 unit + 67 end-to-end tests passing.
 
+- Save to GitHub ✅: "Sign in with GitHub" saves boards to a private repo (`ui-workflow-boards`) and syncs across devices — see [GITHUB-SAVE.md](GITHUB-SAVE.md). 1061 unit + 74 end-to-end tests passing.
+
 ## In progress
 - ⛳ Gate 4 approved — see [gates/GATE-4.md](gates/GATE-4.md). Live: https://timea-ve.github.io/ui-workflow-editor/ · Code: https://github.com/timea-ve/ui-workflow-editor (CI green) — see [gates/GATE-3.md](gates/GATE-3.md)
 
@@ -32,4 +34,4 @@ _Last updated: 2026-10-09_
 - Nothing
 
 ## Up next
-- ⛳ Gate 4: quality checklist + deploy plan
+- Director tries Save to GitHub on the live site

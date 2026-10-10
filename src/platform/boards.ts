@@ -8,11 +8,13 @@
 // dashboard) but keeps the content untouched until `commit()` runs — after the undo window, or when
 // the caller says so (e.g. the undo toast closes). `undo()` simply puts the row back. Ids awaiting
 // deletion are also recorded in localStorage, so content orphaned by closing the tab mid-window is
-// cleaned up by `flushPendingDeletes()` on the next dashboard visit.
+// cleaned up by `flushPendingDeletes()` on the next dashboard visit. A committed delete is also
+// recorded for GitHub sync (src/platform/github), which then removes the board's cloud copy.
 import type { Board, BoardDoc, ID } from '../model/types';
 import { emptyDoc } from '../flow/ops';
 import { createBoardMeta, deleteBoardMeta, getBoard, restoreBoardMeta } from './boardIndex';
 import { getTemplate } from './templates';
+import { recordLocalDelete } from './github/syncState';
 
 // Loaded on first use so the dashboard's initial bundle doesn't carry Yjs + IndexedDB (see docs/phase-4/performance.md).
 const persistence = () => import('../store/persistence');
@@ -87,7 +89,8 @@ export interface PendingDelete {
 
 const inFlight = new Map<ID, PendingDelete>();
 
-function readPending(): ID[] {
+/** Ids deleted but still inside their undo window (or not yet cleaned up). */
+export function pendingDeleteIds(): ID[] {
   try {
     const v = JSON.parse(localStorage.getItem(PENDING_KEY) ?? '[]');
     return Array.isArray(v) ? v.filter((x): x is ID => typeof x === 'string') : [];
@@ -101,8 +104,8 @@ function writePending(ids: ID[]) {
     else localStorage.removeItem(PENDING_KEY);
   } catch { /* storage full/blocked: worst case some content stays on disk */ }
 }
-const addPending = (id: ID) => writePending([...readPending(), id]);
-const removePending = (id: ID) => writePending(readPending().filter((x) => x !== id));
+const addPending = (id: ID) => writePending([...pendingDeleteIds(), id]);
+const removePending = (id: ID) => writePending(pendingDeleteIds().filter((x) => x !== id));
 
 /**
  * Removes the board from the list now; deletes its content after `undoWindowMs` (default 8 s).
@@ -133,7 +136,7 @@ export function deleteBoard(id: ID, opts: { undoWindowMs?: number | null } = {})
       if (state === 'undone') return Promise.resolve();
       clearTimeout(timer);
       committing ??= persistence().then((p) => p.deleteBoardData(id)).then(
-        () => { state = 'committed'; inFlight.delete(id); removePending(id); },
+        () => { state = 'committed'; inFlight.delete(id); removePending(id); recordLocalDelete(id); },
         (cause) => {
           committing = undefined;
           inFlight.delete(id);
@@ -159,12 +162,13 @@ export function commitPendingDeletes(): Promise<void> {
  * Skips ids still waiting in this tab and ids whose board row exists again (restored elsewhere).
  */
 export async function flushPendingDeletes(): Promise<void> {
-  for (const id of readPending()) {
+  for (const id of pendingDeleteIds()) {
     if (inFlight.has(id)) continue;
     if (getBoard(id)) { removePending(id); continue; }
     try {
       await (await persistence()).deleteBoardData(id);
       removePending(id);
+      recordLocalDelete(id);
     } catch { /* keep queued; retry next visit */ }
   }
 }

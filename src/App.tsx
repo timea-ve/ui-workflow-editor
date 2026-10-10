@@ -2,6 +2,7 @@ import { Suspense, lazy, useEffect, useState, type ComponentType } from 'react';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import { DashboardPage } from './pages/DashboardPage';
 import { NotFoundPage } from './pages/NotFoundPage';
+import { githubEnabled } from './platform/github/config';
 
 // Route-level code splitting: the dashboard ships in the entry chunk; the editor (React Flow, Yjs,
 // the canvas), the share page, the flow-link import page and the dev previews load on demand. See docs/phase-4/performance.md.
@@ -26,6 +27,14 @@ const home = lazyPage(() => import('./pages/HomePage'), (m) => m.HomePage);
 const gallery = lazyPage(() => import('./pages/GalleryPage'), (m) => m.GalleryPage);
 const sandbox = lazyPage(() => import('./pages/FlowSandboxPage'), (m) => m.FlowSandboxPage);
 const chrome = lazyPage(() => import('./pages/ChromePage'), (m) => m.ChromePage);
+const authCallback = lazyPage(() => import('./pages/AuthCallbackPage'), (m) => m.AuthCallbackPage);
+
+/** "Save to GitHub" background sync: its own chunk, loaded only when the feature is configured. */
+function useGitHubSync() {
+  useEffect(() => {
+    if (githubEnabled) import('./platform/github/runtime').then((m) => m.startGitHubSync(), () => {});
+  }, []);
+}
 
 // Deep links start fetching their page as soon as this module runs (vite.config.ts also preloads the
 // chunks from index.html), and the first render waits for it, so the editor appears in one go.
@@ -36,7 +45,8 @@ const appPath = typeof location === 'undefined' ? undefined
 const deepLink = appPath?.startsWith('/b/') ? editor.preload()
   : appPath?.startsWith('/s/') ? share.preload()
     : appPath?.startsWith('/new/') ? newFlow.preload()
-      : undefined;
+      : appPath?.startsWith('/auth/') ? authCallback.preload()
+        : undefined;
 deepLink?.catch(() => {});
 
 function useDeepLinkReady(): boolean {
@@ -63,6 +73,7 @@ function usePrefetchEditor() {
 
 export function App() {
   usePrefetchEditor();
+  useGitHubSync();
   if (!useDeepLinkReady()) return null;
   return (
     <BrowserRouter basename={BASENAME || undefined}>
@@ -72,6 +83,7 @@ export function App() {
         <Route path="/b/:boardId" element={<editor.Page />} />
         <Route path="/s/:shareId" element={<share.Page />} />
         <Route path="/new/:version" element={<newFlow.Page />} />
+        {githubEnabled && <Route path="/auth/callback" element={<authCallback.Page />} />}
         {/* Dev previews */}
         <Route path="/dev" element={<home.Page />} />
         <Route path="/gallery" element={<gallery.Page />} />

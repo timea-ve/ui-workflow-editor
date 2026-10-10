@@ -26,6 +26,13 @@ Your browser opens the app automatically (http://localhost:5173).
 
 Describe a flow in plain words to Copilot (on github.com or in the Copilot app) and get back a link that opens it as a new, editable board. No AI keys in the app. How to ask, with example prompts: [docs/AGENT-FLOWS.md](docs/AGENT-FLOWS.md).
 
+## Save boards to GitHub
+
+Boards are saved on your device as you work. Sign in with GitHub (dashboard, top right) and they're also
+copied to a private repository, `ui-workflow-boards`, in your account — so they're backed up and show up on
+your other devices. How it works and how to set it up: [docs/GITHUB-SAVE.md](docs/GITHUB-SAVE.md). Without
+the three `VITE_*` values in [`.env.example`](.env.example) the button simply doesn't appear.
+
 ## How it's published
 
 - Every push to `main` builds the app and publishes it to GitHub Pages ([`.github/workflows/pages.yml`](.github/workflows/pages.yml)). Every push and pull request also runs the checks and tests ([`ci.yml`](.github/workflows/ci.yml)).
@@ -36,6 +43,7 @@ Describe a flow in plain words to Copilot (on github.com or in the Copilot app) 
 ## Docs
 
 - [Ask Copilot for a flow](docs/AGENT-FLOWS.md)
+- [Save boards to GitHub](docs/GITHUB-SAVE.md)
 - [Project status](docs/PROJECT-STATUS.md)
 - [Decision log](docs/DECISION-LOG.md)
 - [Product brief](docs/BRIEF.md)

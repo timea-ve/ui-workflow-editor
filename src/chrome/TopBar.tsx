@@ -20,15 +20,18 @@ export interface TopBarProps {
   leading?: ReactNode;
   /** Replaces the default Share / Export / Compare / Play buttons (the editor mounts its action slot here). */
   actions?: ReactNode;
+  /** Extra status after the save status (e.g. "Saved to GitHub"). */
+  cloudStatus?: ReactNode;
 }
 
-export function TopBar({ title, onTitleChange, saveStatus, onShare, onExport, onCompare, onPlay, compareDisabled, leading, actions }: TopBarProps) {
+export function TopBar({ title, onTitleChange, saveStatus, onShare, onExport, onCompare, onPlay, compareDisabled, leading, actions, cloudStatus }: TopBarProps) {
   return (
     <header className="fsc-topbar fsc-root">
       {leading ?? <span className="fsc-topbar__brand" aria-hidden><BrandMark /></span>}
       <div className="fsc-topbar__title">
         <InlineTitle value={title} onChange={onTitleChange} />
         <SaveStatusIndicator status={saveStatus} />
+        {cloudStatus}
       </div>
       <div className="fsc-topbar__actions">
         {actions ?? <>

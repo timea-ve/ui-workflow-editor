@@ -28,3 +28,7 @@ dist-ssr
 test-results/
 playwright-report/
 .impeccable/
+
+# Cloudflare Wrangler
+.wrangler/
+.dev.vars

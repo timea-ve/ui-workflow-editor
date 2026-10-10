@@ -33,6 +33,11 @@ jobs:
         run: npm run build
         env:
           BASE_PATH: /ui-workflow-editor/
+          # "Save to GitHub" (docs/GITHUB-SAVE.md). Public values, kept as repository *variables*
+          # (Settings → Secrets and variables → Actions → Variables). If any is empty the feature stays hidden.
+          VITE_GITHUB_CLIENT_ID: ${{ vars.VITE_GITHUB_CLIENT_ID }}
+          VITE_GITHUB_APP_SLUG: ${{ vars.VITE_GITHUB_APP_SLUG }}
+          VITE_AUTH_WORKER_URL: ${{ vars.VITE_AUTH_WORKER_URL }}
 
       - name: Check SPA fallback
         run: test -f dist/404.html

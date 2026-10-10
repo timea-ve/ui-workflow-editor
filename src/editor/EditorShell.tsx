@@ -37,6 +37,8 @@ export interface EditorShellProps {
   readOnly?: boolean;
   /** Left of the title (e.g. back to dashboard). */
   leading?: ReactNode;
+  /** After the save status (GitHub sync state). */
+  cloudStatus?: ReactNode;
   /** Extra slot content (in addition to EDITOR_EXTENSIONS). */
   slots?: EditorSlots;
   extensions?: EditorExtension[];
@@ -53,7 +55,7 @@ export function EditorShell(props: EditorShellProps) {
 }
 
 function EditorInner({
-  boardId, store, title, onTitleChange, saveStatus, readOnly = false, leading, slots, extensions = EDITOR_EXTENSIONS,
+  boardId, store, title, onTitleChange, saveStatus, readOnly = false, leading, cloudStatus, slots, extensions = EDITOR_EXTENSIONS,
 }: EditorShellProps) {
   const doc = useSyncExternalStore(store.subscribe, store.getDoc);
   const rf = useReactFlow<FlowNode, SketchFlowEdge>();
@@ -174,6 +176,7 @@ function EditorInner({
             title={title}
             onTitleChange={(t) => onTitleChange?.(t)}
             saveStatus={saveStatus}
+            cloudStatus={cloudStatus}
             leading={leading}
             actions={(
               <>

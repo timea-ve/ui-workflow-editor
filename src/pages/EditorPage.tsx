@@ -1,5 +1,5 @@
 // /b/:boardId — the board editor. Owner: Canvas Core.
-import { useEffect, useMemo, useSyncExternalStore } from 'react';
+import { Suspense, lazy, useEffect, useMemo, useSyncExternalStore } from 'react';
 import { Link, useParams, useSearchParams } from 'react-router-dom';
 import { ArrowLeft } from 'lucide-react';
 import { Tip } from '../chrome';
@@ -7,9 +7,12 @@ import { EditorShell } from '../editor/EditorShell';
 import { PERF_BOARD_ID, buildPerfDoc } from '../editor/fixtures/perf60';
 import { STRESS_BOARD_ID, buildStressDoc } from '../editor/fixtures/stress';
 import { getBoard, renameBoard, subscribeBoards, touchBoard } from '../platform/boardIndex';
+import { githubEnabled } from '../platform/github/config';
 import { createMemoryStore } from '../store/boardStore';
 import { useBoardSession, useSaveState } from '../store/useBoardSession';
 import '../editor/editor.css';
+
+const CloudStatus = githubEnabled ? lazy(() => import('../platform/github/ui/CloudStatus').then((m) => ({ default: m.CloudStatus }))) : null;
 
 function BackLink() {
   return (
@@ -92,6 +95,7 @@ function BoardEditor({ boardId }: { boardId: string }) {
       title={title}
       onTitleChange={(t) => renameBoard(boardId, t)}
       saveStatus={saveState}
+      cloudStatus={CloudStatus && <Suspense fallback={null}><CloudStatus boardId={boardId} localSaving={saveState === 'saving'} /></Suspense>}
       leading={<BackLink />}
     />
   );

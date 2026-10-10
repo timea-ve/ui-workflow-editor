@@ -1,0 +1,12 @@
+# Token-exchange worker for "Save to GitHub". Deploy: see docs/GITHUB-SAVE.md.
+#   cd worker && npx wrangler deploy
+#   npx wrangler secret put GITHUB_CLIENT_SECRET
+name = "ui-workflow-editor-auth"
+main = "src/index.ts"
+compatibility_date = "2026-10-01"
+
+[vars]
+# The GitHub App's Client ID (public).
+GITHUB_CLIENT_ID = "Iv23liAJ2PBiA2uVD1Uq"
+# Comma-separated origins allowed to call this worker.
+ALLOWED_ORIGINS = "https://timea-ve.github.io,http://localhost:5173,http://localhost:5180"

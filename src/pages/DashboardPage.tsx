@@ -1,10 +1,11 @@
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { Suspense, lazy, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Plus, Search, X } from 'lucide-react';
 import type { Board } from '../model/types';
 import { BrandMark, ChromeProvider, Kbd, Tip, Toasts, isTypingTarget, type ToastMessage } from '../chrome';
 import { ICON_STROKE } from '../chrome/shared';
 import { renameBoard } from '../platform/boardIndex';
+import { githubEnabled } from '../platform/github/config';
 import { getShareState } from '../share/client';
 import {
   commitPendingDeletes, createBoard, deleteBoard, duplicateBoard, flushPendingDeletes, UNDO_WINDOW_MS, type PendingDelete,
@@ -17,6 +18,11 @@ import { useBoards, useNow } from '../dashboard/useBoards';
 import '../dashboard/dashboard.css';
 
 let toastSeq = 0;
+
+// "Save to GitHub" ships in its own chunk, loaded only when configured (see docs/GITHUB-SAVE.md).
+const loadGitHub = () => import('../platform/github/ui/GitHubDashboard');
+const GitHubAccount = githubEnabled ? lazy(() => loadGitHub().then((m) => ({ default: m.GitHubAccount }))) : null;
+const GitHubSetupPanel = githubEnabled ? lazy(() => loadGitHub().then((m) => ({ default: m.GitHubSetupPanel }))) : null;
 
 export function DashboardPage() {
   const navigate = useNavigate();
@@ -34,6 +40,8 @@ export function DashboardPage() {
     setToasts((ts) => [...ts, { ...t, id }]);
     return id;
   }, []);
+
+  const notice = useCallback((message: string) => { toast({ message }); }, [toast]);
 
   useEffect(() => {
     const prev = document.title;
@@ -143,6 +151,7 @@ export function DashboardPage() {
       <div className="fsd-page fsc-root" data-kit-style="clean">
         <header className="fsd-header">
           <span className="fsd-brand"><BrandMark size={20} />{copy.appName}</span>
+          {GitHubAccount && <Suspense fallback={null}><GitHubAccount onNotice={notice} /></Suspense>}
           <Tip label={copy.newBoard} shortcut={copy.newBoardShortcut}>
             <button type="button" className="fsc-btn fsc-btn--primary fsd-new" onClick={() => void create()} disabled={busy} aria-keyshortcuts="N" data-testid="new-board">
               <Plus size={18} strokeWidth={ICON_STROKE} aria-hidden />
@@ -152,6 +161,7 @@ export function DashboardPage() {
         </header>
 
         <main className="fsd-main">
+          {GitHubSetupPanel && <Suspense fallback={null}><GitHubSetupPanel /></Suspense>}
           {isEmpty ? (
             <section className="fsd-hero" aria-labelledby="fsd-hero-title">
               <h1 id="fsd-hero-title" className="fsd-hero__title">{copy.emptyTitle}</h1>
