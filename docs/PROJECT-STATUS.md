@@ -31,6 +31,8 @@ _Last updated: 2026-10-10_
 
 - Board previews ✅: board cards show their screens, like templates. 1078 unit + 79 end-to-end tests passing.
 
+- TwinScape flows from the live app ✅: 7 new flows (07–13) and 01–06 corrected, checked screen by screen against TwinScape v2.7.34, placeholders instead of customer data (decision #62). 1078 unit tests passing.
+
 ## In progress
 - ⛳ Gate 4 approved — see [gates/GATE-4.md](gates/GATE-4.md). Live: https://timea-ve.github.io/ui-workflow-editor/ · Code: https://github.com/timea-ve/ui-workflow-editor (CI green) — see [gates/GATE-3.md](gates/GATE-3.md)
 

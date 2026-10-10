@@ -1,0 +1,247 @@
+{
+  "name": "TwinScape 13 · Superlimator final test and fleet",
+  "device": "desktop",
+  "screens": [
+    {
+      "id": "instruments-menu",
+      "name": "Instruments menu",
+      "components": [
+        {
+          "type": "header",
+          "title": "TwinScape",
+          "links": "Labs, Browse, Overview, Instruments",
+          "search": false,
+          "right": "avatar"
+        },
+        {
+          "type": "menu",
+          "items": [
+            "Mass Spectrometry",
+            "Liquid Chromatography",
+            "Superlimator"
+          ],
+          "goTo": "picker",
+          "linkLabel": "Superlimator"
+        }
+      ]
+    },
+    {
+      "id": "picker",
+      "name": "Superlimator",
+      "components": [
+        {
+          "type": "header",
+          "title": "TwinScape",
+          "links": "Labs, Browse, Overview, Instruments",
+          "search": false,
+          "right": "avatar"
+        },
+        {
+          "type": "heading",
+          "text": "Superlimator",
+          "level": "H2"
+        },
+        {
+          "type": "dropdown",
+          "label": "Serial",
+          "value": "Select...",
+          "items": [
+            "SL-0001",
+            "SL-0002",
+            "SL-0003"
+          ],
+          "goTo": "final-test",
+          "linkLabel": "Pick a serial"
+        },
+        {
+          "type": "link",
+          "text": "Fleet Statistics",
+          "goTo": "fleet"
+        }
+      ]
+    },
+    {
+      "id": "final-test",
+      "name": "Superlimator · Final Test",
+      "components": [
+        {
+          "type": "header",
+          "title": "TwinScape",
+          "links": "Labs, Browse, Overview, Instruments",
+          "search": false,
+          "right": "avatar"
+        },
+        {
+          "type": "sidebar",
+          "title": "SL-0001",
+          "items": [
+            "Final Test"
+          ],
+          "active": 0
+        },
+        {
+          "type": "heading",
+          "text": "SL-0001",
+          "level": "H2"
+        },
+        {
+          "type": "caption",
+          "text": "#SL-0001 · in None"
+        },
+        {
+          "type": "text",
+          "text": "Test History · Total tests: 4",
+          "size": "md"
+        },
+        {
+          "type": "table",
+          "items": [
+            "Test Date",
+            "Test Count"
+          ],
+          "rows": 4
+        },
+        {
+          "type": "text",
+          "text": "Health Components",
+          "size": "md"
+        },
+        {
+          "type": "table",
+          "items": [
+            "Component",
+            "Serial Number",
+            "Operating Seconds"
+          ],
+          "rows": 4
+        },
+        {
+          "type": "link",
+          "text": "Test Summary",
+          "goTo": "final-test-2",
+          "linkLabel": "Scroll down"
+        }
+      ]
+    },
+    {
+      "id": "final-test-2",
+      "name": "Final Test · summary",
+      "components": [
+        {
+          "type": "header",
+          "title": "TwinScape",
+          "links": "Labs, Browse, Overview, Instruments",
+          "search": false,
+          "right": "avatar"
+        },
+        {
+          "type": "sidebar",
+          "title": "SL-0001",
+          "items": [
+            "Final Test"
+          ],
+          "active": 0
+        },
+        {
+          "type": "text",
+          "text": "Test Summary",
+          "size": "md"
+        },
+        {
+          "type": "table",
+          "items": [
+            "Test Name",
+            "Start Time",
+            "End Time",
+            "Duration (s)",
+            "Temp Mean",
+            "Temp StdDev",
+            "Pressure (Start)",
+            "Pressure (End)"
+          ],
+          "rows": 5
+        },
+        {
+          "type": "text",
+          "text": "Manual Measurements",
+          "size": "md"
+        },
+        {
+          "type": "table",
+          "items": [
+            "Chamber 1",
+            "Chamber 2",
+            "Chamber 3",
+            "Temp Crucible",
+            "Slide 1",
+            "…",
+            "Slide 6",
+            "Temp Peltier Cold"
+          ],
+          "rows": 1
+        }
+      ]
+    },
+    {
+      "id": "fleet",
+      "name": "Superlimator Fleet Statistics",
+      "components": [
+        {
+          "type": "header",
+          "title": "TwinScape",
+          "links": "Labs, Browse, Overview, Instruments",
+          "search": false,
+          "right": "avatar"
+        },
+        {
+          "type": "heading",
+          "text": "Superlimator Fleet Statistics",
+          "level": "H2"
+        },
+        {
+          "type": "text",
+          "text": "Final test statistics across all superlimator instruments. For each instrument the most recent final test is used.",
+          "tone": "muted"
+        },
+        {
+          "type": "heading",
+          "text": "Heater_cooling",
+          "level": "H3"
+        },
+        {
+          "type": "line-chart",
+          "title": "Duration (s) by Serial Number",
+          "shape": "flat"
+        },
+        {
+          "type": "line-chart",
+          "title": "Temp Mean by Serial Number",
+          "shape": "flat"
+        },
+        {
+          "type": "line-chart",
+          "title": "Temp StdDev by Serial Number",
+          "shape": "flat"
+        },
+        {
+          "type": "caption",
+          "text": "CONTENTS: Heater_cooling · Heater_heating · Heater_stability · Peltier_25to4 · Peltier_25to10 · Peltier_stability · Vacuum_evac · Vacuum_stability · Vacuum_vent"
+        }
+      ]
+    }
+  ],
+  "notes": [
+    {
+      "text": "Instruments ▾ in the header: Mass Spectrometry · Liquid Chromatography · Superlimator.",
+      "near": "instruments-menu"
+    },
+    {
+      "text": "Picking a serial opens /device/superlimator/<serial>/finaltest. The header really reads 'in None' (no lab).",
+      "near": "final-test"
+    },
+    {
+      "text": "Peltier_25to4 / 25to10 add Pressure (Start) and Pressure (End) charts; Vacuum sections show Duration and Pressure only.",
+      "near": "fleet"
+    }
+  ]
+}

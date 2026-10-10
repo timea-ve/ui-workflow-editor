@@ -1,0 +1,471 @@
+{
+  "name": "TwinScape 09 · Manage a lab",
+  "device": "desktop",
+  "screens": [
+    {
+      "id": "lab-instruments",
+      "name": "Lab A · Instruments",
+      "components": [
+        {
+          "type": "header",
+          "title": "TwinScape",
+          "links": "Labs, Browse, Overview, Instruments",
+          "search": false,
+          "right": "avatar"
+        },
+        {
+          "type": "heading",
+          "text": "Lab A",
+          "level": "H2"
+        },
+        {
+          "type": "tabs",
+          "items": [
+            "Instruments",
+            "Environment",
+            "Settings"
+          ],
+          "active": 0
+        },
+        {
+          "type": "text",
+          "text": "Mass spectrometers",
+          "size": "md"
+        },
+        {
+          "type": "table",
+          "items": [
+            "Name",
+            "Serial",
+            "Location"
+          ],
+          "rows": 3
+        },
+        {
+          "type": "text",
+          "text": "LCs",
+          "size": "md"
+        },
+        {
+          "type": "table",
+          "items": [
+            "Name",
+            "Serial",
+            "Location"
+          ],
+          "rows": 1
+        },
+        {
+          "type": "link",
+          "text": "Environment",
+          "goTo": "environment"
+        }
+      ]
+    },
+    {
+      "id": "environment",
+      "name": "Lab A · Environment",
+      "components": [
+        {
+          "type": "header",
+          "title": "TwinScape",
+          "links": "Labs, Browse, Overview, Instruments",
+          "search": false,
+          "right": "avatar"
+        },
+        {
+          "type": "heading",
+          "text": "Lab A",
+          "level": "H2"
+        },
+        {
+          "type": "tabs",
+          "items": [
+            "Instruments",
+            "Environment",
+            "Settings"
+          ],
+          "active": 1
+        },
+        {
+          "type": "heading",
+          "text": "Environment Sensor · Sensor A",
+          "level": "H3"
+        },
+        {
+          "type": "line-chart",
+          "title": "Temperature",
+          "shape": "wave"
+        },
+        {
+          "type": "line-chart",
+          "title": "Humidity",
+          "shape": "wave"
+        },
+        {
+          "type": "line-chart",
+          "title": "Pressure",
+          "shape": "flat"
+        },
+        {
+          "type": "link",
+          "text": "Settings",
+          "goTo": "general"
+        }
+      ]
+    },
+    {
+      "id": "general",
+      "name": "Settings · General",
+      "components": [
+        {
+          "type": "header",
+          "title": "TwinScape",
+          "links": "Labs, Browse, Overview, Instruments",
+          "search": false,
+          "right": "avatar"
+        },
+        {
+          "type": "heading",
+          "text": "Lab A",
+          "level": "H2"
+        },
+        {
+          "type": "tabs",
+          "items": [
+            "Instruments",
+            "Environment",
+            "Settings"
+          ],
+          "active": 2
+        },
+        {
+          "type": "input",
+          "label": "Name"
+        },
+        {
+          "type": "input",
+          "label": "Location"
+        },
+        {
+          "type": "textarea",
+          "label": "Description"
+        },
+        {
+          "type": "button",
+          "text": "Save changes"
+        },
+        {
+          "type": "link",
+          "text": "Tags",
+          "goTo": "tags",
+          "linkLabel": "CONTENTS"
+        }
+      ]
+    },
+    {
+      "id": "tags",
+      "name": "Settings · Tags",
+      "components": [
+        {
+          "type": "header",
+          "title": "TwinScape",
+          "links": "Labs, Browse, Overview, Instruments",
+          "search": false,
+          "right": "avatar"
+        },
+        {
+          "type": "heading",
+          "text": "Lab A",
+          "level": "H2"
+        },
+        {
+          "type": "tabs",
+          "items": [
+            "Instruments",
+            "Environment",
+            "Settings"
+          ],
+          "active": 2
+        },
+        {
+          "type": "heading",
+          "text": "Tags",
+          "level": "H3"
+        },
+        {
+          "type": "text",
+          "text": "No tags defined yet",
+          "tone": "muted"
+        },
+        {
+          "type": "input",
+          "label": "Add a new tag",
+          "placeholder": "New tag name"
+        },
+        {
+          "type": "button",
+          "text": "+ Add"
+        },
+        {
+          "type": "link",
+          "text": "Instruments",
+          "goTo": "lab-devices",
+          "linkLabel": "CONTENTS"
+        }
+      ]
+    },
+    {
+      "id": "lab-devices",
+      "name": "Settings · Instruments",
+      "components": [
+        {
+          "type": "header",
+          "title": "TwinScape",
+          "links": "Labs, Browse, Overview, Instruments",
+          "search": false,
+          "right": "avatar"
+        },
+        {
+          "type": "heading",
+          "text": "Lab A",
+          "level": "H2"
+        },
+        {
+          "type": "tabs",
+          "items": [
+            "Instruments",
+            "Environment",
+            "Settings"
+          ],
+          "active": 2
+        },
+        {
+          "type": "heading",
+          "text": "Mass Spectrometers",
+          "level": "H3"
+        },
+        {
+          "type": "table",
+          "items": [
+            "Name",
+            "Serial",
+            "Location",
+            "Remove"
+          ],
+          "rows": 3
+        },
+        {
+          "type": "dropdown",
+          "label": "Add an instrument",
+          "value": "Select...",
+          "helper": "Add any instruments to this lab that you have access to"
+        },
+        {
+          "type": "button",
+          "text": "Add instrument"
+        },
+        {
+          "type": "caption",
+          "text": "LCs: same table · Add an LC · Add LC"
+        },
+        {
+          "type": "link",
+          "text": "Members",
+          "goTo": "role",
+          "linkLabel": "CONTENTS"
+        }
+      ]
+    },
+    {
+      "id": "members-manager",
+      "name": "Settings · Members (Manager)",
+      "components": [
+        {
+          "type": "header",
+          "title": "TwinScape",
+          "links": "Labs, Browse, Overview, Instruments",
+          "search": false,
+          "right": "avatar"
+        },
+        {
+          "type": "heading",
+          "text": "Lab A",
+          "level": "H2"
+        },
+        {
+          "type": "tabs",
+          "items": [
+            "Instruments",
+            "Environment",
+            "Settings"
+          ],
+          "active": 2
+        },
+        {
+          "type": "table",
+          "items": [
+            "User",
+            "Role",
+            "Remove"
+          ],
+          "rows": 4
+        },
+        {
+          "type": "dropdown",
+          "label": "User",
+          "value": "Select...",
+          "helper": "Enter an email address to invite a user that is not visible here"
+        },
+        {
+          "type": "dropdown",
+          "label": "Role",
+          "items": [
+            "Observer",
+            "Editor",
+            "Manager"
+          ],
+          "value": "Observer"
+        },
+        {
+          "type": "button",
+          "text": "Invite"
+        },
+        {
+          "type": "link",
+          "text": "Show open invitations",
+          "goTo": "open-invites"
+        },
+        {
+          "type": "button",
+          "text": "Leave this lab",
+          "variant": "secondary"
+        },
+        {
+          "type": "button",
+          "text": "Delete this lab",
+          "variant": "secondary"
+        }
+      ]
+    },
+    {
+      "id": "open-invites",
+      "name": "Members · open invitations",
+      "components": [
+        {
+          "type": "header",
+          "title": "TwinScape",
+          "links": "Labs, Browse, Overview, Instruments",
+          "search": false,
+          "right": "avatar"
+        },
+        {
+          "type": "heading",
+          "text": "Lab A",
+          "level": "H2"
+        },
+        {
+          "type": "tabs",
+          "items": [
+            "Instruments",
+            "Environment",
+            "Settings"
+          ],
+          "active": 2
+        },
+        {
+          "type": "heading",
+          "text": "Show open invitations",
+          "level": "H3"
+        },
+        {
+          "type": "table",
+          "items": [
+            "Invitee",
+            "Invited by",
+            "Link",
+            "Date"
+          ],
+          "rows": 2
+        },
+        {
+          "type": "link",
+          "text": "Back to members",
+          "goTo": "members-manager"
+        }
+      ]
+    },
+    {
+      "id": "members-editor",
+      "name": "Settings · Members (Editor)",
+      "components": [
+        {
+          "type": "header",
+          "title": "TwinScape",
+          "links": "Labs, Browse, Overview, Instruments",
+          "search": false,
+          "right": "avatar"
+        },
+        {
+          "type": "heading",
+          "text": "Lab B",
+          "level": "H2"
+        },
+        {
+          "type": "tabs",
+          "items": [
+            "Instruments",
+            "Settings"
+          ],
+          "active": 1
+        },
+        {
+          "type": "table",
+          "items": [
+            "User",
+            "Role"
+          ],
+          "rows": 2
+        },
+        {
+          "type": "button",
+          "text": "Leave this lab",
+          "variant": "secondary"
+        }
+      ]
+    }
+  ],
+  "decisions": [
+    {
+      "id": "role",
+      "text": "Your role in the lab?",
+      "after": "lab-devices",
+      "yes": "members-manager",
+      "no": "members-editor",
+      "yesLabel": "Manager",
+      "noLabel": "Editor"
+    }
+  ],
+  "notes": [
+    {
+      "text": "Environment tab seen on a lab with sensors (Manager). Labs without sensors show only Instruments · Settings.",
+      "near": "lab-instruments"
+    },
+    {
+      "text": "Settings is one long page with CONTENTS nav on the right: General · Tags · Instruments · Members.",
+      "near": "general"
+    },
+    {
+      "text": "Not exercised: Save changes, + Add, Add instrument, Add LC, Remove.",
+      "near": "lab-devices"
+    },
+    {
+      "text": "Role badges in the table: Observer · Editor · Manager · Admin; you are marked 'You'. Not exercised: Invite, Remove, Leave this lab, Delete this lab.",
+      "near": "members-manager"
+    },
+    {
+      "text": "Editors see no invite form and no Remove on members. Save changes / Add instrument / Add LC stay disabled until something is entered.",
+      "near": "members-editor"
+    }
+  ]
+}

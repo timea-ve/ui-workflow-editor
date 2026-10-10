@@ -1,0 +1,269 @@
+{
+  "name": "TwinScape 11 · Monitor pipelines, logs and SFDC thresholds",
+  "device": "desktop",
+  "screens": [
+    {
+      "id": "pipelines",
+      "name": "Pipelines · no runs",
+      "components": [
+        {
+          "type": "header",
+          "title": "TwinScape",
+          "links": "Labs, Browse, Overview, Instruments",
+          "search": false,
+          "right": "avatar"
+        },
+        {
+          "type": "sidebar",
+          "title": "timsTOF #1",
+          "items": [
+            "Overview",
+            "Timeline",
+            "Final Test",
+            "Instrument Parameters",
+            "Differences",
+            "Readback Values",
+            "Atlas Commands",
+            "Hardware Diagnostics",
+            "Proteomics QC",
+            "Metabolomics QC",
+            "Insights",
+            "Pipelines",
+            "Logs",
+            "SFDC Thresholds",
+            "Settings",
+            "Thresholds",
+            "Notifications"
+          ],
+          "active": 11
+        },
+        {
+          "type": "heading",
+          "text": "timsTOF #1",
+          "level": "H2"
+        },
+        {
+          "type": "caption",
+          "text": "#1000000.00001 · in Lab A, Lab B"
+        },
+        {
+          "type": "heading",
+          "text": "TwinScape Pipelines",
+          "level": "H3"
+        },
+        {
+          "type": "dropdown",
+          "label": "Time range",
+          "value": "Today",
+          "items": [
+            "Today",
+            "Last week",
+            "Last month",
+            "Last 6 months",
+            "All"
+          ]
+        },
+        {
+          "type": "table",
+          "items": [
+            "Status",
+            "Date",
+            "Module",
+            "Task",
+            "Message",
+            "Value"
+          ],
+          "rows": 0
+        },
+        {
+          "type": "text",
+          "text": "No pipeline runs in the selected time range.",
+          "tone": "muted"
+        },
+        {
+          "type": "link",
+          "text": "load the last 6 months"
+        },
+        {
+          "type": "link",
+          "text": "Logs",
+          "goTo": "logs"
+        }
+      ]
+    },
+    {
+      "id": "logs",
+      "name": "Logs",
+      "components": [
+        {
+          "type": "header",
+          "title": "TwinScape",
+          "links": "Labs, Browse, Overview, Instruments",
+          "search": false,
+          "right": "avatar"
+        },
+        {
+          "type": "sidebar",
+          "title": "timsTOF #1",
+          "items": [
+            "Overview",
+            "Timeline",
+            "Final Test",
+            "Instrument Parameters",
+            "Differences",
+            "Readback Values",
+            "Atlas Commands",
+            "Hardware Diagnostics",
+            "Proteomics QC",
+            "Metabolomics QC",
+            "Insights",
+            "Pipelines",
+            "Logs",
+            "SFDC Thresholds",
+            "Settings",
+            "Thresholds",
+            "Notifications"
+          ],
+          "active": 12
+        },
+        {
+          "type": "heading",
+          "text": "timsTOF #1",
+          "level": "H2"
+        },
+        {
+          "type": "caption",
+          "text": "#1000000.00001 · in Lab A, Lab B"
+        },
+        {
+          "type": "heading",
+          "text": "TwinScape service logs",
+          "level": "H3"
+        },
+        {
+          "type": "toast",
+          "title": "Environment variable REMOTE_LOG_DIRECTORY not set. Downloading logs will not be possible",
+          "kind": "warning"
+        },
+        {
+          "type": "toast",
+          "title": "The installed TwinScape service version does not support remote log retrieval.",
+          "kind": "warning"
+        },
+        {
+          "type": "table",
+          "items": [
+            "created",
+            "uuid",
+            "initiator",
+            "active",
+            "files",
+            "download"
+          ],
+          "rows": 0
+        },
+        {
+          "type": "button",
+          "text": "Request logs"
+        },
+        {
+          "type": "link",
+          "text": "SFDC Thresholds",
+          "goTo": "sfdc"
+        }
+      ]
+    },
+    {
+      "id": "sfdc",
+      "name": "SFDC Thresholds",
+      "components": [
+        {
+          "type": "header",
+          "title": "TwinScape",
+          "links": "Labs, Browse, Overview, Instruments",
+          "search": false,
+          "right": "avatar"
+        },
+        {
+          "type": "sidebar",
+          "title": "timsTOF #1",
+          "items": [
+            "Overview",
+            "Timeline",
+            "Final Test",
+            "Instrument Parameters",
+            "Differences",
+            "Readback Values",
+            "Atlas Commands",
+            "Hardware Diagnostics",
+            "Proteomics QC",
+            "Metabolomics QC",
+            "Insights",
+            "Pipelines",
+            "Logs",
+            "SFDC Thresholds",
+            "Settings",
+            "Thresholds",
+            "Notifications"
+          ],
+          "active": 13
+        },
+        {
+          "type": "heading",
+          "text": "timsTOF #1",
+          "level": "H2"
+        },
+        {
+          "type": "caption",
+          "text": "#1000000.00001 · in Lab A, Lab B"
+        },
+        {
+          "type": "list",
+          "items": [
+            "Service Readback · 11",
+            "Service Instrument Parameters · 58",
+            "Service BLITS State · 6"
+          ]
+        },
+        {
+          "type": "table",
+          "items": [
+            "PARAMETER",
+            "Warning Below",
+            "Warning Above",
+            "Failure Below",
+            "Failure Above",
+            "Unit",
+            "Delay",
+            "Feedback"
+          ],
+          "rows": 4
+        },
+        {
+          "type": "button",
+          "text": "Correct recommendation",
+          "variant": "secondary"
+        },
+        {
+          "type": "button",
+          "text": "Give detailed feedback",
+          "variant": "secondary"
+        }
+      ]
+    }
+  ],
+  "notes": [
+    {
+      "text": "Only the empty state was visible. Also offers 'load all data'; grid has Page Size: 20 and paging.",
+      "near": "pipelines"
+    },
+    {
+      "text": "Request logs — not exercised.",
+      "near": "logs"
+    },
+    {
+      "text": "Each group is a collapsible card with a count badge. Feedback buttons — not exercised. Insights page was blank.",
+      "near": "sfdc"
+    }
+  ]
+}

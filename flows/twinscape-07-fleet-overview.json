@@ -1,0 +1,210 @@
+{
+  "name": "TwinScape 07 · Find an instrument in the fleet",
+  "device": "desktop",
+  "screens": [
+    {
+      "id": "overview",
+      "name": "Overview · test matrix",
+      "components": [
+        {
+          "type": "header",
+          "title": "TwinScape",
+          "links": "Labs, Browse, Overview, Instruments",
+          "search": false,
+          "right": "avatar"
+        },
+        {
+          "type": "heading",
+          "text": "Overview",
+          "level": "H2"
+        },
+        {
+          "type": "dropdown",
+          "label": "Filter instruments",
+          "value": "Select...",
+          "items": [
+            "timsTOF",
+            "timsTOF Pro",
+            "timsTOF Pro 2",
+            "timsTOF SCP",
+            "timsTOF HT",
+            "timsTOF Ultra",
+            "rapifleX"
+          ]
+        },
+        {
+          "type": "table",
+          "items": [
+            "Instrument",
+            "CapacityScan",
+            "FragmentationYield",
+            "MSAccuracy",
+            "…",
+            "Tune"
+          ],
+          "rows": 5
+        },
+        {
+          "type": "pagination",
+          "current": 1,
+          "total": 54
+        },
+        {
+          "type": "link",
+          "text": "Instrument serial (row)",
+          "goTo": "ms-overview",
+          "linkLabel": "Open instrument"
+        },
+        {
+          "type": "link",
+          "text": "Test name (column header)",
+          "goTo": "browse-test",
+          "linkLabel": "Browse this test"
+        },
+        {
+          "type": "link",
+          "text": "Scroll down",
+          "goTo": "overview-summary",
+          "linkLabel": "Summary"
+        }
+      ]
+    },
+    {
+      "id": "overview-summary",
+      "name": "Overview · summary",
+      "components": [
+        {
+          "type": "header",
+          "title": "TwinScape",
+          "links": "Labs, Browse, Overview, Instruments",
+          "search": false,
+          "right": "avatar"
+        },
+        {
+          "type": "heading",
+          "text": "Overview",
+          "level": "H2"
+        },
+        {
+          "type": "card",
+          "title": "Instrument types",
+          "body": "Pie chart by instrument type",
+          "hasImage": true
+        },
+        {
+          "type": "card",
+          "title": "Document count",
+          "body": "Instruments · Analyses",
+          "hasImage": false
+        }
+      ]
+    },
+    {
+      "id": "ms-overview",
+      "name": "MS · Overview",
+      "components": [
+        {
+          "type": "header",
+          "title": "TwinScape",
+          "links": "Labs, Browse, Overview, Instruments",
+          "search": false,
+          "right": "avatar"
+        },
+        {
+          "type": "sidebar",
+          "title": "timsTOF #1",
+          "items": [
+            "Overview",
+            "Timeline",
+            "Final Test",
+            "Instrument Parameters",
+            "Differences",
+            "Readback Values",
+            "Atlas Commands",
+            "Hardware Diagnostics",
+            "Proteomics QC",
+            "Metabolomics QC",
+            "Insights",
+            "Pipelines",
+            "Logs",
+            "SFDC Thresholds",
+            "Settings",
+            "Thresholds",
+            "Notifications"
+          ],
+          "active": 0
+        },
+        {
+          "type": "heading",
+          "text": "timsTOF #1",
+          "level": "H2"
+        },
+        {
+          "type": "caption",
+          "text": "#1000000.00001 · in Lab A, Lab B"
+        },
+        {
+          "type": "caption",
+          "text": "Last update 2 minutes ago"
+        },
+        {
+          "type": "list",
+          "items": [
+            "Readback · No data",
+            "Calibration · No data",
+            "Hardware Diagnostics · No data",
+            "TwinScape · 2 years ago"
+          ]
+        },
+        {
+          "type": "card",
+          "title": "General",
+          "body": "Device name · Serial number · Device type · Digitizer type · Registrant",
+          "hasImage": false
+        }
+      ]
+    },
+    {
+      "id": "browse-test",
+      "name": "Browse · filtered by test",
+      "components": [
+        {
+          "type": "header",
+          "title": "TwinScape",
+          "links": "Labs, Browse, Overview, Instruments",
+          "search": false,
+          "right": "avatar"
+        },
+        {
+          "type": "search",
+          "placeholder": "Filter",
+          "value": "specs.type:CapacityScanSpecification"
+        },
+        {
+          "type": "card",
+          "title": "Filter by test type",
+          "body": "×CapacityScan 809 · FragmentationYield 1219 · …",
+          "hasImage": false
+        },
+        {
+          "type": "caption",
+          "text": "Continues in flow 08 · Browse data"
+        }
+      ]
+    }
+  ],
+  "notes": [
+    {
+      "text": "Rows: instrument name + #serial (25 per page). Columns: one per final-test type. Cells show a ✓ icon per test that opens its report in a new tab (not opened).",
+      "near": "overview"
+    },
+    {
+      "text": "Serial link goes via /system/<serial> to the MS device page.",
+      "near": "ms-overview"
+    },
+    {
+      "text": "Instrument and analysis counts replaced with placeholders.",
+      "near": "overview-summary"
+    }
+  ]
+}

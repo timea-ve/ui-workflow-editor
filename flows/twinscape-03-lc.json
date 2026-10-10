@@ -4,18 +4,18 @@
   "screens": [
     {
       "id": "lc-overview",
-      "name": "LC overview · nano LC SN0004",
+      "name": "LC · Overview",
       "components": [
         {
           "type": "header",
           "title": "TwinScape",
-          "links": "Home, Notifications",
+          "links": "Labs, Browse, Overview, Instruments",
           "search": false,
           "right": "avatar"
         },
         {
           "type": "sidebar",
-          "title": "nano LC SN0004",
+          "title": "nano LC #1",
           "items": [
             "Overview",
             "Procedures",
@@ -26,12 +26,12 @@
         },
         {
           "type": "heading",
-          "text": "nano LC SN0004",
+          "text": "nano LC #1",
           "level": "H2"
         },
         {
           "type": "caption",
-          "text": "nanoElute#NRLP04 · Fällanden › MyDemoLab"
+          "text": "nanoElute#LC-0001 · Lab A › Lab B"
         },
         {
           "type": "list",
@@ -40,14 +40,12 @@
             "Self check · No data",
             "Flow restriction test · No data",
             "Preparation · No data"
-          ],
-          "showAvatar": false
+          ]
         },
         {
           "type": "line-chart",
           "title": "Leak test",
-          "shape": "flat",
-          "legend": "2026-09-27 – 2026-10-01"
+          "shape": "flat"
         },
         {
           "type": "link",
@@ -71,18 +69,18 @@
     },
     {
       "id": "procedures",
-      "name": "Procedures",
+      "name": "LC · Procedures",
       "components": [
         {
           "type": "header",
           "title": "TwinScape",
-          "links": "Home, Notifications",
+          "links": "Labs, Browse, Overview, Instruments",
           "search": false,
           "right": "avatar"
         },
         {
           "type": "sidebar",
-          "title": "nano LC SN0004",
+          "title": "nano LC #1",
           "items": [
             "Overview",
             "Procedures",
@@ -93,12 +91,12 @@
         },
         {
           "type": "heading",
-          "text": "nano LC SN0004",
+          "text": "nano LC #1",
           "level": "H2"
         },
         {
           "type": "caption",
-          "text": "nanoElute#NRLP04 · Fällanden › MyDemoLab"
+          "text": "nanoElute#LC-0001 · Lab A › Lab B"
         },
         {
           "type": "tabs",
@@ -115,7 +113,7 @@
         },
         {
           "type": "table",
-          "columns": [
+          "items": [
             "Metric",
             "Value",
             "Date"
@@ -126,18 +124,18 @@
     },
     {
       "id": "telemetry",
-      "name": "Telemetry",
+      "name": "LC · Telemetry",
       "components": [
         {
           "type": "header",
           "title": "TwinScape",
-          "links": "Home, Notifications",
+          "links": "Labs, Browse, Overview, Instruments",
           "search": false,
           "right": "avatar"
         },
         {
           "type": "sidebar",
-          "title": "nano LC SN0004",
+          "title": "nano LC #1",
           "items": [
             "Overview",
             "Procedures",
@@ -148,12 +146,12 @@
         },
         {
           "type": "heading",
-          "text": "nano LC SN0004",
+          "text": "nano LC #1",
           "level": "H2"
         },
         {
           "type": "caption",
-          "text": "nanoElute#NRLP04 · Fällanden › MyDemoLab"
+          "text": "nanoElute#LC-0001 · Lab A › Lab B"
         },
         {
           "type": "line-chart",
@@ -167,7 +165,7 @@
         },
         {
           "type": "table",
-          "columns": [
+          "items": [
             "Flow factor",
             "Test value"
           ],
@@ -177,18 +175,18 @@
     },
     {
       "id": "lc-settings",
-      "name": "LC settings",
+      "name": "LC · Settings",
       "components": [
         {
           "type": "header",
           "title": "TwinScape",
-          "links": "Home, Notifications",
+          "links": "Labs, Browse, Overview, Instruments",
           "search": false,
           "right": "avatar"
         },
         {
           "type": "sidebar",
-          "title": "nano LC SN0004",
+          "title": "nano LC #1",
           "items": [
             "Overview",
             "Procedures",
@@ -199,12 +197,12 @@
         },
         {
           "type": "heading",
-          "text": "nano LC SN0004",
+          "text": "nano LC #1",
           "level": "H2"
         },
         {
           "type": "caption",
-          "text": "nanoElute#NRLP04 · Fällanden › MyDemoLab"
+          "text": "nanoElute#LC-0001 · Lab A › Lab B"
         },
         {
           "type": "tabs",
@@ -234,7 +232,7 @@
   ],
   "notes": [
     {
-      "text": "Observer role and no-data state verified.",
+      "text": "LC device pages render blank on v2.7.34 (2 LCs tried). Screens kept from v1.9.26; only header and names updated. Re-check when LC pages load.",
       "near": "lc-overview"
     }
   ]

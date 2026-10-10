@@ -1,10 +1,10 @@
 {
-  "name": "TwinScape 02 · Review MS status and QC",
+  "name": "TwinScape 12 · Device thresholds and alerts",
   "device": "desktop",
   "screens": [
     {
-      "id": "lab-view",
-      "name": "Lab B · Instruments",
+      "id": "device-settings",
+      "name": "Device Settings",
       "components": [
         {
           "type": "header",
@@ -14,296 +14,65 @@
           "right": "avatar"
         },
         {
+          "type": "sidebar",
+          "title": "timsTOF #1",
+          "items": [
+            "Overview",
+            "Timeline",
+            "Final Test",
+            "Instrument Parameters",
+            "Differences",
+            "Readback Values",
+            "Atlas Commands",
+            "Hardware Diagnostics",
+            "Proteomics QC",
+            "Metabolomics QC",
+            "Insights",
+            "Pipelines",
+            "Logs",
+            "SFDC Thresholds",
+            "Settings",
+            "Thresholds",
+            "Notifications"
+          ],
+          "active": 14
+        },
+        {
           "type": "heading",
-          "text": "Lab B",
+          "text": "timsTOF #1",
           "level": "H2"
         },
         {
-          "type": "tabs",
-          "items": [
-            "Instruments",
-            "Settings"
-          ],
-          "active": 0
+          "type": "caption",
+          "text": "#1000000.00001 · in Lab A, Lab B"
+        },
+        {
+          "type": "input",
+          "label": "Name",
+          "state": "disabled"
+        },
+        {
+          "type": "input",
+          "label": "Location",
+          "state": "disabled"
+        },
+        {
+          "type": "textarea",
+          "label": "Description"
         },
         {
           "type": "text",
-          "text": "Mass spectrometers",
-          "size": "md"
+          "text": "You are not authorized to change these values",
+          "size": "sm",
+          "tone": "muted"
         },
         {
           "type": "table",
           "items": [
-            "Name",
-            "Serial",
-            "Location"
+            "User",
+            "Role"
           ],
           "rows": 3
-        },
-        {
-          "type": "text",
-          "text": "LCs",
-          "size": "md"
-        },
-        {
-          "type": "table",
-          "items": [
-            "Name",
-            "Serial",
-            "Location"
-          ],
-          "rows": 1
-        },
-        {
-          "type": "link",
-          "text": "timsTOF #1",
-          "goTo": "ms-overview",
-          "linkLabel": "Open device"
-        }
-      ]
-    },
-    {
-      "id": "ms-overview",
-      "name": "MS · Overview",
-      "components": [
-        {
-          "type": "header",
-          "title": "TwinScape",
-          "links": "Labs, Browse, Overview, Instruments",
-          "search": false,
-          "right": "avatar"
-        },
-        {
-          "type": "sidebar",
-          "title": "timsTOF #1",
-          "items": [
-            "Overview",
-            "Timeline",
-            "Final Test",
-            "Instrument Parameters",
-            "Differences",
-            "Readback Values",
-            "Atlas Commands",
-            "Hardware Diagnostics",
-            "Proteomics QC",
-            "Metabolomics QC",
-            "Insights",
-            "Pipelines",
-            "Logs",
-            "SFDC Thresholds",
-            "Settings",
-            "Thresholds",
-            "Notifications"
-          ],
-          "active": 0
-        },
-        {
-          "type": "heading",
-          "text": "timsTOF #1",
-          "level": "H2"
-        },
-        {
-          "type": "caption",
-          "text": "#1000000.00001 · in Lab A, Lab B"
-        },
-        {
-          "type": "caption",
-          "text": "Last update 2 minutes ago"
-        },
-        {
-          "type": "list",
-          "items": [
-            "Readback · No data",
-            "Calibration · No data",
-            "Hardware Diagnostics · No data",
-            "TwinScape · 2 years ago"
-          ]
-        },
-        {
-          "type": "link",
-          "text": "Proteomics QC",
-          "goTo": "qc-found"
-        },
-        {
-          "type": "link",
-          "text": "Metabolomics QC",
-          "goTo": "metabolomics"
-        }
-      ]
-    },
-    {
-      "id": "proteomics",
-      "name": "Proteomics QC · results",
-      "components": [
-        {
-          "type": "header",
-          "title": "TwinScape",
-          "links": "Labs, Browse, Overview, Instruments",
-          "search": false,
-          "right": "avatar"
-        },
-        {
-          "type": "sidebar",
-          "title": "timsTOF #1",
-          "items": [
-            "Overview",
-            "Timeline",
-            "Final Test",
-            "Instrument Parameters",
-            "Differences",
-            "Readback Values",
-            "Atlas Commands",
-            "Hardware Diagnostics",
-            "Proteomics QC",
-            "Metabolomics QC",
-            "Insights",
-            "Pipelines",
-            "Logs",
-            "SFDC Thresholds",
-            "Settings",
-            "Thresholds",
-            "Notifications"
-          ],
-          "active": 8
-        },
-        {
-          "type": "heading",
-          "text": "timsTOF #1",
-          "level": "H2"
-        },
-        {
-          "type": "caption",
-          "text": "#1000000.00001 · in Lab A, Lab B"
-        },
-        {
-          "type": "stacked-chart",
-          "title": "QC Sample Results",
-          "items": [
-            "Peptide Precursors",
-            "Stripped Peptides",
-            "Protein Groups"
-          ]
-        },
-        {
-          "type": "line-chart",
-          "title": "iRT Peptides QC Results · Peptide MS1 Area",
-          "shape": "wave"
-        },
-        {
-          "type": "line-chart",
-          "title": "Peptide Retention Time",
-          "shape": "flat"
-        },
-        {
-          "type": "caption",
-          "text": "Also: Peptide MS2 Area · Peptide FWHM · Peptide MS/MS Quality · Peptide 1/K0 · Peptide Mass Accuracy"
-        }
-      ]
-    },
-    {
-      "id": "proteomics-empty",
-      "name": "Proteomics QC · no runs",
-      "components": [
-        {
-          "type": "header",
-          "title": "TwinScape",
-          "links": "Labs, Browse, Overview, Instruments",
-          "search": false,
-          "right": "avatar"
-        },
-        {
-          "type": "sidebar",
-          "title": "timsTOF #1",
-          "items": [
-            "Overview",
-            "Timeline",
-            "Final Test",
-            "Instrument Parameters",
-            "Differences",
-            "Readback Values",
-            "Atlas Commands",
-            "Hardware Diagnostics",
-            "Proteomics QC",
-            "Metabolomics QC",
-            "Insights",
-            "Pipelines",
-            "Logs",
-            "SFDC Thresholds",
-            "Settings",
-            "Thresholds",
-            "Notifications"
-          ],
-          "active": 8
-        },
-        {
-          "type": "heading",
-          "text": "timsTOF #1",
-          "level": "H2"
-        },
-        {
-          "type": "caption",
-          "text": "#1000000.00001 · in Lab A, Lab B"
-        },
-        {
-          "type": "text",
-          "text": "No Proteomics QC runs found",
-          "tone": "muted"
-        },
-        {
-          "type": "link",
-          "text": "Metabolomics QC",
-          "goTo": "metabolomics"
-        }
-      ]
-    },
-    {
-      "id": "metabolomics",
-      "name": "Metabolomics QC · no runs",
-      "components": [
-        {
-          "type": "header",
-          "title": "TwinScape",
-          "links": "Labs, Browse, Overview, Instruments",
-          "search": false,
-          "right": "avatar"
-        },
-        {
-          "type": "sidebar",
-          "title": "timsTOF #1",
-          "items": [
-            "Overview",
-            "Timeline",
-            "Final Test",
-            "Instrument Parameters",
-            "Differences",
-            "Readback Values",
-            "Atlas Commands",
-            "Hardware Diagnostics",
-            "Proteomics QC",
-            "Metabolomics QC",
-            "Insights",
-            "Pipelines",
-            "Logs",
-            "SFDC Thresholds",
-            "Settings",
-            "Thresholds",
-            "Notifications"
-          ],
-          "active": 9
-        },
-        {
-          "type": "heading",
-          "text": "timsTOF #1",
-          "level": "H2"
-        },
-        {
-          "type": "caption",
-          "text": "#1000000.00001 · in Lab A, Lab B"
-        },
-        {
-          "type": "text",
-          "text": "No Metabolomics QC runs found",
-          "tone": "muted"
         },
         {
           "type": "link",
@@ -357,10 +126,24 @@
           "text": "#1000000.00001 · in Lab A, Lab B"
         },
         {
-          "type": "card",
-          "title": "Metabolomics QC",
-          "body": "Error (ppm) · Retention Time Error (min) · CCS Error",
-          "hasImage": false
+          "type": "heading",
+          "text": "Metabolomics QC",
+          "level": "H3"
+        },
+        {
+          "type": "list",
+          "items": [
+            "Error (ppm)",
+            "Retention Time Error (min)",
+            "CCS Error"
+          ]
+        },
+        {
+          "type": "icon-button",
+          "name": "Edit custom thresholds",
+          "icon": "edit",
+          "goTo": "threshold-detail",
+          "linkLabel": "Expand"
         },
         {
           "type": "text",
@@ -369,28 +152,235 @@
           "tone": "muted"
         }
       ]
-    }
-  ],
-  "decisions": [
+    },
     {
-      "id": "qc-found",
-      "text": "QC runs found?",
-      "yes": "proteomics",
-      "no": "proteomics-empty"
+      "id": "threshold-detail",
+      "name": "Thresholds · Error (ppm)",
+      "components": [
+        {
+          "type": "header",
+          "title": "TwinScape",
+          "links": "Labs, Browse, Overview, Instruments",
+          "search": false,
+          "right": "avatar"
+        },
+        {
+          "type": "sidebar",
+          "title": "timsTOF #1",
+          "items": [
+            "Overview",
+            "Timeline",
+            "Final Test",
+            "Instrument Parameters",
+            "Differences",
+            "Readback Values",
+            "Atlas Commands",
+            "Hardware Diagnostics",
+            "Proteomics QC",
+            "Metabolomics QC",
+            "Insights",
+            "Pipelines",
+            "Logs",
+            "SFDC Thresholds",
+            "Settings",
+            "Thresholds",
+            "Notifications"
+          ],
+          "active": 15
+        },
+        {
+          "type": "heading",
+          "text": "timsTOF #1",
+          "level": "H2"
+        },
+        {
+          "type": "caption",
+          "text": "#1000000.00001 · in Lab A, Lab B"
+        },
+        {
+          "type": "heading",
+          "text": "Error (ppm)",
+          "level": "H3"
+        },
+        {
+          "type": "list",
+          "items": [
+            "Failure · not set",
+            "Warning · not set",
+            "Info · not set"
+          ]
+        },
+        {
+          "type": "caption",
+          "text": "Default: Outside of: -3 - 3 ppm"
+        },
+        {
+          "type": "link",
+          "text": "Notifications",
+          "goTo": "notifications"
+        }
+      ]
+    },
+    {
+      "id": "notifications",
+      "name": "Device Notifications",
+      "components": [
+        {
+          "type": "header",
+          "title": "TwinScape",
+          "links": "Labs, Browse, Overview, Instruments",
+          "search": false,
+          "right": "avatar"
+        },
+        {
+          "type": "sidebar",
+          "title": "timsTOF #1",
+          "items": [
+            "Overview",
+            "Timeline",
+            "Final Test",
+            "Instrument Parameters",
+            "Differences",
+            "Readback Values",
+            "Atlas Commands",
+            "Hardware Diagnostics",
+            "Proteomics QC",
+            "Metabolomics QC",
+            "Insights",
+            "Pipelines",
+            "Logs",
+            "SFDC Thresholds",
+            "Settings",
+            "Thresholds",
+            "Notifications"
+          ],
+          "active": 16
+        },
+        {
+          "type": "heading",
+          "text": "timsTOF #1",
+          "level": "H2"
+        },
+        {
+          "type": "caption",
+          "text": "#1000000.00001 · in Lab A, Lab B"
+        },
+        {
+          "type": "card",
+          "title": "Readback",
+          "body": "Device Temperature 1/2 · Pump 1/2 Current · Pump 1/2 Speed · Vacuum Funnel In · TIMS Out · TIMS In · TOF",
+          "hasImage": false
+        },
+        {
+          "type": "card",
+          "title": "Qc Metabolomics",
+          "body": "CCS Error · Error (ppm) · Retention Time Error (min)",
+          "hasImage": false
+        },
+        {
+          "type": "card",
+          "title": "Software Versions",
+          "body": "Software Version Change",
+          "hasImage": false
+        },
+        {
+          "type": "card",
+          "title": "Other",
+          "body": "TwinScape Service Update · TwinScape Connection",
+          "hasImage": false
+        },
+        {
+          "type": "link",
+          "text": "Software Version Change",
+          "goTo": "notification-row",
+          "linkLabel": "Expand row"
+        }
+      ]
+    },
+    {
+      "id": "notification-row",
+      "name": "Notification · expanded",
+      "components": [
+        {
+          "type": "header",
+          "title": "TwinScape",
+          "links": "Labs, Browse, Overview, Instruments",
+          "search": false,
+          "right": "avatar"
+        },
+        {
+          "type": "sidebar",
+          "title": "timsTOF #1",
+          "items": [
+            "Overview",
+            "Timeline",
+            "Final Test",
+            "Instrument Parameters",
+            "Differences",
+            "Readback Values",
+            "Atlas Commands",
+            "Hardware Diagnostics",
+            "Proteomics QC",
+            "Metabolomics QC",
+            "Insights",
+            "Pipelines",
+            "Logs",
+            "SFDC Thresholds",
+            "Settings",
+            "Thresholds",
+            "Notifications"
+          ],
+          "active": 16
+        },
+        {
+          "type": "heading",
+          "text": "timsTOF #1",
+          "level": "H2"
+        },
+        {
+          "type": "caption",
+          "text": "#1000000.00001 · in Lab A, Lab B"
+        },
+        {
+          "type": "heading",
+          "text": "Software Version Change",
+          "level": "H3"
+        },
+        {
+          "type": "slider",
+          "label": "Severity: Failure · Warning · Info · Success",
+          "value": 66
+        },
+        {
+          "type": "toggle",
+          "label": "Software Version Change",
+          "on": false
+        },
+        {
+          "type": "text",
+          "text": "Get notified if software version(s) change on the acquisition PC.",
+          "tone": "muted"
+        },
+        {
+          "type": "link",
+          "text": "Back to Notifications",
+          "goTo": "notifications"
+        }
+      ]
     }
   ],
   "notes": [
     {
-      "text": "Corrected for v2.7.34: Proteomics QC moved from the lab sidebar to the device sidebar (QUALITY group).",
-      "near": "lab-view"
+      "text": "Seen as a non-editor: General fields disabled. Access Control table lists users and roles. CONTENTS: General · Access Rights.",
+      "near": "device-settings"
     },
     {
-      "text": "Charts are scatter plots over time; CONTENTS nav on the right lists each chart.",
-      "near": "proteomics"
-    },
-    {
-      "text": "Thresholds detail is in flow 12.",
+      "text": "Thresholds is a card list (not tabs). Editing needs editor permissions — not exercised.",
       "near": "thresholds"
+    },
+    {
+      "text": "Severity slider is disabled for this role; each row has an unlabeled on/off switch (all off here) — not changed.",
+      "near": "notification-row"
     }
   ]
 }

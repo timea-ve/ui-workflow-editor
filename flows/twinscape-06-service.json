@@ -4,23 +4,33 @@
   "screens": [
     {
       "id": "ms-overview",
-      "name": "MS overview · GG-TOF_Pro_2",
+      "name": "MS · Overview",
       "components": [
         {
           "type": "header",
           "title": "TwinScape",
-          "links": "Home, Notifications",
+          "links": "Labs, Browse, Overview, Instruments",
           "search": false,
           "right": "avatar"
         },
         {
           "type": "sidebar",
-          "title": "GG-TOF_Pro_2",
+          "title": "timsTOF #1",
           "items": [
             "Overview",
-            "Hardware Diagnostics",
+            "Timeline",
+            "Final Test",
+            "Instrument Parameters",
+            "Differences",
             "Readback Values",
-            "Software",
+            "Atlas Commands",
+            "Hardware Diagnostics",
+            "Proteomics QC",
+            "Metabolomics QC",
+            "Insights",
+            "Pipelines",
+            "Logs",
+            "SFDC Thresholds",
             "Settings",
             "Thresholds",
             "Notifications"
@@ -29,12 +39,12 @@
         },
         {
           "type": "heading",
-          "text": "GG-TOF_Pro_2",
+          "text": "timsTOF #1",
           "level": "H2"
         },
         {
           "type": "caption",
-          "text": "#1893751.10757 · in Fällanden › MyDemoLab"
+          "text": "#1000000.00001 · in Lab A, Lab B"
         },
         {
           "type": "list",
@@ -43,14 +53,13 @@
             "Calibration · No data",
             "Hardware Diagnostics · No data",
             "TwinScape · 2 years ago"
-          ],
-          "showAvatar": false
+          ]
         },
         {
-          "type": "line-chart",
-          "title": "Mass calibration",
-          "shape": "rising",
-          "legend": "Last update 1 minute ago"
+          "type": "card",
+          "title": "Installed Software",
+          "body": "Last update on 2024-09-08 17:06",
+          "hasImage": false
         },
         {
           "type": "link",
@@ -66,179 +75,220 @@
         },
         {
           "type": "link",
-          "text": "Software",
-          "goTo": "software",
-          "linkLabel": "Versions"
+          "text": "Atlas Commands",
+          "goTo": "atlas"
         }
       ]
     },
     {
       "id": "readbacks",
-      "name": "Readback values",
+      "name": "Readback Values",
       "components": [
         {
           "type": "header",
           "title": "TwinScape",
-          "links": "Home, Notifications",
+          "links": "Labs, Browse, Overview, Instruments",
           "search": false,
           "right": "avatar"
         },
         {
           "type": "sidebar",
-          "title": "GG-TOF_Pro_2",
+          "title": "timsTOF #1",
           "items": [
             "Overview",
-            "Hardware Diagnostics",
+            "Timeline",
+            "Final Test",
+            "Instrument Parameters",
+            "Differences",
             "Readback Values",
-            "Software",
+            "Atlas Commands",
+            "Hardware Diagnostics",
+            "Proteomics QC",
+            "Metabolomics QC",
+            "Insights",
+            "Pipelines",
+            "Logs",
+            "SFDC Thresholds",
             "Settings",
             "Thresholds",
             "Notifications"
           ],
-          "active": 2
+          "active": 5
         },
         {
           "type": "heading",
-          "text": "GG-TOF_Pro_2",
+          "text": "timsTOF #1",
           "level": "H2"
         },
         {
           "type": "caption",
-          "text": "#1893751.10757 · in Fällanden › MyDemoLab"
+          "text": "#1000000.00001 · in Lab A, Lab B"
         },
         {
           "type": "line-chart",
-          "title": "Device temperatures (°C)",
-          "shape": "flat",
-          "legend": "Last 15 minutes"
+          "title": "Device Temperatures ºC",
+          "shape": "flat"
+        },
+        {
+          "type": "stacked-chart",
+          "title": "Vacuum (mBar)",
+          "items": [
+            "TIMS In",
+            "TIMS Out",
+            "TOF"
+          ]
         },
         {
           "type": "line-chart",
-          "title": "TIMS In (mBar)",
-          "shape": "falling",
-          "legend": "Last 15 minutes"
+          "title": "Collision Gas · Gas Flow %",
+          "shape": "flat"
         },
         {
-          "type": "caption",
-          "text": "Also: Vacuum · TIMS Out · TOF · Collision gas · Turbo pumps · Power · Speed"
+          "type": "stacked-chart",
+          "title": "Turbo Pumps · Power Consumption % · Speed %",
+          "items": [
+            "Pump 1",
+            "Pump 2"
+          ]
         }
       ]
     },
     {
       "id": "diagnostics",
-      "name": "Hardware diagnostics",
+      "name": "Hardware Diagnostics",
       "components": [
         {
           "type": "header",
           "title": "TwinScape",
-          "links": "Home, Notifications",
+          "links": "Labs, Browse, Overview, Instruments",
           "search": false,
           "right": "avatar"
         },
         {
           "type": "sidebar",
-          "title": "GG-TOF_Pro_2",
+          "title": "timsTOF #1",
           "items": [
             "Overview",
-            "Hardware Diagnostics",
+            "Timeline",
+            "Final Test",
+            "Instrument Parameters",
+            "Differences",
             "Readback Values",
-            "Software",
+            "Atlas Commands",
+            "Hardware Diagnostics",
+            "Proteomics QC",
+            "Metabolomics QC",
+            "Insights",
+            "Pipelines",
+            "Logs",
+            "SFDC Thresholds",
             "Settings",
             "Thresholds",
             "Notifications"
           ],
-          "active": 1
+          "active": 7
         },
         {
           "type": "heading",
-          "text": "GG-TOF_Pro_2",
+          "text": "timsTOF #1",
           "level": "H2"
         },
         {
           "type": "caption",
-          "text": "#1893751.10757 · in Fällanden › MyDemoLab"
+          "text": "#1000000.00001 · in Lab A, Lab B"
         },
         {
-          "type": "line-chart",
-          "title": "Funnel 2 performance",
-          "shape": "wave"
+          "type": "card",
+          "title": "Funnel 2 Performance Score",
+          "body": "Works well and within the specification",
+          "hasImage": false
         },
         {
-          "type": "list",
-          "items": [
-            "Collision cell",
-            "Quadrupole",
-            "QIE",
-            "Content index"
-          ],
-          "showAvatar": false
+          "type": "card",
+          "title": "Collision Cell Efficiency Score",
+          "body": "Works well and within the specification",
+          "hasImage": false
         },
         {
           "type": "badge",
-          "label": "Funnel validation within specification",
-          "variant": "soft"
+          "label": "Quadrupole Ion Energy · Fail",
+          "variant": "outline"
+        },
+        {
+          "type": "line-chart",
+          "title": "Quadrupole Transmission",
+          "shape": "wave"
+        },
+        {
+          "type": "caption",
+          "text": "Also: Collision Cell Detailed Scores · segment intensity · Capillary: Resistance (No data to show)"
         }
       ]
     },
     {
-      "id": "software",
-      "name": "Installed software",
+      "id": "atlas",
+      "name": "Atlas Commands",
       "components": [
         {
           "type": "header",
           "title": "TwinScape",
-          "links": "Home, Notifications",
+          "links": "Labs, Browse, Overview, Instruments",
           "search": false,
           "right": "avatar"
         },
         {
           "type": "sidebar",
-          "title": "GG-TOF_Pro_2",
+          "title": "timsTOF #1",
           "items": [
             "Overview",
-            "Hardware Diagnostics",
+            "Timeline",
+            "Final Test",
+            "Instrument Parameters",
+            "Differences",
             "Readback Values",
-            "Software",
+            "Atlas Commands",
+            "Hardware Diagnostics",
+            "Proteomics QC",
+            "Metabolomics QC",
+            "Insights",
+            "Pipelines",
+            "Logs",
+            "SFDC Thresholds",
             "Settings",
             "Thresholds",
             "Notifications"
           ],
-          "active": 3
+          "active": 6
         },
         {
           "type": "heading",
-          "text": "GG-TOF_Pro_2",
+          "text": "timsTOF #1",
           "level": "H2"
         },
         {
           "type": "caption",
-          "text": "#1893751.10757 · in Fällanden › MyDemoLab"
-        },
-        {
-          "type": "table",
-          "columns": [
-            "Component",
-            "Version"
-          ],
-          "rows": 3
+          "text": "#1000000.00001 · in Lab A, Lab B"
         },
         {
           "type": "text",
-          "text": "timsControl setup 5.1.8 · TwinScape service 1.4.5 · otofControl 6.2.9.1",
-          "size": "sm",
+          "text": "No Atlas values available",
           "tone": "muted"
-        },
-        {
-          "type": "caption",
-          "text": "Last update shown: 2024-09-08 17:06"
         }
       ]
     }
   ],
   "notes": [
     {
-      "text": "Inspection only in the captured role — no repair, update or destructive action was exercised.",
+      "text": "Corrected for v2.7.34: 'Software' is no longer a sidebar item — Installed Software is a card on Overview. Sidebar has 17 items.",
       "near": "ms-overview"
+    },
+    {
+      "text": "Quadrupole Ion Energy shows Fail/Pass with a 'needs maintenance…' text when failing.",
+      "near": "diagnostics"
+    },
+    {
+      "text": "Inspection only — no repair, update or destructive action exercised.",
+      "near": "atlas"
     }
   ]
 }

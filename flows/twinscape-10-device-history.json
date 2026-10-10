@@ -1,67 +1,7 @@
 {
-  "name": "TwinScape 02 · Review MS status and QC",
+  "name": "TwinScape 10 · Investigate a device's history",
   "device": "desktop",
   "screens": [
-    {
-      "id": "lab-view",
-      "name": "Lab B · Instruments",
-      "components": [
-        {
-          "type": "header",
-          "title": "TwinScape",
-          "links": "Labs, Browse, Overview, Instruments",
-          "search": false,
-          "right": "avatar"
-        },
-        {
-          "type": "heading",
-          "text": "Lab B",
-          "level": "H2"
-        },
-        {
-          "type": "tabs",
-          "items": [
-            "Instruments",
-            "Settings"
-          ],
-          "active": 0
-        },
-        {
-          "type": "text",
-          "text": "Mass spectrometers",
-          "size": "md"
-        },
-        {
-          "type": "table",
-          "items": [
-            "Name",
-            "Serial",
-            "Location"
-          ],
-          "rows": 3
-        },
-        {
-          "type": "text",
-          "text": "LCs",
-          "size": "md"
-        },
-        {
-          "type": "table",
-          "items": [
-            "Name",
-            "Serial",
-            "Location"
-          ],
-          "rows": 1
-        },
-        {
-          "type": "link",
-          "text": "timsTOF #1",
-          "goTo": "ms-overview",
-          "linkLabel": "Open device"
-        }
-      ]
-    },
     {
       "id": "ms-overview",
       "name": "MS · Overview",
@@ -121,19 +61,14 @@
         },
         {
           "type": "link",
-          "text": "Proteomics QC",
-          "goTo": "qc-found"
-        },
-        {
-          "type": "link",
-          "text": "Metabolomics QC",
-          "goTo": "metabolomics"
+          "text": "Timeline",
+          "goTo": "timeline"
         }
       ]
     },
     {
-      "id": "proteomics",
-      "name": "Proteomics QC · results",
+      "id": "timeline",
+      "name": "Timeline",
       "components": [
         {
           "type": "header",
@@ -164,7 +99,7 @@
             "Thresholds",
             "Notifications"
           ],
-          "active": 8
+          "active": 1
         },
         {
           "type": "heading",
@@ -176,221 +111,256 @@
           "text": "#1000000.00001 · in Lab A, Lab B"
         },
         {
-          "type": "stacked-chart",
-          "title": "QC Sample Results",
-          "items": [
-            "Peptide Precursors",
-            "Stripped Peptides",
-            "Protein Groups"
-          ]
+          "type": "checkbox",
+          "label": "Hardware Diagnostics",
+          "checked": true
+        },
+        {
+          "type": "checkbox",
+          "label": "Software Update",
+          "checked": true
+        },
+        {
+          "type": "checkbox",
+          "label": "Calibration",
+          "checked": true
         },
         {
           "type": "line-chart",
-          "title": "iRT Peptides QC Results · Peptide MS1 Area",
-          "shape": "wave"
-        },
-        {
-          "type": "line-chart",
-          "title": "Peptide Retention Time",
+          "title": "Timeline",
           "shape": "flat"
         },
         {
-          "type": "caption",
-          "text": "Also: Peptide MS2 Area · Peptide FWHM · Peptide MS/MS Quality · Peptide 1/K0 · Peptide Mass Accuracy"
-        }
-      ]
-    },
-    {
-      "id": "proteomics-empty",
-      "name": "Proteomics QC · no runs",
-      "components": [
-        {
-          "type": "header",
-          "title": "TwinScape",
-          "links": "Labs, Browse, Overview, Instruments",
-          "search": false,
-          "right": "avatar"
-        },
-        {
-          "type": "sidebar",
-          "title": "timsTOF #1",
-          "items": [
-            "Overview",
-            "Timeline",
-            "Final Test",
-            "Instrument Parameters",
-            "Differences",
-            "Readback Values",
-            "Atlas Commands",
-            "Hardware Diagnostics",
-            "Proteomics QC",
-            "Metabolomics QC",
-            "Insights",
-            "Pipelines",
-            "Logs",
-            "SFDC Thresholds",
-            "Settings",
-            "Thresholds",
-            "Notifications"
-          ],
-          "active": 8
-        },
-        {
-          "type": "heading",
-          "text": "timsTOF #1",
-          "level": "H2"
-        },
-        {
-          "type": "caption",
-          "text": "#1000000.00001 · in Lab A, Lab B"
-        },
-        {
-          "type": "text",
-          "text": "No Proteomics QC runs found",
-          "tone": "muted"
-        },
-        {
-          "type": "link",
-          "text": "Metabolomics QC",
-          "goTo": "metabolomics"
-        }
-      ]
-    },
-    {
-      "id": "metabolomics",
-      "name": "Metabolomics QC · no runs",
-      "components": [
-        {
-          "type": "header",
-          "title": "TwinScape",
-          "links": "Labs, Browse, Overview, Instruments",
-          "search": false,
-          "right": "avatar"
-        },
-        {
-          "type": "sidebar",
-          "title": "timsTOF #1",
-          "items": [
-            "Overview",
-            "Timeline",
-            "Final Test",
-            "Instrument Parameters",
-            "Differences",
-            "Readback Values",
-            "Atlas Commands",
-            "Hardware Diagnostics",
-            "Proteomics QC",
-            "Metabolomics QC",
-            "Insights",
-            "Pipelines",
-            "Logs",
-            "SFDC Thresholds",
-            "Settings",
-            "Thresholds",
-            "Notifications"
-          ],
-          "active": 9
-        },
-        {
-          "type": "heading",
-          "text": "timsTOF #1",
-          "level": "H2"
-        },
-        {
-          "type": "caption",
-          "text": "#1000000.00001 · in Lab A, Lab B"
-        },
-        {
-          "type": "text",
-          "text": "No Metabolomics QC runs found",
-          "tone": "muted"
-        },
-        {
-          "type": "link",
-          "text": "Thresholds",
-          "goTo": "thresholds"
-        }
-      ]
-    },
-    {
-      "id": "thresholds",
-      "name": "Thresholds",
-      "components": [
-        {
-          "type": "header",
-          "title": "TwinScape",
-          "links": "Labs, Browse, Overview, Instruments",
-          "search": false,
-          "right": "avatar"
-        },
-        {
-          "type": "sidebar",
-          "title": "timsTOF #1",
-          "items": [
-            "Overview",
-            "Timeline",
-            "Final Test",
-            "Instrument Parameters",
-            "Differences",
-            "Readback Values",
-            "Atlas Commands",
-            "Hardware Diagnostics",
-            "Proteomics QC",
-            "Metabolomics QC",
-            "Insights",
-            "Pipelines",
-            "Logs",
-            "SFDC Thresholds",
-            "Settings",
-            "Thresholds",
-            "Notifications"
-          ],
-          "active": 15
-        },
-        {
-          "type": "heading",
-          "text": "timsTOF #1",
-          "level": "H2"
-        },
-        {
-          "type": "caption",
-          "text": "#1000000.00001 · in Lab A, Lab B"
-        },
-        {
           "type": "card",
-          "title": "Metabolomics QC",
-          "body": "Error (ppm) · Retention Time Error (min) · CCS Error",
+          "title": "Device Events",
           "hasImage": false
         },
         {
-          "type": "text",
-          "text": "Custom thresholds are read-only, you need editor permissions on this device to change them.",
-          "size": "sm",
-          "tone": "muted"
+          "type": "link",
+          "text": "Final Test",
+          "goTo": "final-test"
         }
       ]
-    }
-  ],
-  "decisions": [
+    },
     {
-      "id": "qc-found",
-      "text": "QC runs found?",
-      "yes": "proteomics",
-      "no": "proteomics-empty"
+      "id": "final-test",
+      "name": "Final Test",
+      "components": [
+        {
+          "type": "header",
+          "title": "TwinScape",
+          "links": "Labs, Browse, Overview, Instruments",
+          "search": false,
+          "right": "avatar"
+        },
+        {
+          "type": "sidebar",
+          "title": "timsTOF #1",
+          "items": [
+            "Overview",
+            "Timeline",
+            "Final Test",
+            "Instrument Parameters",
+            "Differences",
+            "Readback Values",
+            "Atlas Commands",
+            "Hardware Diagnostics",
+            "Proteomics QC",
+            "Metabolomics QC",
+            "Insights",
+            "Pipelines",
+            "Logs",
+            "SFDC Thresholds",
+            "Settings",
+            "Thresholds",
+            "Notifications"
+          ],
+          "active": 2
+        },
+        {
+          "type": "heading",
+          "text": "timsTOF #1",
+          "level": "H2"
+        },
+        {
+          "type": "caption",
+          "text": "#1000000.00001 · in Lab A, Lab B"
+        },
+        {
+          "type": "search",
+          "placeholder": "Filter"
+        },
+        {
+          "type": "card",
+          "title": "Tune",
+          "body": "AcquisitionDateTime · AcquisitionSoftware · AcquisitionSoftwareVersion · Method · Location · Specification · Report: PDF",
+          "hasImage": false
+        },
+        {
+          "type": "caption",
+          "text": "One card per test: FragmentationYield · FunnelIntensityDrop · HardwareDiagnostics · IsotopicRatio · MSAccuracy · … · Tune"
+        },
+        {
+          "type": "link",
+          "text": "Instrument Parameters",
+          "goTo": "parameters"
+        }
+      ]
+    },
+    {
+      "id": "parameters",
+      "name": "Instrument Parameters",
+      "components": [
+        {
+          "type": "header",
+          "title": "TwinScape",
+          "links": "Labs, Browse, Overview, Instruments",
+          "search": false,
+          "right": "avatar"
+        },
+        {
+          "type": "sidebar",
+          "title": "timsTOF #1",
+          "items": [
+            "Overview",
+            "Timeline",
+            "Final Test",
+            "Instrument Parameters",
+            "Differences",
+            "Readback Values",
+            "Atlas Commands",
+            "Hardware Diagnostics",
+            "Proteomics QC",
+            "Metabolomics QC",
+            "Insights",
+            "Pipelines",
+            "Logs",
+            "SFDC Thresholds",
+            "Settings",
+            "Thresholds",
+            "Notifications"
+          ],
+          "active": 3
+        },
+        {
+          "type": "heading",
+          "text": "timsTOF #1",
+          "level": "H2"
+        },
+        {
+          "type": "caption",
+          "text": "#1000000.00001 · in Lab A, Lab B"
+        },
+        {
+          "type": "breadcrumbs",
+          "items": [
+            "instrument_parameters",
+            "dependent"
+          ]
+        },
+        {
+          "type": "text",
+          "text": "Please select a key below the currently selected",
+          "tone": "muted"
+        },
+        {
+          "type": "heading",
+          "text": "Sample data",
+          "level": "H3"
+        },
+        {
+          "type": "link",
+          "text": "Differences",
+          "goTo": "differences"
+        }
+      ]
+    },
+    {
+      "id": "differences",
+      "name": "Differences",
+      "components": [
+        {
+          "type": "header",
+          "title": "TwinScape",
+          "links": "Labs, Browse, Overview, Instruments",
+          "search": false,
+          "right": "avatar"
+        },
+        {
+          "type": "sidebar",
+          "title": "timsTOF #1",
+          "items": [
+            "Overview",
+            "Timeline",
+            "Final Test",
+            "Instrument Parameters",
+            "Differences",
+            "Readback Values",
+            "Atlas Commands",
+            "Hardware Diagnostics",
+            "Proteomics QC",
+            "Metabolomics QC",
+            "Insights",
+            "Pipelines",
+            "Logs",
+            "SFDC Thresholds",
+            "Settings",
+            "Thresholds",
+            "Notifications"
+          ],
+          "active": 4
+        },
+        {
+          "type": "heading",
+          "text": "timsTOF #1",
+          "level": "H2"
+        },
+        {
+          "type": "caption",
+          "text": "#1000000.00001 · in Lab A, Lab B"
+        },
+        {
+          "type": "datepicker",
+          "label": "From",
+          "value": "YYYY-MM-DD"
+        },
+        {
+          "type": "datepicker",
+          "label": "To",
+          "value": "YYYY-MM-DD"
+        },
+        {
+          "type": "dropdown",
+          "label": "Polarity",
+          "value": "positive"
+        },
+        {
+          "type": "checkbox",
+          "label": "Show only changes"
+        },
+        {
+          "type": "checkbox",
+          "label": "Show calibration parameters"
+        },
+        {
+          "type": "button",
+          "text": "Apply"
+        }
+      ]
     }
   ],
   "notes": [
     {
-      "text": "Corrected for v2.7.34: Proteomics QC moved from the lab sidebar to the device sidebar (QUALITY group).",
-      "near": "lab-view"
+      "text": "Timeline has 36 event-type checkboxes, all on by default (Network, Atlas, Engine Log, Firmware Info, … Mass Calibration, Mobility Calibration).",
+      "near": "timeline"
     },
     {
-      "text": "Charts are scatter plots over time; CONTENTS nav on the right lists each chart.",
-      "near": "proteomics"
+      "text": "Report 'PDF' opens /reports/<id> in a new tab (not opened). Location has a copy-to-clipboard icon.",
+      "near": "final-test"
     },
     {
-      "text": "Thresholds detail is in flow 12.",
-      "near": "thresholds"
+      "text": "Card title: 'Instrument parameters comparison'. Apply — not exercised.",
+      "near": "differences"
     }
   ]
 }

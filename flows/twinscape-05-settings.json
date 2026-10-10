@@ -1,21 +1,45 @@
 {
-  "name": "TwinScape 05 · Account and lab settings",
+  "name": "TwinScape 05 · Account settings",
   "device": "desktop",
   "screens": [
     {
-      "id": "interface",
-      "name": "User settings · Interface",
+      "id": "avatar-menu",
+      "name": "Avatar menu",
       "components": [
         {
           "type": "header",
           "title": "TwinScape",
-          "links": "Home, Notifications",
+          "links": "Labs, Browse, Overview, Instruments",
+          "search": false,
+          "right": "avatar"
+        },
+        {
+          "type": "menu",
+          "items": [
+            "Logged in as user@lab.org",
+            "Notifications",
+            "Settings",
+            "Logout"
+          ],
+          "goTo": "interface",
+          "linkLabel": "Settings"
+        }
+      ]
+    },
+    {
+      "id": "interface",
+      "name": "Settings · Interface",
+      "components": [
+        {
+          "type": "header",
+          "title": "TwinScape",
+          "links": "Labs, Browse, Overview, Instruments",
           "search": false,
           "right": "avatar"
         },
         {
           "type": "heading",
-          "text": "Interface settings",
+          "text": "Interface Settings",
           "level": "H2"
         },
         {
@@ -32,7 +56,8 @@
           "label": "Timezone",
           "items": [
             "Browser default"
-          ]
+          ],
+          "value": "Browser default"
         },
         {
           "type": "button",
@@ -40,48 +65,53 @@
         },
         {
           "type": "link",
-          "text": "Your lab memberships",
+          "text": "Your Labs",
           "goTo": "memberships",
-          "linkLabel": "Access"
+          "linkLabel": "CONTENTS"
         },
         {
           "type": "link",
-          "text": "API keys",
+          "text": "API Keys",
           "goTo": "api-keys",
-          "linkLabel": "Credentials"
+          "linkLabel": "CONTENTS"
+        },
+        {
+          "type": "link",
+          "text": "Your Access Roles",
+          "goTo": "roles",
+          "linkLabel": "CONTENTS"
         }
       ]
     },
     {
       "id": "memberships",
-      "name": "User settings · Lab memberships",
+      "name": "Settings · Your Lab Memberships",
       "components": [
         {
           "type": "header",
           "title": "TwinScape",
-          "links": "Home, Notifications",
+          "links": "Labs, Browse, Overview, Instruments",
           "search": false,
           "right": "avatar"
         },
         {
           "type": "heading",
-          "text": "Your lab memberships",
+          "text": "Your Lab Memberships",
           "level": "H2"
         },
         {
           "type": "list",
           "items": [
             "Unnamed lab",
-            "Fällanden",
-            "Unnamed lab",
-            "MyDemoLab"
-          ],
-          "showAvatar": false
+            "Lab A",
+            "Lab B",
+            "Lab C"
+          ]
         },
         {
           "type": "input",
           "label": "Create a new lab",
-          "placeholder": "Lab name"
+          "placeholder": "Name"
         },
         {
           "type": "button",
@@ -91,44 +121,83 @@
     },
     {
       "id": "api-keys",
-      "name": "User settings · API keys",
+      "name": "Settings · API Keys",
       "components": [
         {
           "type": "header",
           "title": "TwinScape",
-          "links": "Home, Notifications",
+          "links": "Labs, Browse, Overview, Instruments",
           "search": false,
           "right": "avatar"
         },
         {
           "type": "heading",
-          "text": "API keys",
+          "text": "API Keys",
           "level": "H2"
         },
         {
           "type": "table",
-          "columns": [
-            "Key ID"
+          "items": [
+            "Key Id"
           ],
           "rows": 1
         },
         {
           "type": "input",
-          "label": "Key ID",
-          "placeholder": "Generate new key",
-          "helper": "Key IDs must be unique and at least 3 characters."
+          "label": "Generate new key",
+          "placeholder": "Key ID",
+          "helper": "Key IDs have to be unique and contain at least 3 characters."
         },
         {
           "type": "button",
           "text": "Generate"
         }
       ]
+    },
+    {
+      "id": "roles",
+      "name": "Settings · Your roles",
+      "components": [
+        {
+          "type": "header",
+          "title": "TwinScape",
+          "links": "Labs, Browse, Overview, Instruments",
+          "search": false,
+          "right": "avatar"
+        },
+        {
+          "type": "heading",
+          "text": "Your roles",
+          "level": "H2"
+        },
+        {
+          "type": "table",
+          "items": [
+            "Role",
+            "Collection",
+            "Object"
+          ],
+          "rows": 5
+        },
+        {
+          "type": "caption",
+          "text": "Roles: Creator · Editor · Manager · Observer (on labs, instruments, lcs, sensors…)"
+        }
+      ]
     }
   ],
   "notes": [
     {
-      "text": "One account-level page with three sections. Save changes, Create and Generate are available — not exercised.",
+      "text": "One page with four sections; CONTENTS nav on the right: Interface · Your Labs · API Keys · Your Access Roles.",
       "near": "interface"
+    },
+    {
+      "text": "Save changes, Create and Generate are available — not exercised.",
+      "near": "memberships"
+    },
+    {
+      "text": "New on v2.7.34. First column has no header; it shows the role badge.",
+      "near": "roles"
     }
   ]
 }

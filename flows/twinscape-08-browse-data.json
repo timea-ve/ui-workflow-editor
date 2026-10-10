@@ -1,0 +1,208 @@
+{
+  "name": "TwinScape 08 · Browse and plot test data",
+  "device": "desktop",
+  "screens": [
+    {
+      "id": "browse",
+      "name": "Browse",
+      "components": [
+        {
+          "type": "header",
+          "title": "TwinScape",
+          "links": "Labs, Browse, Overview, Instruments",
+          "search": false,
+          "right": "avatar"
+        },
+        {
+          "type": "search",
+          "placeholder": "Filter",
+          "value": "metadata.AnalysisName:regexi:final"
+        },
+        {
+          "type": "caption",
+          "text": "Enter a filter in the form of <field>:<operator>:<value>. Operators: eq, eqs, before, after, greater, less, range, in, oid, regex, regexi, first-by, last-by."
+        },
+        {
+          "type": "button",
+          "text": "Filter",
+          "variant": "secondary",
+          "goTo": "filter-menu",
+          "linkLabel": "Quick filters"
+        },
+        {
+          "type": "card",
+          "title": "Filter by instrument type",
+          "body": "timsTOF · timsTOF Pro · timsTOF Pro 2 · … · rapifleX PP",
+          "hasImage": false
+        },
+        {
+          "type": "card",
+          "title": "Filter by test type",
+          "body": "Choose one to see the test results in the data hierarchy.",
+          "hasImage": false
+        },
+        {
+          "type": "link",
+          "text": "CapacityScan 809",
+          "goTo": "browse-test",
+          "linkLabel": "Pick a test type"
+        }
+      ]
+    },
+    {
+      "id": "filter-menu",
+      "name": "Browse · Filter menu",
+      "components": [
+        {
+          "type": "header",
+          "title": "TwinScape",
+          "links": "Labs, Browse, Overview, Instruments",
+          "search": false,
+          "right": "avatar"
+        },
+        {
+          "type": "search",
+          "placeholder": "Filter",
+          "value": "metadata.AnalysisName:regexi:final"
+        },
+        {
+          "type": "caption",
+          "text": "Enter a filter in the form of <field>:<operator>:<value>. Operators: eq, eqs, before, after, greater, less, range, in, oid, regex, regexi, first-by, last-by."
+        },
+        {
+          "type": "menu",
+          "items": [
+            "Type",
+            "timsTOF",
+            "timsTOF Pro",
+            "…",
+            "rapifleX PP",
+            "Date",
+            "This Month",
+            "This Year"
+          ]
+        },
+        {
+          "type": "link",
+          "text": "Close",
+          "goTo": "browse"
+        }
+      ]
+    },
+    {
+      "id": "browse-test",
+      "name": "Browse · test type selected",
+      "components": [
+        {
+          "type": "header",
+          "title": "TwinScape",
+          "links": "Labs, Browse, Overview, Instruments",
+          "search": false,
+          "right": "avatar"
+        },
+        {
+          "type": "search",
+          "placeholder": "Filter",
+          "value": "metadata.AnalysisName:regexi:final"
+        },
+        {
+          "type": "caption",
+          "text": "Enter a filter in the form of <field>:<operator>:<value>. Operators: eq, eqs, before, after, greater, less, range, in, oid, regex, regexi, first-by, last-by."
+        },
+        {
+          "type": "badge",
+          "label": "Only final test",
+          "variant": "outline"
+        },
+        {
+          "type": "badge",
+          "label": "Only latest recorded per device",
+          "variant": "outline"
+        },
+        {
+          "type": "dropdown",
+          "label": "Select field for y-axis",
+          "value": "Select...",
+          "items": [
+            "instrument_parameters",
+            "results",
+            "specs"
+          ]
+        },
+        {
+          "type": "dropdown",
+          "label": "Select field for x-axis",
+          "value": "Select...",
+          "items": [
+            "Serial No",
+            "Acquisition Date",
+            "Software Version"
+          ]
+        },
+        {
+          "type": "link",
+          "text": "x: Serial No · y: results › condition",
+          "goTo": "plot",
+          "linkLabel": "Pick axes"
+        }
+      ]
+    },
+    {
+      "id": "plot",
+      "name": "Browse · plot",
+      "components": [
+        {
+          "type": "header",
+          "title": "TwinScape",
+          "links": "Labs, Browse, Overview, Instruments",
+          "search": false,
+          "right": "avatar"
+        },
+        {
+          "type": "search",
+          "placeholder": "Filter",
+          "value": "metadata.AnalysisName:regexi:final"
+        },
+        {
+          "type": "caption",
+          "text": "Enter a filter in the form of <field>:<operator>:<value>. Operators: eq, eqs, before, after, greater, less, range, in, oid, regex, regexi, first-by, last-by."
+        },
+        {
+          "type": "line-chart",
+          "title": "results.condition by metadata.InstrumentSerialNumber",
+          "shape": "wave",
+          "legend": "Scatter"
+        },
+        {
+          "type": "heading",
+          "text": "Sample data",
+          "level": "H3"
+        },
+        {
+          "type": "button",
+          "text": ".json",
+          "variant": "secondary"
+        },
+        {
+          "type": "button",
+          "text": ".csv",
+          "variant": "secondary"
+        }
+      ]
+    }
+  ],
+  "notes": [
+    {
+      "text": "Filter text, chips and axis picks update the URL (?filter=…&x=…&y=…). Results are read-only.",
+      "near": "browse"
+    },
+    {
+      "text": "Y-axis buttons drill down: results › averages_per_segment · condition · eic · figure · segments.",
+      "near": "browse-test"
+    },
+    {
+      "text": "Sample data shows one JSON document; .json / .csv download — not exercised.",
+      "near": "plot"
+    }
+  ]
+}

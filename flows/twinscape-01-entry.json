@@ -33,12 +33,12 @@
     },
     {
       "id": "labs",
-      "name": "Your Labs",
+      "name": "Labs · Your Labs",
       "components": [
         {
           "type": "header",
           "title": "TwinScape",
-          "links": "Home, Notifications",
+          "links": "Labs, Browse, Overview, Instruments",
           "search": false,
           "right": "avatar"
         },
@@ -48,53 +48,58 @@
           "level": "H2"
         },
         {
-          "type": "caption",
-          "text": "Current list of lab memberships"
-        },
-        {
           "type": "list",
           "items": [
             "Unnamed lab",
-            "Fällanden",
-            "Unnamed lab",
-            "MyDemoLab"
-          ],
-          "showAvatar": false
+            "Lab A",
+            "Lab B",
+            "Lab C"
+          ]
         },
         {
           "type": "link",
-          "text": "Open MyDemoLab",
+          "text": "Lab B",
           "goTo": "lab-view",
           "linkLabel": "Open a lab"
+        },
+        {
+          "type": "heading",
+          "text": "Create a new lab",
+          "level": "H3"
+        },
+        {
+          "type": "input",
+          "label": "Name"
+        },
+        {
+          "type": "button",
+          "text": "Create"
         }
       ]
     },
     {
       "id": "lab-view",
-      "name": "Lab view · MyDemoLab",
+      "name": "Lab B · Instruments",
       "components": [
         {
           "type": "header",
           "title": "TwinScape",
-          "links": "Home, Notifications",
+          "links": "Labs, Browse, Overview, Instruments",
           "search": false,
           "right": "avatar"
         },
         {
-          "type": "sidebar",
-          "title": "MyDemoLab",
-          "items": [
-            "Instruments",
-            "Proteomics QC",
-            "Settings",
-            "Experiments (deprecated)"
-          ],
-          "active": 0
+          "type": "heading",
+          "text": "Lab B",
+          "level": "H2"
         },
         {
-          "type": "heading",
-          "text": "MyDemoLab",
-          "level": "H2"
+          "type": "tabs",
+          "items": [
+            "Instruments",
+            "Settings"
+          ],
+          "active": 0
         },
         {
           "type": "text",
@@ -103,7 +108,7 @@
         },
         {
           "type": "table",
-          "columns": [
+          "items": [
             "Name",
             "Serial",
             "Location"
@@ -117,7 +122,7 @@
         },
         {
           "type": "table",
-          "columns": [
+          "items": [
             "Name",
             "Serial",
             "Location"
@@ -126,30 +131,41 @@
         },
         {
           "type": "link",
-          "text": "Open a device",
-          "goTo": "device-type"
+          "text": "timsTOF #1 (or an LC)",
+          "goTo": "device-type",
+          "linkLabel": "Open a device"
         }
       ]
     },
     {
       "id": "ms-overview",
-      "name": "MS overview · GG-TOF_Pro_2",
+      "name": "MS · Overview",
       "components": [
         {
           "type": "header",
           "title": "TwinScape",
-          "links": "Home, Notifications",
+          "links": "Labs, Browse, Overview, Instruments",
           "search": false,
           "right": "avatar"
         },
         {
           "type": "sidebar",
-          "title": "GG-TOF_Pro_2",
+          "title": "timsTOF #1",
           "items": [
             "Overview",
-            "Hardware Diagnostics",
+            "Timeline",
+            "Final Test",
+            "Instrument Parameters",
+            "Differences",
             "Readback Values",
-            "Software",
+            "Atlas Commands",
+            "Hardware Diagnostics",
+            "Proteomics QC",
+            "Metabolomics QC",
+            "Insights",
+            "Pipelines",
+            "Logs",
+            "SFDC Thresholds",
             "Settings",
             "Thresholds",
             "Notifications"
@@ -158,12 +174,16 @@
         },
         {
           "type": "heading",
-          "text": "GG-TOF_Pro_2",
+          "text": "timsTOF #1",
           "level": "H2"
         },
         {
           "type": "caption",
-          "text": "#1893751.10757 · in Fällanden › MyDemoLab"
+          "text": "#1000000.00001 · in Lab A, Lab B"
+        },
+        {
+          "type": "caption",
+          "text": "Last update 2 minutes ago"
         },
         {
           "type": "list",
@@ -172,31 +192,36 @@
             "Calibration · No data",
             "Hardware Diagnostics · No data",
             "TwinScape · 2 years ago"
-          ],
-          "showAvatar": false
+          ]
         },
         {
-          "type": "line-chart",
-          "title": "Mass calibration",
-          "shape": "rising",
-          "legend": "Last update 1 minute ago"
+          "type": "card",
+          "title": "General",
+          "body": "Device name · Serial number · Device type · Digitizer type · Registrant",
+          "hasImage": false
+        },
+        {
+          "type": "card",
+          "title": "Installed Software",
+          "body": "Last update on 2024-09-08 17:06",
+          "hasImage": false
         }
       ]
     },
     {
       "id": "lc-overview",
-      "name": "LC overview · nano LC SN0004",
+      "name": "LC · Overview",
       "components": [
         {
           "type": "header",
           "title": "TwinScape",
-          "links": "Home, Notifications",
+          "links": "Labs, Browse, Overview, Instruments",
           "search": false,
           "right": "avatar"
         },
         {
           "type": "sidebar",
-          "title": "nano LC SN0004",
+          "title": "nano LC #1",
           "items": [
             "Overview",
             "Procedures",
@@ -207,12 +232,12 @@
         },
         {
           "type": "heading",
-          "text": "nano LC SN0004",
+          "text": "nano LC #1",
           "level": "H2"
         },
         {
           "type": "caption",
-          "text": "nanoElute#NRLP04 · Fällanden › MyDemoLab"
+          "text": "nanoElute#LC-0001 · Lab A › Lab B"
         },
         {
           "type": "list",
@@ -221,14 +246,12 @@
             "Self check · No data",
             "Flow restriction test · No data",
             "Preparation · No data"
-          ],
-          "showAvatar": false
+          ]
         },
         {
           "type": "line-chart",
           "title": "Leak test",
-          "shape": "flat",
-          "legend": "2026-09-27 – 2026-10-01"
+          "shape": "flat"
         }
       ]
     }
@@ -245,8 +268,24 @@
   ],
   "notes": [
     {
-      "text": "Observed navigation from sign-in to the MS or LC overview. Evidence: sign-in · Your Labs · MyDemoLab · device overviews (v1.9.26)",
+      "text": "Re-checked on v2.7.34: header is Labs · Browse · Overview · Instruments ▾ · bell · avatar. Sign-in screen not re-checked (already signed in).",
       "near": "sign-in"
+    },
+    {
+      "text": "Create is available — not exercised.",
+      "near": "labs"
+    },
+    {
+      "text": "Lab page now uses tabs (Instruments · Settings), no sidebar. Environment tab appears on labs with sensors.",
+      "near": "lab-view"
+    },
+    {
+      "text": "Sidebar groups in the app: GENERAL · INSTRUMENT PARAMETERS · HARDWARE MONITORING · QUALITY · INSIGHTS · MONITORING · SETTINGS.",
+      "near": "ms-overview"
+    },
+    {
+      "text": "LC device pages render blank on v2.7.34; LC screen kept from v1.9.26, not re-verified.",
+      "near": "lc-overview"
     }
   ]
 }
