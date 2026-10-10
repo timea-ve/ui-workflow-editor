@@ -129,6 +129,8 @@
   text-decoration: none;
   overflow: hidden;
 }
+/* Stretch the link over the card's border too, so the hand cursor and click cover the whole card. */
+a.fsd-board__main::after { content: ''; position: absolute; inset: -1px; border-radius: var(--fs-radius-lg); }
 .fsd-board__main:focus-visible { outline-offset: 2px; }
 .fsd-board__text { display: grid; gap: 2px; min-width: 0; padding: var(--fs-space-3) 48px var(--fs-space-3) var(--fs-space-3); }
 .fsd-board__title { overflow: hidden; font-weight: 600; text-overflow: ellipsis; white-space: nowrap; }
