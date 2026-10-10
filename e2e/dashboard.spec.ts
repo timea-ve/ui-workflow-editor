@@ -64,6 +64,19 @@ test('a template creates a seeded board and opens it', async ({ page }) => {
   await expect(page.getByRole('link', { name: /Checkout/ })).toBeVisible();
 });
 
+test('board cards preview their screens, like templates; empty boards show a placeholder', async ({ page }) => {
+  await page.getByTestId('template-settings').click();
+  await expect(page).toHaveURL(BOARD_URL);
+  await page.goBack();
+  await page.getByTestId('new-board').first().click();
+  await expect(page).toHaveURL(BOARD_URL);
+  await page.goBack();
+  const card = (name: string) => page.getByTestId('board-card').filter({ hasText: name }).getByTestId('board-preview');
+  await expect(card('Settings')).toHaveAttribute('data-state', 'ready');
+  await expect(card('Settings').locator('.fsd-preview')).toBeVisible();
+  await expect(card('Untitled board')).toHaveAttribute('data-state', 'empty');
+});
+
 test('search filters boards by name', async ({ page }) => {
   await seedBoards(page, ['Checkout ideas', 'Login v2', 'Settings revamp']);
   await page.getByRole('searchbox', { name: 'Search boards' }).fill('log');

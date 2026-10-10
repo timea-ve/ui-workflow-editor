@@ -69,7 +69,7 @@
   border-bottom: 1px solid var(--fs-hairline);
 }
 .fsd-preview { position: relative; flex: none; overflow: hidden; pointer-events: none; }
-.fsd-thumb--board { height: 112px; }
+.fsd-thumb--board { height: 132px; }
 
 /* ── Template cards ───────────────────────────────────────────── */
 .fsd-templates {

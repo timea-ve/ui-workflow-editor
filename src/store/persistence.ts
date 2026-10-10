@@ -11,6 +11,8 @@ export const roomName = (boardId: ID) => `fs-board-${boardId}`;
 
 /** Live editor sessions in this tab, so readBoardDoc / writeInitialDoc see the freshest content. */
 const liveSessions = new Map<ID, BoardSession>();
+/** Sessions still writing/closing after the editor left, so reads don't race the last save. */
+const closingSessions = new Map<ID, Promise<void>>();
 
 /**
  * Resolves once every IndexedDB write queued so far has committed: a readonly transaction on the
@@ -56,6 +58,7 @@ export async function writeInitialDoc(boardId: ID, doc: BoardDoc): Promise<void>
 export async function readBoardDoc(boardId: ID): Promise<BoardDoc> {
   const live = liveSessions.get(boardId);
   if (live) return live.store.getDoc();
+  await closingSessions.get(boardId);
   return withRoom(boardId, (ydoc) => readDoc(ydoc));
 }
 
@@ -153,6 +156,9 @@ export function openBoardSession(boardId: ID): BoardSession {
     close: async () => {
       if (closed) return;
       closed = true;
+      let done!: () => void;
+      const closing = new Promise<void>((r) => { done = r; });
+      closingSessions.set(boardId, closing);
       if (liveSessions.get(boardId) === session) liveSessions.delete(boardId);
       clearTimeout(flushTimer);
       if (typeof window !== 'undefined') {
@@ -165,6 +171,8 @@ export function openBoardSession(boardId: ID): BoardSession {
       } catch { /* database already closed or deleted */ }
       store.destroy();
       ydoc.destroy();
+      if (closingSessions.get(boardId) === closing) closingSessions.delete(boardId);
+      done();
     },
   };
   liveSessions.set(boardId, session);

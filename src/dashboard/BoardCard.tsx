@@ -4,6 +4,7 @@ import * as Menu from '@radix-ui/react-dropdown-menu';
 import { Check, ChevronRight, Copy, ExternalLink, FolderInput, FolderPlus, Link2, MoreHorizontal, Pencil, Trash2 } from 'lucide-react';
 import type { Board, Folder, ID } from '../model/types';
 import { ICON_STROKE } from '../chrome/shared';
+import { BoardPreview } from './BoardPreview';
 import { copy, formatRelative } from './copy';
 
 export type BoardAction = 'open' | 'duplicate' | 'copyLink' | 'delete';
@@ -60,7 +61,7 @@ export function BoardCard({ board, now, folders, showFolder, onAction, onRename,
     >
       {renaming ? (
         <div className="fsd-board__main">
-          <BoardThumb />
+          <BoardPreview boardId={board.id} version={board.updatedAt} fallback={<BoardThumbArt />} />
           <span className="fsd-board__text">
             <RenameInput initial={board.title} onDone={finish} />
             <span className="fsd-board__meta">{edited}</span>
@@ -68,7 +69,7 @@ export function BoardCard({ board, now, folders, showFolder, onAction, onRename,
         </div>
       ) : (
         <Link ref={linkRef} to={`/b/${board.id}`} className="fsd-board__main" onKeyDown={onLinkKey} aria-describedby={`${titleId}-meta`}>
-          <BoardThumb />
+          <BoardPreview boardId={board.id} version={board.updatedAt} fallback={<BoardThumbArt />} />
           <span className="fsd-board__text">
             <span className="fsd-board__title" id={titleId}>{board.title}</span>
             <span className="fsd-board__meta" id={`${titleId}-meta`}>{edited}</span>
@@ -203,10 +204,10 @@ function BoardMenu({ board, folders, onAction, onMove, onRename }: {
   );
 }
 
-/** Neutral lo-fi placeholder (two linked screens) — real board thumbnails are parked. */
-export function BoardThumb() {
+/** Neutral lo-fi placeholder (two linked screens), shown while loading or for an empty board. */
+function BoardThumbArt() {
   return (
-    <span className="fsd-thumb fsd-thumb--board" aria-hidden>
+    <>
       <svg width="120" height="72" viewBox="0 0 120 72" fill="none" strokeLinecap="round" strokeLinejoin="round">
         <rect x="14" y="10" width="32" height="52" rx="5" stroke="var(--fs-gray-4)" strokeWidth="2" fill="var(--fs-surface)" />
         <rect x="20" y="40" width="20" height="6" rx="2" fill="var(--fs-gray-3)" />
@@ -216,6 +217,6 @@ export function BoardThumb() {
         <rect x="80" y="28" width="14" height="4" rx="2" fill="var(--fs-gray-3)" />
         <path d="M40 43 H58 V36 H72 M68 32 L72 36 L68 40" stroke="var(--fs-accent)" strokeWidth="1.75" />
       </svg>
-    </span>
+    </>
   );
 }
