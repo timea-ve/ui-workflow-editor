@@ -99,6 +99,31 @@ test.describe('Save to GitHub (configured)', () => {
     await expect(account(page)).toHaveAttribute('data-phase', 'synced');
   });
 
+  test('boards made before connecting are uploaded right after "Give access"', async ({ page }) => {
+    await fresh(page);
+    await page.reload();
+    await page.getByTestId('new-board').click();
+    await expect(page).toHaveURL(/\/b\//);
+    const id = page.url().split('/b/')[1];
+    await page.goto('/');
+
+    gh.installed = false;
+    await page.getByRole('button', { name: 'Sign in with GitHub' }).click();
+    const panel = page.getByTestId('github-setup');
+    await expect(panel).toBeVisible({ timeout: 10_000 });
+
+    // GitHub's install page: grant the repo, then come back with a code and no state.
+    await page.route('https://github.com/apps/**', (route) => {
+      gh.installed = true;
+      const back = `${GITHUB_BASE_URL}/auth/callback?code=test-code&installation_id=7&setup_action=install`;
+      return route.fulfill({ contentType: 'text/html', body: `<script>location.replace(${JSON.stringify(back)})</script>` });
+    });
+    await panel.getByRole('link', { name: 'Give access' }).click();
+    await expect(account(page)).toBeVisible({ timeout: 10_000 });
+    await expect.poll(() => gh.board(id)?.board.title, { timeout: 15_000 }).toBe('Untitled board');
+    await expect(account(page)).toHaveAttribute('data-phase', 'synced');
+  });
+
   test('a cancelled sign-in is explained calmly', async ({ page }) => {
     await fresh(page);
     await page.goto('/auth/callback?error=access_denied&state=x');

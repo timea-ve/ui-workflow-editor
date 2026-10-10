@@ -82,6 +82,8 @@ let retryTimer: ReturnType<typeof setTimeout> | undefined;
 let backoff = 5000;
 let lastFullSync = 0;
 let fullSync: Promise<void> | null = null;
+/** Which connection the running full sync belongs to; a stale one must not stand in for a new one. */
+let fullSyncGen = -1;
 const seenUpdatedAt = new Map<ID, number>();
 
 const repoKey = (r: RepoRef) => `${r.owner}/${r.name}`;
@@ -117,15 +119,18 @@ function succeeded() {
 /** Full two-way sync now (deduplicated while one is running). */
 export function syncNow(): Promise<void> {
   if (!engine) return fullSync ?? Promise.resolve();
-  if (fullSync) return fullSync;
+  if (fullSync && fullSyncGen === generation) return fullSync;
   const e = engine;
   const gen = generation;
+  fullSyncGen = gen;
   set({ phase: 'syncing' });
   fullSync = e.syncAll().then(
     () => { if (gen === generation) { lastFullSync = Date.now(); succeeded(); } },
     (err) => { if (gen === generation) handleError(err); },
-  ).finally(() => { fullSync = null; });
-  return fullSync;
+  );
+  const mine = fullSync;
+  void mine.finally(() => { if (fullSync === mine) fullSync = null; });
+  return mine;
 }
 
 /** Full sync unless one ran in the last `minGapMs` (focus, dashboard visits). */
@@ -209,6 +214,8 @@ async function connect(gen: number) {
     set({ user, repo });
     for (const b of listBoards()) seenUpdatedAt.set(b.id, b.updatedAt);
     await syncNow();
+    // Safety net: a second pass shortly after connecting catches boards a racing first pass missed.
+    setTimeout(() => { if (gen === generation && engine) void syncNow(); }, 4000);
   } catch (err) {
     if (gen !== generation) return;
     if (err instanceof SignedOutError) { onAuth(); return; }
