@@ -379,7 +379,7 @@
       "near": "thresholds"
     },
     {
-      "text": "Severity slider is disabled for this role; each row has an unlabeled on/off switch (all off here) — not changed.",
+      "text": "Severity slider is disabled for this role; each row has an unlabeled on/off switch (all off here) — not changed. ",
       "near": "notification-row"
     }
   ]
